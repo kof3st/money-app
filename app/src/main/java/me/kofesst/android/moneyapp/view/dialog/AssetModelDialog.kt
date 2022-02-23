@@ -53,6 +53,10 @@ class AssetModelDialog(
             binding.nameTextLayout.error = getString(R.string.error_required)
             error = true
         }
+        else if (name.length > binding.nameTextLayout.counterMaxLength) {
+            binding.nameTextLayout.error = getString(R.string.error_counter)
+            error = true
+        }
 
         if (selectedType == null) {
             binding.typeTextLayout.error = getString(R.string.error_required)
