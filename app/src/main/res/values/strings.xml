@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">MoneyApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="card_type_title">Карта</string>
     <string name="cash_type_title">Наличные</string>
     <string name="asset_type">Тип счёта</string>
@@ -16,9 +14,11 @@
     <string name="error_incorrect">Некорректное значение</string>
     <string name="error_big">Слишком большое значение</string>
     <string name="error_small">Слишком маленькое значение</string>
-    <string name="edit_asset">Изменение счёта</string>
     <string name="rub_suffix">руб.</string>
-
     <string name="create">Создать</string>
     <string name="edit">Изменить</string>
+    <string name="edit_asset">Изменить счёт</string>
+    <string name="transaction">Транзакция</string>
+    <string name="delete_asset">Удалить счёт</string>
+    <string name="asset_menu_title">Выберите действие</string>
 </resources>

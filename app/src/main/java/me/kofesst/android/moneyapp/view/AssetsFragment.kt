@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import me.kofesst.android.moneyapp.databinding.FragmentAssetsBinding
+import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatWithCurrency
+import me.kofesst.android.moneyapp.view.dialog.AssetMenuDialog
 import me.kofesst.android.moneyapp.view.dialog.AssetModelDialog
 import me.kofesst.android.moneyapp.view.recyclerview.AssetsAdapter
+import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.viewmodel.AssetsViewModel
 import me.kofesst.android.moneyapp.viewmodel.factory.AssetsViewModelFactory
 
@@ -44,6 +47,17 @@ class AssetsFragment : Fragment() {
 
     private fun setupViews() {
         assetsAdapter = AssetsAdapter(requireContext())
+        assetsAdapter.addOnItemClickListener(object: ItemClickListener {
+            override fun onClick(item: AssetEntity) {
+                val dialog = AssetMenuDialog(item)
+                dialog.show(parentFragmentManager, "asset_menu_dialog")
+            }
+
+            override fun onLongClick(item: AssetEntity) {
+
+            }
+        })
+
         binding.assetsView.apply {
             adapter = assetsAdapter
         }
