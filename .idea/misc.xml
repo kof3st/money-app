@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/activity_main.xml" value="0.20380434782608695" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/asset_item.xml" value="0.358695652173913" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/asset_model_dialog.xml" value="0.3523550724637681" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/bottom_dialog.xml" value="0.20108695652173914" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/create_bottom_dialog.xml" value="0.3523550724637681" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_assets.xml" value="0.35208333333333336" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_categories.xml" value="0.3523550724637681" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_create_asset.xml" value="0.3523550724637681" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/model_bottom_dialog.xml" value="0.3523550724637681" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1693121693121693" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">MoneyApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="card_type_title">Карта</string>
+    <string name="cash_type_title">Наличные</string>
+    <string name="asset_type">Тип счёта</string>
+    <string name="assets">Ваши счета</string>
+    <string name="new_asset">Новый счёт</string>
+    <string name="categories">Категории</string>
+    <string name="asset_name">Наименование счёта</string>
+    <string name="asset_balance">Текущий баланс</string>
+    <string name="create_asset">Создать счёт</string>
+    <string name="error_required">Это обязательное поле</string>
+    <string name="error_counter">Слишком длинное значение</string>
+    <string name="error_incorrect">Некорректное значение</string>
+    <string name="error_big">Слишком большое значение</string>
+    <string name="error_small">Слишком маленькое значение</string>
+    <string name="edit_asset">Изменение счёта</string>
+    <string name="rub_suffix">руб.</string>
+
+    <string name="create">Создать</string>
+    <string name="edit">Изменить</string>
+</resources>
