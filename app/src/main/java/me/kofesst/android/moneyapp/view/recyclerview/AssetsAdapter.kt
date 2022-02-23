@@ -11,6 +11,7 @@ import me.kofesst.android.moneyapp.model.AssetEntity
 class AssetsAdapter(
     private val context: Context
 ): ListAdapter<AssetEntity, AssetViewHolder>(AssetsDiffer) {
+    private var onItemClickListener: ItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssetViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -21,7 +22,27 @@ class AssetsAdapter(
     override fun onBindViewHolder(holder: AssetViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
+
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.onClick(item)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onItemClickListener?.onLongClick(item)
+            true
+        }
     }
+
+    fun addOnItemClickListener(listener: ItemClickListener) {
+        onItemClickListener = listener
+    }
+}
+
+interface ItemClickListener {
+
+    fun onClick(item: AssetEntity)
+
+    fun onLongClick(item: AssetEntity)
 
 }
 
