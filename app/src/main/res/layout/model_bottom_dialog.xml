@@ -11,10 +11,6 @@
         android:layout_height="wrap_content"
         android:padding="20dp"/>
 
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="20dp"/>
-
     <Button
         android:id="@+id/save_button"
         style="@style/Widget.MaterialComponents.Button.TextButton"
