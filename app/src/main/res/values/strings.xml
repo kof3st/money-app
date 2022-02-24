@@ -21,4 +21,9 @@
     <string name="transaction">Транзакция</string>
     <string name="delete_asset">Удалить счёт</string>
     <string name="asset_menu_title">Выберите действие</string>
+    <string name="confirm_dialog_title">Подтвердите действие</string>
+    <string name="delete_asset_message">Вы действительно хотите навсегда удалить этот счёт?</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="snackbar_asset_deleted">Счёт удалён</string>
 </resources>

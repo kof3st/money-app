@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentAssetsBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatWithCurrency
+import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.dialog.AssetMenuDialog
 import me.kofesst.android.moneyapp.view.dialog.AssetModelDialog
 import me.kofesst.android.moneyapp.view.recyclerview.AssetsAdapter
@@ -49,7 +51,20 @@ class AssetsFragment : Fragment() {
         assetsAdapter = AssetsAdapter(requireContext())
         assetsAdapter.addOnItemClickListener(object: ItemClickListener {
             override fun onClick(item: AssetEntity) {
-                val dialog = AssetMenuDialog(item)
+                val listPosition = viewModel.assetsLiveData.value!!.indexOf(item)
+
+                val dialog = AssetMenuDialog().apply {
+                    onDeleteClickCallback = {
+                        showDeleteDialogWithSnackbar(
+                            fragmentView = binding.root,
+                            dialogTitleRes = R.string.confirm_dialog_title,
+                            dialogMessageRes = R.string.delete_asset_message,
+                            snakbarMessageRes = R.string.snackbar_asset_deleted,
+                            deleteAction = { viewModel.deleteAsset(item) },
+                            undoAction = { viewModel.addAsset(item, listPosition) }
+                        )
+                    }
+                }
                 dialog.show(parentFragmentManager, "asset_menu_dialog")
             }
 

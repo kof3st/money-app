@@ -37,12 +37,14 @@ class AssetsViewModel(
 
     /**
      * Добавляет новый счёт [asset] в базу данных,
-     * обновляя [assetsLiveData]
+     * обновляя [assetsLiveData].
+     * Также вставляет элемент на позицию [listPosition],
+     * если параметр функции передан
      */
-    fun addAsset(asset: AssetEntity) {
+    fun addAsset(asset: AssetEntity, listPosition: Int? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             dao.addAsset(asset)
-            assets.add(asset)
+            assets.add(listPosition ?: assets.size, asset)
             assetsLiveData.postValue(assets)
         }
     }
