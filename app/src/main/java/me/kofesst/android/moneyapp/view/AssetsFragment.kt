@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentAssetsBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
-import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatWithCurrency
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.dialog.AssetMenuDialog
@@ -95,6 +94,5 @@ class AssetsFragment : Fragment() {
     private fun updateTopBarBalance() {
         val balance = viewModel.getTotalBalance()
         binding.topBar.subtitle = balance.formatWithCurrency()
-        binding.topBar.setSubtitleTextColor(balance.balanceColor(requireContext()))
     }
 }
