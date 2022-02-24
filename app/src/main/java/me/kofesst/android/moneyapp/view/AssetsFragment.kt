@@ -53,6 +53,19 @@ class AssetsFragment : Fragment() {
                 val listPosition = viewModel.assetsLiveData.value!!.indexOf(item)
 
                 val dialog = AssetMenuDialog().apply {
+                    onEditClickCallback = {
+                        val modelDialog = AssetModelDialog(
+                            editingModel = item,
+                            onAssetSubmit = {
+                                item.name = it.name
+                                item.balance = it.balance
+                                item.type = it.type
+                                // Не робит обновление ресайклера
+                                viewModel.updateAsset(item, listPosition)
+                            }
+                        )
+                        modelDialog.show(parentFragmentManager, "create_asset_dialog")
+                    }
                     onDeleteClickCallback = {
                         showDeleteDialogWithSnackbar(
                             fragmentView = binding.root,

@@ -50,6 +50,18 @@ class AssetsViewModel(
     }
 
     /**
+     * Обновляет счёт [asset], находящийся на
+     * позиции [listPosition]
+     */
+    fun updateAsset(asset: AssetEntity, listPosition: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.addAsset(asset)
+            assets[listPosition] = asset
+            assetsLiveData.postValue(assets)
+        }
+    }
+
+    /**
      * Удаляет счёт [asset] из базы данных,
      * обновляя [assetsLiveData]
      */

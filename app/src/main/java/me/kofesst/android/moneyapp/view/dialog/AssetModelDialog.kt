@@ -37,7 +37,7 @@ class AssetModelDialog(
         if (editingModel != null) {
             binding.nameText.setText(editingModel.name)
             binding.balanceText.setText(editingModel.balance.format())
-            binding.typeText.setSelection(editingModel.type)
+//            binding.typeText.setSelection(editingModel.type)
         }
     }
 
