@@ -6,7 +6,6 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.AssetModelDialogBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.default.AssetTypes
-import me.kofesst.android.moneyapp.util.format
 import java.lang.Exception
 
 class AssetModelDialog(
@@ -35,7 +34,7 @@ class AssetModelDialog(
 
         if (editingModel != null) {
             binding.nameText.setText(editingModel.name)
-            binding.balanceText.setText(editingModel.balance.format())
+            binding.balanceText.setText(editingModel.balance.toString())
 //            binding.typeText.setSelection(editingModel.type)
         }
     }

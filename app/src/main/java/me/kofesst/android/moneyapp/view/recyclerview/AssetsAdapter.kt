@@ -36,6 +36,10 @@ class AssetsAdapter(
     fun addOnItemClickListener(listener: ItemClickListener) {
         onItemClickListener = listener
     }
+
+    override fun submitList(list: List<AssetEntity>?) {
+        super.submitList(list?.let { ArrayList(it) })
+    }
 }
 
 interface ItemClickListener {

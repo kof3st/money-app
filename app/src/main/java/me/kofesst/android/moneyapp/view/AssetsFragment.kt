@@ -48,9 +48,7 @@ class AssetsFragment : Fragment() {
         assetsAdapter = AssetsAdapter(requireContext())
         assetsAdapter.addOnItemClickListener(object: ItemClickListener {
             override fun onClick(item: AssetEntity) {
-                val listPosition = viewModel.assetsLiveData.value!!.indexOf(item)
-
-                val dialog = AssetMenuDialog(binding.root, viewModel, item, listPosition)
+                val dialog = AssetMenuDialog(binding.root, viewModel, item)
                 dialog.show(parentFragmentManager, "asset_menu_dialog")
             }
 
@@ -73,7 +71,7 @@ class AssetsFragment : Fragment() {
 
     private fun setupObserves() {
         viewModel.assetsLiveData.observe(viewLifecycleOwner) {
-            assetsAdapter.submitList(it.toMutableList())
+            assetsAdapter.submitList(it.toList())
             updateTopBarBalance()
         }
     }

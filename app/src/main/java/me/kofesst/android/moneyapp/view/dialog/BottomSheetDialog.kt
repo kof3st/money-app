@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import me.kofesst.android.moneyapp.databinding.BottomDialogBinding
 

@@ -10,7 +10,7 @@ interface AssetsDao {
     suspend fun getAssets(): List<AssetEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addAsset(asset: AssetEntity)
+    suspend fun addAsset(asset: AssetEntity): Long
 
     @Delete
     suspend fun deleteAsset(asset: AssetEntity)

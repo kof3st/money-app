@@ -24,6 +24,6 @@
     </style>
 
     <style name="ThemeOverlay.App.Button.MenuButton" parent="">
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/black</item>
     </style>
 </resources>

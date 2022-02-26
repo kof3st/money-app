@@ -1,6 +1,7 @@
 package me.kofesst.android.moneyapp.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,14 +15,13 @@ class AssetsViewModel(
 ): AndroidViewModel(application) {
     private val dao = AssetsDatabase.get(application).getDao()
 
-    private val assets = mutableListOf<AssetEntity>()
     val assetsLiveData = MutableLiveData<List<AssetEntity>>()
 
     /**
      * Возвращает итоговый баланс, считая его из
      * всех счетов пользователя
      */
-    fun getTotalBalance(): Double = assets.sumOf { it.balance }
+    fun getTotalBalance(): Double = assetsLiveData.value!!.sumOf { it.balance }
 
     /**
      * Обновляет [assetsLiveData], заменяя уже
@@ -29,9 +29,7 @@ class AssetsViewModel(
      */
     fun updateAssets() {
         viewModelScope.launch(Dispatchers.IO) {
-            assets.clear()
-            assets.addAll(dao.getAssets())
-            assetsLiveData.postValue(assets)
+            assetsLiveData.postValue(dao.getAssets())
         }
     }
 
@@ -41,23 +39,21 @@ class AssetsViewModel(
      * Также вставляет элемент на позицию [listPosition],
      * если параметр функции передан
      */
-    fun addAsset(asset: AssetEntity, listPosition: Int? = null) {
+    fun addAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             dao.addAsset(asset)
-            assets.add(listPosition ?: assets.size, asset)
-            assetsLiveData.postValue(assets)
+            updateAssets()
         }
     }
 
     /**
-     * Обновляет счёт [asset], находящийся на
-     * позиции [listPosition]
+     * Обновляет счёт [asset] в базе данных,
+     * обновляя [assetsLiveData]
      */
-    fun updateAsset(asset: AssetEntity, listPosition: Int) {
+    fun updateAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             dao.addAsset(asset)
-            assets[listPosition] = asset
-            assetsLiveData.postValue(assets)
+            updateAssets()
         }
     }
 
@@ -68,8 +64,7 @@ class AssetsViewModel(
     fun deleteAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             dao.deleteAsset(asset)
-            assets.remove(asset)
-            assetsLiveData.postValue(assets)
+            updateAssets()
         }
     }
 }
