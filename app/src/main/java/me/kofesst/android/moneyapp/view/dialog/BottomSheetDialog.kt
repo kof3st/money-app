@@ -10,7 +10,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import me.kofesst.android.moneyapp.databinding.BottomDialogBinding
 
 abstract class BottomSheetDialog(
-    @StringRes private val titleRes: Int,
     @LayoutRes private val contentRes: Int
 ): BottomSheetDialogFragment() {
     private lateinit var binding: BottomDialogBinding
@@ -25,8 +24,6 @@ abstract class BottomSheetDialog(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.dialogTitle.setText(titleRes)
-
         val contentView = LayoutInflater.from(requireContext())
             .inflate(contentRes, null, false)
         binding.dialogContent.addView(contentView)

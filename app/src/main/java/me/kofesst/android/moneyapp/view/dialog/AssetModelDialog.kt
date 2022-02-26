@@ -13,7 +13,6 @@ class AssetModelDialog(
     onAssetSubmit: (AssetEntity) -> Unit,
     private val editingModel: AssetEntity? = null
 ): ModelDialog<AssetEntity>(
-    titleRes = if (editingModel == null) R.string.new_asset else R.string.edit_asset,
     saveButtonTextRes = if (editingModel == null) R.string.create else R.string.edit,
     contentRes = R.layout.asset_model_dialog,
     onModelSubmit = onAssetSubmit

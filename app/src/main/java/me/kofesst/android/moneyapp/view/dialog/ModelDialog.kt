@@ -8,11 +8,10 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.ModelBottomDialogBinding
 
 abstract class ModelDialog<M>(
-    @StringRes private val titleRes: Int,
     @LayoutRes private val contentRes: Int,
     @StringRes private val saveButtonTextRes: Int,
     private val onModelSubmit: (M) -> Unit
-): BottomSheetDialog(titleRes, R.layout.model_bottom_dialog) {
+): BottomSheetDialog(R.layout.model_bottom_dialog) {
     private lateinit var binding: ModelBottomDialogBinding
 
     override fun onContentCreated(contentView: View) {
