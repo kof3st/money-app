@@ -22,7 +22,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/assets"
                 app:subtitle="150 000 руб."
-                style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"/>
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 

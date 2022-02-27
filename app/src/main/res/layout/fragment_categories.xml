@@ -22,7 +22,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/categories"
                 app:subtitle="Всего: 10 категорий"
-                style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"/>
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
