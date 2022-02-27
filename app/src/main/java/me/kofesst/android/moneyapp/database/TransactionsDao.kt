@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import me.kofesst.android.moneyapp.model.TransactionEntity
-import me.kofesst.android.moneyapp.model.relation.CategoryAndTransaction
 import me.kofesst.android.moneyapp.model.relation.CategoryWithTransactions
 
 @Dao

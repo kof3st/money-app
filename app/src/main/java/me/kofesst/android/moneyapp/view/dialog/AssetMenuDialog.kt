@@ -40,6 +40,8 @@ class AssetMenuDialog(
                 ) {
                     item.balance += it.amount
                     viewModel.updateAsset(item)
+
+                    it.assetId = item.assetId.toLong()
                     viewModel.addTransaction(it)
 
                     dismiss()
