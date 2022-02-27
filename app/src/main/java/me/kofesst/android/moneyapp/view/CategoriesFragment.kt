@@ -10,6 +10,7 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
+import me.kofesst.android.moneyapp.view.dialog.CategoryMenuDialog
 import me.kofesst.android.moneyapp.view.dialog.CategoryModelDialog
 import me.kofesst.android.moneyapp.view.recyclerview.CategoriesAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
@@ -52,7 +53,10 @@ class CategoriesFragment : Fragment() {
     private fun setupViews() {
         categoriesAdapter = CategoriesAdapter(requireContext()).apply {
             itemClickListener = object: ItemClickListener<CategoryEntity> {
-                override fun onClick(item: CategoryEntity) { }
+                override fun onClick(item: CategoryEntity) {
+                    val dialog = CategoryMenuDialog(binding.root, viewModel, item)
+                    dialog.show(parentFragmentManager, "category_menu_dialog")
+                }
 
                 override fun onLongClick(item: CategoryEntity) { }
             }

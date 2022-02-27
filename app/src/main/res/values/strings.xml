@@ -28,4 +28,8 @@
     <string name="snackbar_asset_deleted">Счёт удалён</string>
     <string name="categories_top_bar_format">Всего: %s</string>
     <string name="category_name">Название категории</string>
+    <string name="edit_category">Изменить категорию</string>
+    <string name="delete_category">Удалить категорию</string>
+    <string name="delete_category_message">Вы действительно хотите навсегда удалить эту категорию?</string>
+    <string name="snackbar_category_deleted">Категория удалена</string>
 </resources>
