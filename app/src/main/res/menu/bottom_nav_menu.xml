@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/assets"
+        android:id="@+id/assetsFragment"
         android:icon="@drawable/ic_baseline_credit_card_24"
         android:title="@string/assets" />
 
     <item
-        android:id="@+id/categories"
-        android:icon="@drawable/ic_baseline_category_24"
+        android:id="@+id/categoriesFragment"
+        android:icon="@drawable/ic_baseline_notes_24"
         android:title="@string/categories" />
 
 </menu>

@@ -7,12 +7,12 @@ import me.kofesst.android.moneyapp.model.CategoryEntity
 interface CategoriesDao {
 
     @Query("SELECT * FROM categories ORDER BY id ASC")
-    suspend fun getAssets(): List<CategoryEntity>
+    suspend fun getCategories(): List<CategoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addAsset(asset: CategoryEntity)
+    suspend fun addCategory(asset: CategoryEntity)
 
     @Delete
-    suspend fun deleteAsset(asset: CategoryEntity)
+    suspend fun deleteCategory(asset: CategoryEntity)
 
 }

@@ -26,4 +26,5 @@
     <string name="cancel">Отмена</string>
     <string name="delete">Удалить</string>
     <string name="snackbar_asset_deleted">Счёт удалён</string>
+    <string name="categories_top_bar_format">Всего: %s</string>
 </resources>

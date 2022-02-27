@@ -45,17 +45,16 @@ class AssetsFragment : Fragment() {
     }
 
     private fun setupViews() {
-        assetsAdapter = AssetsAdapter(requireContext())
-        assetsAdapter.addOnItemClickListener(object: ItemClickListener {
-            override fun onClick(item: AssetEntity) {
-                val dialog = AssetMenuDialog(binding.root, viewModel, item)
-                dialog.show(parentFragmentManager, "asset_menu_dialog")
-            }
+        assetsAdapter = AssetsAdapter(requireContext()).apply {
+            itemClickListener = object : ItemClickListener<AssetEntity> {
+                override fun onClick(item: AssetEntity) {
+                    val dialog = AssetMenuDialog(binding.root, viewModel, item)
+                    dialog.show(parentFragmentManager, "asset_menu_dialog")
+                }
 
-            override fun onLongClick(item: AssetEntity) {
-
+                override fun onLongClick(item: AssetEntity) { }
             }
-        })
+        }
 
         binding.assetsView.apply {
             adapter = assetsAdapter

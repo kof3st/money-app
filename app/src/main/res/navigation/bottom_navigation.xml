@@ -10,9 +10,11 @@
         android:name="me.kofesst.android.moneyapp.view.AssetsFragment"
         android:label="fragment_assets"
         tools:layout="@layout/fragment_assets"/>
+
     <fragment
         android:id="@+id/categoriesFragment"
         android:name="me.kofesst.android.moneyapp.view.CategoriesFragment"
         android:label="fragment_categories"
         tools:layout="@layout/fragment_categories" />
+
 </navigation>
