@@ -8,11 +8,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.database.MainDatabase
 import me.kofesst.android.moneyapp.model.AssetEntity
+import me.kofesst.android.moneyapp.model.CategoryEntity
+import me.kofesst.android.moneyapp.model.TransactionEntity
 
 class AssetsViewModel(
     application: Application
 ): AndroidViewModel(application) {
-    private val dao = MainDatabase.get(application).getAssetsDao()
+    private val database = MainDatabase.get(application)
+    private val assetsDao = database.getAssetsDao()
+    private val categoriesDao = database.getCategoriesDao()
+    private val transactionsDao = database.getTransactionsDao()
 
     val assetsLiveData = MutableLiveData<List<AssetEntity>>()
 
@@ -22,13 +27,21 @@ class AssetsViewModel(
      */
     fun getTotalBalance(): Double = assetsLiveData.value!!.sumOf { it.balance }
 
+    suspend fun getCategories(): List<CategoryEntity> = categoriesDao.getCategories()
+
+    fun addTransaction(transaction: TransactionEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            transactionsDao.addTransaction(transaction)
+        }
+    }
+
     /**
      * Обновляет [assetsLiveData], заменяя уже
      * существующие данные на данные, взятые из базы данных
      */
     fun updateAssets() {
         viewModelScope.launch(Dispatchers.IO) {
-            assetsLiveData.postValue(dao.getAssets())
+            assetsLiveData.postValue(assetsDao.getAssets())
         }
     }
 
@@ -38,7 +51,7 @@ class AssetsViewModel(
      */
     fun addAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.addAsset(asset)
+            assetsDao.addAsset(asset)
             updateAssets()
         }
     }
@@ -49,7 +62,7 @@ class AssetsViewModel(
      */
     fun updateAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.addAsset(asset)
+            assetsDao.addAsset(asset)
             updateAssets()
         }
     }
@@ -60,7 +73,7 @@ class AssetsViewModel(
      */
     fun deleteAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.deleteAsset(asset)
+            assetsDao.deleteAsset(asset)
             updateAssets()
         }
     }

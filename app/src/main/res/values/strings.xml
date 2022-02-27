@@ -33,4 +33,7 @@
     <string name="delete_category_message">Вы действительно хотите навсегда удалить эту категорию?</string>
     <string name="snackbar_category_deleted">Категория удалена</string>
     <string name="history">История</string>
+    <string name="transaction_title">Описание</string>
+    <string name="transaction_amount">Сумма</string>
+    <string name="category">Категория</string>
 </resources>

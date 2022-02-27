@@ -1,6 +1,9 @@
 package me.kofesst.android.moneyapp.view.dialog
 
 import android.view.View
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.AssetMenuDialogBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
@@ -31,7 +34,18 @@ class AssetMenuDialog(
         }
 
         binding.transactionButton.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val transactionDialog = AddTransactionDialog(
+                    categories = viewModel.getCategories()
+                ) {
+                    item.balance += it.amount
+                    viewModel.updateAsset(item)
+                    viewModel.addTransaction(it)
 
+                    dismiss()
+                }
+                transactionDialog.show(parentFragmentManager, "add_transaction_dialog")
+            }
         }
 
         binding.deleteButton.setOnClickListener {

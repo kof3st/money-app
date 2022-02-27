@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.model.relation.CategoryAndTransaction
+import me.kofesst.android.moneyapp.model.relation.CategoryWithTransactions
 
 @Dao
 interface TransactionsDao {
@@ -15,6 +16,6 @@ interface TransactionsDao {
 
     @Transaction
     @Query("SELECT * from categories ORDER BY categoryId ASC")
-    suspend fun getTransactions(): List<CategoryAndTransaction>
+    suspend fun getTransactions(): List<CategoryWithTransactions>
 
 }

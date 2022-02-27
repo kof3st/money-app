@@ -9,6 +9,6 @@ data class CategoryEntity(
     var name: String
 ) {
     override fun toString(): String {
-        return "id: $categoryId, name: $name"
+        return name
     }
 }
