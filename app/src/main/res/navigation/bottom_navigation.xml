@@ -16,5 +16,10 @@
         android:name="me.kofesst.android.moneyapp.view.CategoriesFragment"
         android:label="fragment_categories"
         tools:layout="@layout/fragment_categories" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="me.kofesst.android.moneyapp.view.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 
 </navigation>

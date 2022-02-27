@@ -7,7 +7,7 @@ import me.kofesst.android.moneyapp.model.default.AssetTypes
 
 @Entity(tableName = "assets")
 data class AssetEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val assetId: Int = 0,
     var name: String = "",
     var balance: Double = 0.0,
     var type: Int = AssetTypes.CARD.ordinal

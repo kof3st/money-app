@@ -11,7 +11,7 @@ class AssetsAdapter(
 ): BaseAdapter<AssetEntity, AssetViewHolder>(DIFFER) {
     companion object {
         private val DIFFER = ItemsDiffBuilder<AssetEntity>().apply {
-            itemsCheck = { old, new -> old.id == new.id }
+            itemsCheck = { old, new -> old.assetId == new.assetId }
             contentsCheck = { old, new ->
                 old.name == new.name &&
                 old.balance == new.balance &&

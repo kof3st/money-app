@@ -1,19 +1,18 @@
 package me.kofesst.android.moneyapp.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.kofesst.android.moneyapp.database.asset.AssetsDatabase
+import me.kofesst.android.moneyapp.database.MainDatabase
 import me.kofesst.android.moneyapp.model.AssetEntity
 
 class AssetsViewModel(
     application: Application
 ): AndroidViewModel(application) {
-    private val dao = AssetsDatabase.get(application).getDao()
+    private val dao = MainDatabase.get(application).getAssetsDao()
 
     val assetsLiveData = MutableLiveData<List<AssetEntity>>()
 
@@ -35,9 +34,7 @@ class AssetsViewModel(
 
     /**
      * Добавляет новый счёт [asset] в базу данных,
-     * обновляя [assetsLiveData].
-     * Также вставляет элемент на позицию [listPosition],
-     * если параметр функции передан
+     * обновляя [assetsLiveData]
      */
     fun addAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {

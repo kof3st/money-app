@@ -1,4 +1,4 @@
-package me.kofesst.android.moneyapp.database.asset
+package me.kofesst.android.moneyapp.database
 
 import androidx.room.*
 import me.kofesst.android.moneyapp.model.AssetEntity
@@ -6,7 +6,7 @@ import me.kofesst.android.moneyapp.model.AssetEntity
 @Dao
 interface AssetsDao {
 
-    @Query("SELECT * FROM assets ORDER BY id ASC")
+    @Query("SELECT * FROM assets ORDER BY assetId ASC")
     suspend fun getAssets(): List<AssetEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

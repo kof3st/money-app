@@ -11,7 +11,7 @@ class CategoriesAdapter(
 ): BaseAdapter<CategoryEntity, CategoryViewHolder>(DIFFER) {
     companion object {
         private val DIFFER = ItemsDiffBuilder<CategoryEntity>().apply {
-            itemsCheck = { old, new -> old.id == new.id }
+            itemsCheck = { old, new -> old.categoryId == new.categoryId }
             contentsCheck = { old, new -> old.name == new.name }
         }
     }

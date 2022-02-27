@@ -1,18 +1,22 @@
 package me.kofesst.android.moneyapp.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.kofesst.android.moneyapp.database.category.CategoriesDatabase
+import me.kofesst.android.moneyapp.database.MainDatabase
 import me.kofesst.android.moneyapp.model.CategoryEntity
+import me.kofesst.android.moneyapp.model.TransactionEntity
 
 class CategoriesViewModel(
     application: Application
 ): AndroidViewModel(application) {
-    private val dao = CategoriesDatabase.get(application).getDao()
+    private val database = MainDatabase.get(application)
+    private val categoriesDao = database.getCategoriesDao()
+    private val transactionsDao = database.getTransactionsDao()
 
     val categoriesLiveData = MutableLiveData<List<CategoryEntity>>()
 
@@ -22,7 +26,7 @@ class CategoriesViewModel(
      */
     fun updateCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            categoriesLiveData.postValue(dao.getCategories())
+            categoriesLiveData.postValue(categoriesDao.getCategories())
         }
     }
 
@@ -32,7 +36,8 @@ class CategoriesViewModel(
      */
     fun addCategory(category: CategoryEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.addCategory(category)
+            val categoryId = categoriesDao.addCategory(category)
+
             updateCategories()
         }
     }
@@ -43,7 +48,7 @@ class CategoriesViewModel(
      */
     fun updateCategory(category: CategoryEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.addCategory(category)
+            categoriesDao.addCategory(category)
             updateCategories()
         }
     }
@@ -54,7 +59,7 @@ class CategoriesViewModel(
      */
     fun deleteCategory(category: CategoryEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.deleteCategory(category)
+            categoriesDao.deleteCategory(category)
             updateCategories()
         }
     }
