@@ -90,8 +90,8 @@ class CategoriesFragment : Fragment() {
         }
     }
 
-    private fun updateTopBar(amount: Int) {
-        binding.topBar.subtitle = getString(R.string.categories_top_bar_format)
-            .format(CasesUtil.getCase(CATEGORIES_CASES_WORD_UID, amount))
+    private fun updateTopBar(count: Int) {
+        binding.topBar.subtitle = getString(R.string.count_format)
+            .format(CasesUtil.getCase(CATEGORIES_CASES_WORD_UID, count))
     }
 }

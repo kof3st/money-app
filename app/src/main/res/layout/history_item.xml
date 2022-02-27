@@ -4,6 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground"
     android:padding="10dp">
 
     <ImageView
@@ -74,13 +77,11 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/category_text"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="Транспорт"
-            android:textSize="15sp"
-            android:textStyle="italic"/>
+            android:id="@+id/date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="23 фев 2022 в 23:59"
+            android:textSize="14sp"/>
 
     </LinearLayout>
 

@@ -8,11 +8,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentHistoryBinding
+import me.kofesst.android.moneyapp.util.CasesUtil
 import me.kofesst.android.moneyapp.view.recyclerview.HistoryAdapter
 import me.kofesst.android.moneyapp.viewmodel.HistoryViewModel
 import me.kofesst.android.moneyapp.viewmodel.factory.HistoryViewModelFactory
 
 class HistoryFragment : Fragment() {
+    companion object {
+        private const val TRANSACTIONS_COUNT_CASES_WORD_UID = "transactions"
+    }
+
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var viewModel: HistoryViewModel
     private lateinit var historyAdapter: HistoryAdapter
@@ -28,6 +33,7 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupViewModel()
         setupViews()
+        setupCases()
         setupObserves()
 
         viewModel.updateHistory()
@@ -48,9 +54,24 @@ class HistoryFragment : Fragment() {
         }
     }
 
+    private fun setupCases() {
+        CasesUtil.registerWord(
+            uid = TRANSACTIONS_COUNT_CASES_WORD_UID,
+            firstCase = "транзакция",
+            secondCase = "транзакции",
+            thirdCase = "транзакций"
+        )
+    }
+
     private fun setupObserves() {
         viewModel.historyLiveData.observe(viewLifecycleOwner) {
             historyAdapter.submitList(it.toList())
+            updateTopBar(it.size)
         }
+    }
+
+    private fun updateTopBar(count: Int) {
+        binding.topBar.subtitle = getString(R.string.count_format)
+            .format(CasesUtil.getCase(TRANSACTIONS_COUNT_CASES_WORD_UID, count))
     }
 }
