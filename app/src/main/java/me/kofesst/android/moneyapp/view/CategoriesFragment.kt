@@ -10,6 +10,7 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
+import me.kofesst.android.moneyapp.view.dialog.CategoryModelDialog
 import me.kofesst.android.moneyapp.view.recyclerview.CategoriesAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.viewmodel.CategoriesViewModel
@@ -59,6 +60,13 @@ class CategoriesFragment : Fragment() {
 
         binding.categoriesView.apply {
             adapter = categoriesAdapter
+        }
+
+        binding.newCategoryButton.apply {
+            setOnClickListener {
+                val dialog = CategoryModelDialog({ viewModel.addCategory(it) })
+                dialog.show(parentFragmentManager, "create_category_dialog")
+            }
         }
     }
 
