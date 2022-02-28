@@ -36,14 +36,12 @@ class AssetMenuDialog(
         binding.transactionButton.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val transactionDialog = AddTransactionDialog(
-                    categories = viewModel.getCategories()
+                    categories = viewModel.getCategories(),
+                    asset = item
                 ) {
                     item.balance += it.amount
                     viewModel.updateAsset(item)
-
-                    it.assetId = item.assetId.toLong()
                     viewModel.addTransaction(it)
-
                     dismiss()
                 }
                 transactionDialog.show(parentFragmentManager, "add_transaction_dialog")

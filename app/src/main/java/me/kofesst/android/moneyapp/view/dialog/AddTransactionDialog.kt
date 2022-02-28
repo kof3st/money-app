@@ -4,12 +4,14 @@ import android.view.View
 import android.widget.ArrayAdapter
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.AddTransactionDialogBinding
+import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import java.lang.Exception
 
 class AddTransactionDialog(
     private val categories: List<CategoryEntity>,
+    private val asset: AssetEntity,
     onSubmit: (TransactionEntity) -> Unit
 ): ModelDialog<TransactionEntity>(
     saveButtonTextRes = R.string.create,
@@ -82,9 +84,12 @@ class AddTransactionDialog(
         }
 
         return TransactionEntity(
+            categoryId = selectedCategory!!.categoryId.toLong(),
+            assetId = asset.assetId.toLong(),
+            categoryName = selectedCategory!!.name,
+            assetName = asset.name,
             title = title!!,
-            amount = amount,
-            categoryId = selectedCategory!!.categoryId.toLong()
+            amount = amount
         )
     }
 }

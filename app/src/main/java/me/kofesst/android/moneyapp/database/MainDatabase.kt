@@ -14,7 +14,7 @@ import me.kofesst.android.moneyapp.model.TransactionEntity
         AssetEntity::class,
         TransactionEntity::class
     ],
-    version = 7
+    version = 8
 )
 abstract class MainDatabase: RoomDatabase() {
     companion object {

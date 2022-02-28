@@ -2,7 +2,6 @@ package me.kofesst.android.moneyapp.database
 
 import androidx.room.*
 import me.kofesst.android.moneyapp.model.CategoryEntity
-import me.kofesst.android.moneyapp.model.relation.CategoryWithTransactions
 
 @Dao
 interface CategoriesDao {
@@ -15,9 +14,5 @@ interface CategoriesDao {
 
     @Delete
     suspend fun deleteCategory(asset: CategoryEntity)
-
-    @Transaction
-    @Query("SELECT * FROM categories ORDER BY categoryId ASC")
-    suspend fun getCategoryWithTransactions(): List<CategoryWithTransactions>
 
 }

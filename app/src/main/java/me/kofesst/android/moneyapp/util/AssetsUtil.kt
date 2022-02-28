@@ -1,23 +1,26 @@
 package me.kofesst.android.moneyapp.util
 
 import android.content.Context
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import me.kofesst.android.moneyapp.model.AssetEntity
-import me.kofesst.android.moneyapp.view.recyclerview.AssetViewHolder
 import java.text.DecimalFormat
 
-fun Double.format(): String {
+fun Double.format(sign: Boolean = false): String {
     val formatter = DecimalFormat().apply {
         groupingSize = 3
         minimumFractionDigits = 0
         maximumFractionDigits = 2
     }
 
-    return formatter.format(this)
+    val format = formatter.format(this)
+    if (sign) {
+        return "${if (this < 0.0) "" else "+"}$format"
+    }
+
+    return format
 }
 
-fun Double.formatWithCurrency(): String = "%s руб.".format(this.format())
+fun Double.formatWithCurrency(sign: Boolean = false): String = "%s руб.".format(this.format(sign))
 
 fun Double.balanceColor(context: Context): Int {
     return when {
