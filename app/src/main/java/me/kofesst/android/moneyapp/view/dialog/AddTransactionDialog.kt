@@ -1,5 +1,6 @@
 package me.kofesst.android.moneyapp.view.dialog
 
+import android.text.InputType
 import android.view.View
 import android.widget.ArrayAdapter
 import me.kofesst.android.moneyapp.R
@@ -11,7 +12,9 @@ import java.lang.Exception
 
 class AddTransactionDialog(
     private val categories: List<CategoryEntity>,
+    private val assets: List<AssetEntity>,
     private val asset: AssetEntity,
+    private val isTransfer: Boolean = false,
     onSubmit: (TransactionEntity) -> Unit
 ): ModelDialog<TransactionEntity>(
     saveButtonTextRes = R.string.create,
@@ -20,18 +23,39 @@ class AddTransactionDialog(
 ) {
     private lateinit var binding : AddTransactionDialogBinding
     private var selectedCategory: CategoryEntity? = null
+    private var selectedTarget: AssetEntity? = null
 
     override fun onCreateContentCreated(contentView: View) {
         binding = AddTransactionDialogBinding.bind(contentView)
 
-        val categoriesAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            categories
-        )
-        binding.categoryText.setAdapter(categoriesAdapter)
-        binding.categoryText.setOnItemClickListener { _, _, position, _ ->
-            selectedCategory = categories[position]
+        if (isTransfer) {
+            binding.titleText.setText("Перевод")
+            binding.titleText.isEnabled = false
+            binding.categoryTextLayout.visibility = View.GONE
+            binding.amountText.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
+
+            val targetsAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                assets
+            )
+            binding.targetText.setAdapter(targetsAdapter)
+            binding.targetText.setOnItemClickListener { _, _, position, _ ->
+                selectedTarget = assets[position]
+            }
+        }
+        else {
+            binding.targetTextLayout.visibility = View.GONE
+
+            val categoriesAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                categories
+            )
+            binding.categoryText.setAdapter(categoriesAdapter)
+            binding.categoryText.setOnItemClickListener { _, _, position, _ ->
+                selectedCategory = categories[position]
+            }
         }
     }
 
@@ -52,9 +76,17 @@ class AddTransactionDialog(
             error = true
         }
 
-        if (selectedCategory == null) {
-            binding.categoryTextLayout.error = getString(R.string.error_required)
-            error = true
+        if (isTransfer) {
+            if (selectedTarget == null) {
+                binding.targetTextLayout.error = getString(R.string.error_required)
+                error = true
+            }
+        }
+        else {
+            if (selectedCategory == null) {
+                binding.categoryTextLayout.error = getString(R.string.error_required)
+                error = true
+            }
         }
 
         val amountStr = binding.amountText.text?.toString()
@@ -84,10 +116,12 @@ class AddTransactionDialog(
         }
 
         return TransactionEntity(
-            categoryId = selectedCategory!!.categoryId.toLong(),
+            categoryId = selectedCategory?.categoryId?.toLong(),
             assetId = asset.assetId.toLong(),
-            categoryName = selectedCategory!!.name,
+            targetId = selectedTarget?.assetId?.toLong(),
+            categoryName = selectedCategory?.name ?: getString(R.string.transfer),
             assetName = asset.name,
+            targetName = selectedTarget?.name,
             title = title!!,
             amount = amount
         )

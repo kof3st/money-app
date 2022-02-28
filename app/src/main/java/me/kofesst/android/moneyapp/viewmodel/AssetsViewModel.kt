@@ -1,10 +1,12 @@
 package me.kofesst.android.moneyapp.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.database.MainDatabase
 import me.kofesst.android.moneyapp.model.AssetEntity
@@ -28,6 +30,8 @@ class AssetsViewModel(
     fun getTotalBalance(): Double = assetsLiveData.value!!.sumOf { it.balance }
 
     suspend fun getCategories(): List<CategoryEntity> = categoriesDao.getCategories()
+
+    suspend fun getAsset(id: Long): AssetEntity? = assetsDao.getAsset(id)
 
     fun addTransaction(transaction: TransactionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -64,6 +68,7 @@ class AssetsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             assetsDao.addAsset(asset)
             updateAssets()
+            Log.d("AAA", assetsLiveData.value!!.toString())
         }
     }
 

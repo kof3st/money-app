@@ -70,6 +70,7 @@ class AssetsFragment : Fragment() {
 
     private fun setupObserves() {
         viewModel.assetsLiveData.observe(viewLifecycleOwner) {
+            assetsAdapter.submitList(null)
             assetsAdapter.submitList(it.toList())
             updateTopBarBalance()
         }

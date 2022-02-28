@@ -19,6 +19,12 @@
         style="@style/MenuButton"/>
 
     <Button
+        android:id="@+id/transfer_button"
+        android:text="@string/transfer"
+        app:icon="@drawable/ic_baseline_cached_24"
+        style="@style/MenuButton"/>
+
+    <Button
         android:id="@+id/delete_button"
         android:text="@string/delete_asset"
         app:icon="@drawable/ic_baseline_delete_outline_24"

@@ -9,7 +9,7 @@ data class TransactionEntity(
     @PrimaryKey(autoGenerate = true) val transactionId: Int = 0,
     val date: Long = Date().time,
 
-    val categoryId: Long = 0,
+    val categoryId: Long? = 0,
     val assetId: Long = 0,
     val targetId: Long? = null,
 

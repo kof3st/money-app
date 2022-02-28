@@ -1,5 +1,6 @@
 package me.kofesst.android.moneyapp.view.dialog
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -37,12 +38,42 @@ class AssetMenuDialog(
             lifecycleScope.launch(Dispatchers.IO) {
                 val transactionDialog = AddTransactionDialog(
                     categories = viewModel.getCategories(),
+                    assets = listOf(),
                     asset = item
                 ) {
                     item.balance += it.amount
                     viewModel.updateAsset(item)
+
                     viewModel.addTransaction(it)
                     dismiss()
+                }
+                transactionDialog.show(parentFragmentManager, "add_transaction_dialog")
+            }
+        }
+
+        binding.transferButton.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val transactionDialog = AddTransactionDialog(
+                    categories = listOf(),
+                    assets = viewModel.assetsLiveData.value!!.filter { it.assetId != item.assetId },
+                    asset = item,
+                    isTransfer = true
+                ) {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        item.balance -= it.amount
+                        viewModel.updateAsset(item)
+
+                        val target = viewModel.getAsset(it.targetId!!)!!
+                        target.balance += it.amount
+
+                        Log.d("AAA", "$item asset")
+                        Log.d("AAA", "$target target")
+
+                        viewModel.updateAsset(target)
+
+                        viewModel.addTransaction(it)
+                        dismiss()
+                    }
                 }
                 transactionDialog.show(parentFragmentManager, "add_transaction_dialog")
             }

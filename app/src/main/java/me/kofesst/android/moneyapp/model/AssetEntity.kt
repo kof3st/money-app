@@ -17,4 +17,8 @@ data class AssetEntity(
         const val NEUTRAL_BALANCE_COLOR_RES  = R.color.neutral
         const val POSITIVE_BALANCE_COLOR_RES = R.color.positive
     }
+
+    override fun toString(): String {
+        return "$name, $balance"
+    }
 }

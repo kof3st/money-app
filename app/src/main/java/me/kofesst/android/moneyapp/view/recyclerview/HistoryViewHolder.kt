@@ -34,8 +34,11 @@ class HistoryViewHolder(
             return
         }
 
+        amountText.text = (-item.amount).formatWithCurrency(sign = true)
+        amountText.setTextColor((-item.amount).balanceColor(itemView.context))
+
         targetNameText.text = item.targetName
-        targetAmountText.text = (-item.amount).formatWithCurrency(sign = true)
-        targetAmountText.setTextColor((-item.amount).balanceColor(itemView.context))
+        targetAmountText.text = item.amount.formatWithCurrency(sign = true)
+        targetAmountText.setTextColor(item.amount.balanceColor(itemView.context))
     }
 }
