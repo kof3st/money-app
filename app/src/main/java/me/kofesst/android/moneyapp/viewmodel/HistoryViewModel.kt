@@ -19,7 +19,7 @@ class HistoryViewModel(
     fun updateHistory() {
         viewModelScope.launch(Dispatchers.IO) {
             val history = database.getTransactionsDao().getTransactions()
-            historyLiveData.postValue(history)
+            historyLiveData.postValue(history.sortedByDescending { it.date })
         }
     }
 }
