@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.model.default.AssetTypes
+import java.io.Serializable
 
 @Entity(tableName = "assets")
 data class AssetEntity(
@@ -11,7 +12,7 @@ data class AssetEntity(
     var name: String = "",
     var balance: Double = 0.0,
     var type: Int = AssetTypes.CARD.ordinal
-) {
+): Serializable {
     companion object {
         const val NEGATIVE_BALANCE_COLOR_RES = R.color.negative
         const val NEUTRAL_BALANCE_COLOR_RES  = R.color.neutral

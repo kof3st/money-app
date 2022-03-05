@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.AssetsFragment">
+    tools:context=".view.asset.AssetsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +17,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:transitionName="@string/asset_details_transition_name"
                 android:id="@+id/top_bar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -43,6 +44,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:transitionName="@string/edit_shared_transition_name"
         android:id="@+id/new_asset_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

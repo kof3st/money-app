@@ -18,7 +18,7 @@
     <string name="create">Создать</string>
     <string name="edit">Изменить</string>
     <string name="edit_asset">Изменить счёт</string>
-    <string name="transaction">Транзакция</string>
+    <string name="new_transaction">Новая транзакция</string>
     <string name="delete_asset">Удалить счёт</string>
     <string name="asset_menu_title">Выберите действие</string>
     <string name="confirm_dialog_title">Подтвердите действие</string>
@@ -36,6 +36,15 @@
     <string name="transaction_title">Описание</string>
     <string name="transaction_amount">Сумма</string>
     <string name="category">Категория</string>
-    <string name="transfer">Перевод между счетами</string>
+    <string name="transfer_action">Перевести на другой счёт</string>
+    <string name="transfer_category">Перевод между счетами</string>
+    <string name="transfer">Перевод</string>
     <string name="all_time">За всё время</string>
+    <string name="edit_shared_transition_name">edit_transition</string>
+    <string name="transactions">Транзакции</string>
+    <string name="asset_details_transition_name">asset_details</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_transaction">Добавить транзакцию</string>
+    <string name="add_transaction_transition_name">add_transaction</string>
 </resources>

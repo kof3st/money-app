@@ -10,8 +10,8 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
-import me.kofesst.android.moneyapp.view.dialog.CategoryMenuDialog
-import me.kofesst.android.moneyapp.view.dialog.CategoryModelDialog
+import me.kofesst.android.moneyapp.view.util.CategoryMenuDialog
+import me.kofesst.android.moneyapp.view.util.CategoryModelDialog
 import me.kofesst.android.moneyapp.view.recyclerview.CategoriesAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.viewmodel.CategoriesViewModel
@@ -53,12 +53,12 @@ class CategoriesFragment : Fragment() {
     private fun setupViews() {
         categoriesAdapter = CategoriesAdapter(requireContext()).apply {
             itemClickListener = object: ItemClickListener<CategoryEntity> {
-                override fun onClick(item: CategoryEntity) {
+                override fun onClick(view: View, item: CategoryEntity) {
                     val dialog = CategoryMenuDialog(binding.root, viewModel, item)
                     dialog.show(parentFragmentManager, "category_menu_dialog")
                 }
 
-                override fun onLongClick(item: CategoryEntity) { }
+                override fun onLongClick(view: View, item: CategoryEntity) { }
             }
         }
 
@@ -68,7 +68,9 @@ class CategoriesFragment : Fragment() {
 
         binding.newCategoryButton.apply {
             setOnClickListener {
-                val dialog = CategoryModelDialog({ viewModel.addCategory(it) })
+                val dialog = CategoryModelDialog(
+//                    { viewModel.addCategory(it) }
+                )
                 dialog.show(parentFragmentManager, "create_category_dialog")
             }
         }

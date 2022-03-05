@@ -1,5 +1,6 @@
 package me.kofesst.android.moneyapp.view.recyclerview
 
+import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
@@ -15,11 +16,11 @@ abstract class BaseAdapter<M, VH: BaseViewHolder<M>>(
         if (itemClickListener == null) return
 
         holder.itemView.setOnClickListener {
-            itemClickListener!!.onClick(item)
+            itemClickListener!!.onClick(it, item)
         }
 
         holder.itemView.setOnLongClickListener {
-            itemClickListener!!.onLongClick(item)
+            itemClickListener!!.onLongClick(it, item)
             true
         }
     }
@@ -31,9 +32,9 @@ abstract class BaseAdapter<M, VH: BaseViewHolder<M>>(
 
 interface ItemClickListener<T> {
 
-    fun onClick(item: T)
+    fun onClick(view: View, item: T)
 
-    fun onLongClick(item: T)
+    fun onLongClick(view: View, item: T)
 
 }
 

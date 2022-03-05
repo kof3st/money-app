@@ -8,12 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="primary">#2f9dff</color>
-    <color name="primary_variant">#0c6cdc</color>
-    <color name="secondary">#ffa521</color>
-    <color name="secondary_variant">#fe761c</color>
+    <color name="primary">#7b1fa2</color>
+    <color name="primary_light">#ae52d4</color>
+    <color name="primary_dark">#4a0072</color>
 
     <color name="negative">@android:color/holo_red_light</color>
-    <color name="neutral">@color/primary</color>
+    <color name="neutral">@color/positive</color>
     <color name="positive">#FF3CB043</color>
 </resources>

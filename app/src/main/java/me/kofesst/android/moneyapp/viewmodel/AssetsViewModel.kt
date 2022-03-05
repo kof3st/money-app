@@ -3,10 +3,10 @@ package me.kofesst.android.moneyapp.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.database.MainDatabase
 import me.kofesst.android.moneyapp.model.AssetEntity
@@ -21,13 +21,14 @@ class AssetsViewModel(
     private val categoriesDao = database.getCategoriesDao()
     private val transactionsDao = database.getTransactionsDao()
 
-    val assetsLiveData = MutableLiveData<List<AssetEntity>>()
+    private val _assets = MutableStateFlow(listOf<AssetEntity>())
+    val assets get() = _assets.asStateFlow()
 
     /**
      * Возвращает итоговый баланс, считая его из
      * всех счетов пользователя
      */
-    fun getTotalBalance(): Double = assetsLiveData.value!!.sumOf { it.balance }
+    fun getTotalBalance(): Double = assets.value.sumOf { it.balance }
 
     suspend fun getCategories(): List<CategoryEntity> = categoriesDao.getCategories()
 
@@ -40,18 +41,18 @@ class AssetsViewModel(
     }
 
     /**
-     * Обновляет [assetsLiveData], заменяя уже
+     * Обновляет [assets], заменяя уже
      * существующие данные на данные, взятые из базы данных
      */
     fun updateAssets() {
         viewModelScope.launch(Dispatchers.IO) {
-            assetsLiveData.postValue(assetsDao.getAssets())
+            _assets.value = assetsDao.getAssets()
         }
     }
 
     /**
      * Добавляет новый счёт [asset] в базу данных,
-     * обновляя [assetsLiveData]
+     * обновляя [assets]
      */
     fun addAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -62,19 +63,19 @@ class AssetsViewModel(
 
     /**
      * Обновляет счёт [asset] в базе данных,
-     * обновляя [assetsLiveData]
+     * обновляя [assets]
      */
     fun updateAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             assetsDao.addAsset(asset)
             updateAssets()
-            Log.d("AAA", assetsLiveData.value!!.toString())
+            Log.d("AAA", assets.value.toString())
         }
     }
 
     /**
      * Удаляет счёт [asset] из базы данных,
-     * обновляя [assetsLiveData]
+     * обновляя [assets]
      */
     fun deleteAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {

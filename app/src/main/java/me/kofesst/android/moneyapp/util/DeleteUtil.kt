@@ -11,7 +11,7 @@ fun Fragment.showDeleteDialogWithSnackbar(
     fragmentView: View,
     @StringRes dialogTitleRes: Int,
     @StringRes dialogMessageRes: Int,
-    @StringRes snakbarMessageRes: Int,
+    @StringRes snackbarMessageRes: Int,
     deleteAction: () -> Unit,
     undoAction: () -> Unit
 ) {
@@ -22,7 +22,7 @@ fun Fragment.showDeleteDialogWithSnackbar(
         .setPositiveButton(R.string.delete) { _, _ ->
             deleteAction()
 
-            Snackbar.make(fragmentView, snakbarMessageRes, Snackbar.LENGTH_LONG)
+            Snackbar.make(fragmentView, snackbarMessageRes, Snackbar.LENGTH_LONG)
                 .setAction(R.string.cancel) { undoAction() }
                 .show()
         }

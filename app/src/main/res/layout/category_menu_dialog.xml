@@ -6,16 +6,4 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/edit_button"
-        android:text="@string/edit_category"
-        app:icon="@drawable/ic_baseline_edit_24"
-        style="@style/MenuButton"/>
-
-    <Button
-        android:id="@+id/delete_button"
-        android:text="@string/delete_category"
-        app:icon="@drawable/ic_baseline_delete_outline_24"
-        style="@style/MenuButton"/>
-
 </LinearLayout>
