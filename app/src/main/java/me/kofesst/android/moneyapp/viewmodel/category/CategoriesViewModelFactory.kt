@@ -1,9 +1,8 @@
-package me.kofesst.android.moneyapp.viewmodel.factory
+package me.kofesst.android.moneyapp.viewmodel.category
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.kofesst.android.moneyapp.viewmodel.CategoriesViewModel
 
 class CategoriesViewModelFactory(
     private val application: Application

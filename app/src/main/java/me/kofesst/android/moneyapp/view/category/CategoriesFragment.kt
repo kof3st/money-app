@@ -1,29 +1,41 @@
-package me.kofesst.android.moneyapp.view
+package me.kofesst.android.moneyapp.view.category
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.divider.MaterialDividerItemDecoration
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
-import me.kofesst.android.moneyapp.view.util.CategoryMenuDialog
-import me.kofesst.android.moneyapp.view.util.CategoryModelDialog
+import me.kofesst.android.moneyapp.util.include
+import me.kofesst.android.moneyapp.util.setExitSharedTransition
+import me.kofesst.android.moneyapp.util.setPostpone
 import me.kofesst.android.moneyapp.view.recyclerview.CategoriesAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
-import me.kofesst.android.moneyapp.viewmodel.CategoriesViewModel
-import me.kofesst.android.moneyapp.viewmodel.factory.CategoriesViewModelFactory
+import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
+import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModelFactory
 
 class CategoriesFragment : Fragment() {
     companion object {
         private const val CATEGORIES_CASES_WORD_UID = "categories_count"
     }
 
+    private val viewModel: CategoriesViewModel by viewModels(
+        ownerProducer = { requireActivity() },
+        factoryProducer = { CategoriesViewModelFactory(requireActivity().application) }
+    )
+
     private lateinit var binding: FragmentCategoriesBinding
-    private lateinit var viewModel: CategoriesViewModel
     private lateinit var categoriesAdapter: CategoriesAdapter
 
     override fun onCreateView(
@@ -35,7 +47,9 @@ class CategoriesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setupViewModel()
+        setPostpone(view)
+        setExitSharedTransition(R.integer.shared_transition_duration_short)
+
         setupViews()
         setupCases()
         setupObserves()
@@ -43,19 +57,14 @@ class CategoriesFragment : Fragment() {
         viewModel.updateCategories()
     }
 
-    private fun setupViewModel() {
-        viewModel = ViewModelProvider(
-            owner = this,
-            factory = CategoriesViewModelFactory(requireActivity().application)
-        )[CategoriesViewModel::class.java]
-    }
-
     private fun setupViews() {
         categoriesAdapter = CategoriesAdapter(requireContext()).apply {
             itemClickListener = object: ItemClickListener<CategoryEntity> {
                 override fun onClick(view: View, item: CategoryEntity) {
-                    val dialog = CategoryMenuDialog(binding.root, viewModel, item)
-                    dialog.show(parentFragmentManager, "category_menu_dialog")
+                    val extras = R.string.category_details_transition_name include binding.topBar
+                    val direction =
+                        CategoriesFragmentDirections.actionCategoriesFragmentToCategoryDetailsFragment(item)
+                    findNavController().navigate(direction, extras)
                 }
 
                 override fun onLongClick(view: View, item: CategoryEntity) { }
@@ -64,14 +73,20 @@ class CategoriesFragment : Fragment() {
 
         binding.categoriesView.apply {
             adapter = categoriesAdapter
+            addItemDecoration(
+                MaterialDividerItemDecoration(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL
+                )
+            )
         }
 
         binding.newCategoryButton.apply {
-            setOnClickListener {
-                val dialog = CategoryModelDialog(
-//                    { viewModel.addCategory(it) }
-                )
-                dialog.show(parentFragmentManager, "create_category_dialog")
+            setOnClickListener { button ->
+                val extras = R.string.edit_shared_transition_name include button
+                val direction =
+                    CategoriesFragmentDirections.actionCategoriesFragmentToCreateCategoryFragment()
+                findNavController().navigate(direction, extras)
             }
         }
     }
@@ -86,9 +101,13 @@ class CategoriesFragment : Fragment() {
     }
 
     private fun setupObserves() {
-        viewModel.categoriesLiveData.observe(viewLifecycleOwner) {
-            categoriesAdapter.submitList(it.toList())
-            updateTopBar(it.size)
+        lifecycleScope.launchWhenStarted {
+            viewModel.categories
+                .onEach { categories ->
+                    categoriesAdapter.submitList(categories)
+                    updateTopBar(categories.size)
+                }
+                .collect()
         }
     }
 

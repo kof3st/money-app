@@ -43,9 +43,11 @@
     <string name="edit_shared_transition_name">edit_transition</string>
     <string name="transactions">Транзакции</string>
     <string name="asset_details_transition_name">asset_details</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_transaction">Добавить транзакцию</string>
     <string name="add_transaction_transition_name">add_transaction</string>
     <string name="transfer_transition_name">transfer</string>
+    <string name="create_category">Создать категорию</string>
+    <string name="new_category">Новая категория</string>
+    <string name="category_details_transition_name">category_details</string>
+    <string name="edit_category_transition_name">edit_category</string>
 </resources>

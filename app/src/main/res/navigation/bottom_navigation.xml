@@ -21,9 +21,16 @@
 
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="me.kofesst.android.moneyapp.view.CategoriesFragment"
+        android:name="me.kofesst.android.moneyapp.view.category.CategoriesFragment"
         android:label="fragment_categories"
-        tools:layout="@layout/fragment_categories" />
+        tools:layout="@layout/fragment_categories" >
+        <action
+            android:id="@+id/action_categoriesFragment_to_createCategoryFragment"
+            app:destination="@id/createCategoryFragment" />
+        <action
+            android:id="@+id/action_categoriesFragment_to_categoryDetailsFragment"
+            app:destination="@id/categoryDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/historyFragment"
@@ -59,6 +66,28 @@
             android:name="isTransfer"
             app:argType="boolean"
             android:defaultValue="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/createCategoryFragment"
+        android:name="me.kofesst.android.moneyapp.view.category.CreateCategoryFragment"
+        android:label="CreateCategoryFragment" >
+        <argument
+            android:name="editing"
+            app:argType="me.kofesst.android.moneyapp.model.CategoryEntity"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryDetailsFragment"
+        android:name="me.kofesst.android.moneyapp.view.category.CategoryDetailsFragment"
+        android:label="fragment_category_details"
+        tools:layout="@layout/fragment_category_details" >
+        <argument
+            android:name="targetCategory"
+            app:argType="me.kofesst.android.moneyapp.model.CategoryEntity" />
+        <action
+            android:id="@+id/action_categoryDetailsFragment_to_createCategoryFragment"
+            app:destination="@id/createCategoryFragment" />
     </fragment>
 
 </navigation>
