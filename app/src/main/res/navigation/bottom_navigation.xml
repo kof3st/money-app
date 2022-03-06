@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="me.kofesst.android.moneyapp.view.HistoryFragment"
+        android:name="me.kofesst.android.moneyapp.view.history.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
 

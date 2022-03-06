@@ -2,24 +2,22 @@ package me.kofesst.android.moneyapp.viewmodel.history
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import me.kofesst.android.moneyapp.database.MainDatabase
-import me.kofesst.android.moneyapp.model.TransactionEntity
 
 class HistoryViewModel(
     application: Application
 ): AndroidViewModel(application) {
     private val database = MainDatabase.get(application)
+    private val transactionsDao = database.getTransactionsDao()
 
-    val historyLiveData = MutableLiveData<List<TransactionEntity>>()
-
-    fun updateHistory() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val history = database.getTransactionsDao().getTransactions()
-            historyLiveData.postValue(history.sortedByDescending { it.date })
-        }
-    }
+    val history = Pager(
+        PagingConfig(
+            pageSize = 5,
+            prefetchDistance = 5,
+            initialLoadSize = 15,
+            enablePlaceholders = false
+        )
+    ) { transactionsDao.getTransactions() }.flow
 }
