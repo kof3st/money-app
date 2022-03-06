@@ -1,30 +1,28 @@
 package me.kofesst.android.moneyapp.view.asset
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.transition.platform.MaterialContainerTransform
-import com.google.android.material.transition.platform.MaterialElevationScale
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentAssetDetailsBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.default.AssetTypes
-import me.kofesst.android.moneyapp.util.balanceColor
-import me.kofesst.android.moneyapp.util.formatWithCurrency
-import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
+import me.kofesst.android.moneyapp.util.*
 import me.kofesst.android.moneyapp.viewmodel.AssetsViewModel
 import me.kofesst.android.moneyapp.viewmodel.factory.AssetsViewModelFactory
 
 class AssetDetailsFragment: Fragment() {
+    private val viewModel: AssetsViewModel by viewModels(
+        ownerProducer = { requireActivity() },
+        factoryProducer = { AssetsViewModelFactory(requireActivity().application) }
+    )
+
     private lateinit var binding: FragmentAssetDetailsBinding
-    private lateinit var viewModel: AssetsViewModel
     private lateinit var targetAsset: AssetEntity
 
     private val args: AssetDetailsFragmentArgs by navArgs()
@@ -40,28 +38,17 @@ class AssetDetailsFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.fragment_container
-            duration = resources.getInteger(R.integer.shared_transition_duration_short)
-                .toLong()
-            scrimColor = Color.TRANSPARENT
-        }
+        setEnterSharedTransition(R.integer.shared_transition_duration_short)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         targetAsset = args.targetAsset
 
-        setupViewModel()
+        setExitSharedTransition(R.integer.shared_transition_duration_short)
+
         setupViews()
         setupTopBar()
         setupActions()
-    }
-
-    private fun setupViewModel() {
-        viewModel = ViewModelProvider(
-            requireActivity(),
-            AssetsViewModelFactory(requireActivity().application)
-        )[AssetsViewModel::class.java]
     }
 
     private fun setupViews() {
@@ -86,18 +73,8 @@ class AssetDetailsFragment: Fragment() {
 
     private fun setupActions() {
         binding.transactionButton.apply {
-            setOnClickListener {
-                exitTransition = MaterialElevationScale(false).apply {
-                    duration =
-                        resources.getInteger(R.integer.shared_transition_duration_short).toLong()
-                }
-                reenterTransition = MaterialElevationScale(true).apply {
-                    duration =
-                        resources.getInteger(R.integer.shared_transition_duration_short).toLong()
-                }
-
-                val transitionName = getString(R.string.add_transaction_transition_name)
-                val extras = FragmentNavigatorExtras(it to transitionName)
+            setOnClickListener { button ->
+                val extras = R.string.add_transaction_transition_name include button
                 val direction = AssetDetailsFragmentDirections.actionAssetDetailsFragmentToCreateTransactionFragment(
                     targetAsset = targetAsset,
                     isTransfer = false

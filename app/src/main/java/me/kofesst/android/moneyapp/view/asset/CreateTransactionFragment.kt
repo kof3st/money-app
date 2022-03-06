@@ -8,11 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.transition.platform.MaterialContainerTransform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,12 +20,17 @@ import me.kofesst.android.moneyapp.databinding.FragmentCreateTransactionBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.model.TransactionEntity
+import me.kofesst.android.moneyapp.util.setEnterSharedTransition
 import me.kofesst.android.moneyapp.viewmodel.AssetsViewModel
 import me.kofesst.android.moneyapp.viewmodel.factory.AssetsViewModelFactory
 
 class CreateTransactionFragment: Fragment() {
+    private val viewModel: AssetsViewModel by viewModels(
+        ownerProducer = { requireActivity() },
+        factoryProducer = { AssetsViewModelFactory(requireActivity().application) }
+    )
+
     private lateinit var binding: FragmentCreateTransactionBinding
-    private lateinit var viewModel: AssetsViewModel
     private lateinit var targetAsset: AssetEntity
     private var isTransfer: Boolean = false
 
@@ -48,29 +52,15 @@ class CreateTransactionFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.fragment_container
-            duration = resources.getInteger(R.integer.shared_transition_duration_short)
-                .toLong()
-            scrimColor = Color.TRANSPARENT
-        }
+        setEnterSharedTransition(R.integer.shared_transition_duration_short)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         targetAsset = args.targetAsset
         isTransfer = args.isTransfer
 
-        setupViewModel()
         setupViews()
         setupTopBar()
-    }
-
-    private fun setupViewModel() {
-        viewModel = ViewModelProvider(
-            requireActivity(),
-            AssetsViewModelFactory(requireActivity().application)
-        )[AssetsViewModel::class.java]
     }
 
     private fun setupViews() {

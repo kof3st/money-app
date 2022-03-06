@@ -1,25 +1,28 @@
 package me.kofesst.android.moneyapp.view.asset
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.google.android.material.transition.platform.MaterialContainerTransform
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCreateAssetBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.default.AssetTypes
+import me.kofesst.android.moneyapp.util.setEnterSharedTransition
 import me.kofesst.android.moneyapp.viewmodel.AssetsViewModel
 import me.kofesst.android.moneyapp.viewmodel.factory.AssetsViewModelFactory
 
 class CreateAssetFragment : Fragment() {
+    private val viewModel: AssetsViewModel by viewModels(
+        ownerProducer = { requireActivity() },
+        factoryProducer = { AssetsViewModelFactory(requireActivity().application) }
+    )
+
     private lateinit var binding: FragmentCreateAssetBinding
-    private lateinit var viewModel: AssetsViewModel
     private var selectedType: AssetTypes? = null
 
     override fun onCreateView(
@@ -33,27 +36,13 @@ class CreateAssetFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.fragment_container
-            duration = resources.getInteger(R.integer.shared_transition_duration_short)
-                .toLong()
-            scrimColor = Color.TRANSPARENT
-        }
+        setEnterSharedTransition(R.integer.shared_transition_duration_short)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setupViewModel()
         setupTopBar()
         setupTypes()
         setupViews()
-    }
-
-    private fun setupViewModel() {
-        viewModel = ViewModelProvider(
-            requireActivity(),
-            AssetsViewModelFactory(requireActivity().application)
-        )[AssetsViewModel::class.java]
     }
 
     private fun setupTopBar() {

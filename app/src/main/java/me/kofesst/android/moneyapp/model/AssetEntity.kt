@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.model.default.AssetTypes
+import me.kofesst.android.moneyapp.util.formatWithCurrency
 import java.io.Serializable
 
 @Entity(tableName = "assets")
@@ -20,6 +21,6 @@ data class AssetEntity(
     }
 
     override fun toString(): String {
-        return "$name, $balance"
+        return "$name (${balance.formatWithCurrency()})"
     }
 }
