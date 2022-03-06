@@ -83,6 +83,17 @@ class AssetDetailsFragment: Fragment() {
             }
         }
 
+        binding.transferButton.apply {
+            setOnClickListener { button ->
+                val extras = R.string.transfer_transition_name include button
+                val direction = AssetDetailsFragmentDirections.actionAssetDetailsFragmentToCreateTransactionFragment(
+                    targetAsset = targetAsset,
+                    isTransfer = true
+                )
+                findNavController().navigate(direction, extras)
+            }
+        }
+
         binding.deleteButton.apply {
             setOnClickListener {
                 showDeleteDialogWithSnackbar(

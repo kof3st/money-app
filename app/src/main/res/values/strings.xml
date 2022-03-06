@@ -47,4 +47,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_transaction">Добавить транзакцию</string>
     <string name="add_transaction_transition_name">add_transaction</string>
+    <string name="transfer_transition_name">transfer</string>
 </resources>

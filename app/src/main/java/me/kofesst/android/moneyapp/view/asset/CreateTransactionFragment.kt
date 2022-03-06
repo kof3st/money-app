@@ -1,6 +1,5 @@
 package me.kofesst.android.moneyapp.view.asset
 
-import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -65,6 +64,8 @@ class CreateTransactionFragment: Fragment() {
 
     private fun setupViews() {
         if (isTransfer) {
+            binding.root.transitionName = getString(R.string.transfer_transition_name)
+
             binding.titleText.setText(R.string.transfer)
             binding.titleText.isEnabled = false
             binding.categoryTextLayout.visibility = View.GONE
@@ -88,6 +89,8 @@ class CreateTransactionFragment: Fragment() {
             }
         }
         else {
+            binding.root.transitionName = getString(R.string.add_transaction_transition_name)
+
             binding.targetTextLayout.visibility = View.GONE
 
             lifecycleScope.launch(Dispatchers.IO) {
@@ -199,8 +202,14 @@ class CreateTransactionFragment: Fragment() {
     }
 
     private fun setupTopBar() {
-        binding.topBar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+        binding.topBar.apply {
+            setTitle(
+                if (isTransfer) R.string.transfer_action
+                else R.string.new_transaction
+            )
+            setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
         }
     }
 }

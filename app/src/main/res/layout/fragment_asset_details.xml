@@ -119,6 +119,7 @@
                     app:iconPadding="20dp"/>
 
                 <Button
+                    android:transitionName="@string/transfer_transition_name"
                     android:id="@+id/transfer_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
