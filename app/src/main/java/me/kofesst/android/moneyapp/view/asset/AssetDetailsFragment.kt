@@ -13,8 +13,8 @@ import me.kofesst.android.moneyapp.databinding.FragmentAssetDetailsBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.default.AssetTypes
 import me.kofesst.android.moneyapp.util.*
-import me.kofesst.android.moneyapp.viewmodel.AssetsViewModel
-import me.kofesst.android.moneyapp.viewmodel.factory.AssetsViewModelFactory
+import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
+import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModelFactory
 
 class AssetDetailsFragment: Fragment() {
     private val viewModel: AssetsViewModel by viewModels(
@@ -42,8 +42,9 @@ class AssetDetailsFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        targetAsset = args.targetAsset
+        super.onViewCreated(view, savedInstanceState)
 
+        targetAsset = args.targetAsset
         setExitSharedTransition(R.integer.shared_transition_duration_short)
 
         setupViews()

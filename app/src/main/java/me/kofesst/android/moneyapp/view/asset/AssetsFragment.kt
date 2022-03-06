@@ -21,8 +21,8 @@ import me.kofesst.android.moneyapp.util.setPostpone
 import me.kofesst.android.moneyapp.util.setExitSharedTransition
 import me.kofesst.android.moneyapp.view.recyclerview.AssetsAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
-import me.kofesst.android.moneyapp.viewmodel.AssetsViewModel
-import me.kofesst.android.moneyapp.viewmodel.factory.AssetsViewModelFactory
+import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
+import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModelFactory
 
 class AssetsFragment: Fragment() {
     private val viewModel: AssetsViewModel by viewModels(
@@ -42,6 +42,8 @@ class AssetsFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setPostpone(view)
         setExitSharedTransition(R.integer.shared_transition_duration_short)
 
@@ -66,10 +68,12 @@ class AssetsFragment: Fragment() {
 
         binding.assetsView.apply {
             adapter = assetsAdapter
-            addItemDecoration(MaterialDividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL
-            ))
+            addItemDecoration(
+                MaterialDividerItemDecoration(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL
+                )
+            )
         }
 
         binding.newAssetButton.apply {

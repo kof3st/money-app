@@ -1,9 +1,8 @@
-package me.kofesst.android.moneyapp.viewmodel.factory
+package me.kofesst.android.moneyapp.viewmodel.history
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.kofesst.android.moneyapp.viewmodel.HistoryViewModel
 
 class HistoryViewModelFactory(
     private val application: Application

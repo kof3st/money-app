@@ -12,8 +12,8 @@ import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
 import me.kofesst.android.moneyapp.util.formatWithCurrency
 import me.kofesst.android.moneyapp.view.recyclerview.HistoryAdapter
-import me.kofesst.android.moneyapp.viewmodel.HistoryViewModel
-import me.kofesst.android.moneyapp.viewmodel.factory.HistoryViewModelFactory
+import me.kofesst.android.moneyapp.viewmodel.history.HistoryViewModel
+import me.kofesst.android.moneyapp.viewmodel.history.HistoryViewModelFactory
 
 class HistoryFragment : Fragment() {
     companion object {

@@ -1,4 +1,4 @@
-package me.kofesst.android.moneyapp.viewmodel
+package me.kofesst.android.moneyapp.viewmodel.history
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

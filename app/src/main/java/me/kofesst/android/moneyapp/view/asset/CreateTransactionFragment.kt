@@ -20,8 +20,8 @@ import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.util.setEnterSharedTransition
-import me.kofesst.android.moneyapp.viewmodel.AssetsViewModel
-import me.kofesst.android.moneyapp.viewmodel.factory.AssetsViewModelFactory
+import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
+import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModelFactory
 
 class CreateTransactionFragment: Fragment() {
     private val viewModel: AssetsViewModel by viewModels(
@@ -55,6 +55,8 @@ class CreateTransactionFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         targetAsset = args.targetAsset
         isTransfer = args.isTransfer
 

@@ -1,7 +1,6 @@
-package me.kofesst.android.moneyapp.viewmodel
+package me.kofesst.android.moneyapp.viewmodel.asset
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -30,10 +29,14 @@ class AssetsViewModel(
      */
     fun getTotalBalance(): Double = assets.value.sumOf { it.balance }
 
+    /**
+     * Возвращает список всех категорий
+     */
     suspend fun getCategories(): List<CategoryEntity> = categoriesDao.getCategories()
 
-    suspend fun getAsset(id: Long): AssetEntity? = assetsDao.getAsset(id)
-
+    /**
+     * Добавляет новую транзакцию [transaction]
+     */
     fun addTransaction(transaction: TransactionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             transactionsDao.addTransaction(transaction)
@@ -41,8 +44,7 @@ class AssetsViewModel(
     }
 
     /**
-     * Обновляет [assets], заменяя уже
-     * существующие данные на данные, взятые из базы данных
+     * Обновляет список счетов [assets]
      */
     fun updateAssets() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -51,8 +53,9 @@ class AssetsViewModel(
     }
 
     /**
-     * Добавляет новый счёт [asset] в базу данных,
-     * обновляя [assets]
+     * Добавляет новый счёт [asset] в базу данных.
+     * Если счёт с таким id уже существует, то
+     * обновляет его
      */
     fun addAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -62,20 +65,7 @@ class AssetsViewModel(
     }
 
     /**
-     * Обновляет счёт [asset] в базе данных,
-     * обновляя [assets]
-     */
-    fun updateAsset(asset: AssetEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            assetsDao.addAsset(asset)
-            updateAssets()
-            Log.d("AAA", assets.value.toString())
-        }
-    }
-
-    /**
-     * Удаляет счёт [asset] из базы данных,
-     * обновляя [assets]
+     * Удаляет счёт [asset] из базы данных
      */
     fun deleteAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
