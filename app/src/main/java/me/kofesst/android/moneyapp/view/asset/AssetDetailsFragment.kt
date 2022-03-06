@@ -76,7 +76,7 @@ class AssetDetailsFragment: Fragment() {
         binding.transactionButton.apply {
             setOnClickListener { button ->
                 val extras = R.string.add_transaction_transition_name include button
-                val direction = AssetDetailsFragmentDirections.actionAssetDetailsFragmentToCreateTransactionFragment(
+                val direction = AssetDetailsFragmentDirections.actionCreateTransaction(
                     targetAsset = targetAsset,
                     isTransfer = false
                 )
@@ -87,7 +87,7 @@ class AssetDetailsFragment: Fragment() {
         binding.transferButton.apply {
             setOnClickListener { button ->
                 val extras = R.string.transfer_transition_name include button
-                val direction = AssetDetailsFragmentDirections.actionAssetDetailsFragmentToCreateTransactionFragment(
+                val direction = AssetDetailsFragmentDirections.actionCreateTransaction(
                     targetAsset = targetAsset,
                     isTransfer = true
                 )

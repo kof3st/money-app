@@ -66,7 +66,7 @@ class CategoryDetailsFragment : Fragment() {
             setOnClickListener { button ->
                 val extras = R.string.edit_shared_transition_name include button
                 val direction =
-                    CategoryDetailsFragmentDirections.actionCategoryDetailsFragmentToCreateCategoryFragment(targetCategory)
+                    CategoryDetailsFragmentDirections.actionEditCategory(targetCategory)
                 findNavController().navigate(direction, extras)
             }
         }

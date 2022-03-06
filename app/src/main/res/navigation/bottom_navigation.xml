@@ -11,25 +11,31 @@
         android:name="me.kofesst.android.moneyapp.view.asset.AssetsFragment"
         android:label="fragment_assets"
         tools:layout="@layout/fragment_assets">
+
         <action
-            android:id="@+id/action_assetsFragment_to_createAssetFragment"
+            android:id="@+id/action_create_asset"
             app:destination="@id/createAssetFragment" />
+
         <action
-            android:id="@+id/action_assetsFragment_to_assetDetailsFragment"
+            android:id="@+id/action_asset_details"
             app:destination="@id/assetDetailsFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/categoriesFragment"
         android:name="me.kofesst.android.moneyapp.view.category.CategoriesFragment"
         android:label="fragment_categories"
-        tools:layout="@layout/fragment_categories" >
+        tools:layout="@layout/fragment_categories">
+
         <action
-            android:id="@+id/action_categoriesFragment_to_createCategoryFragment"
+            android:id="@+id/action_create_category"
             app:destination="@id/createCategoryFragment" />
+
         <action
-            android:id="@+id/action_categoriesFragment_to_categoryDetailsFragment"
+            android:id="@+id/action_category_details"
             app:destination="@id/categoryDetailsFragment" />
+
     </fragment>
 
     <fragment
@@ -43,51 +49,66 @@
         android:name="me.kofesst.android.moneyapp.view.asset.CreateAssetFragment"
         android:label="fragment_create_asset"
         tools:layout="@layout/fragment_create_asset" />
+
     <fragment
         android:id="@+id/assetDetailsFragment"
         android:name="me.kofesst.android.moneyapp.view.asset.AssetDetailsFragment"
         android:label="fragment_asset_details"
-        tools:layout="@layout/fragment_asset_details" >
+        tools:layout="@layout/fragment_asset_details">
+
         <argument
             android:name="targetAsset"
             app:argType="me.kofesst.android.moneyapp.model.AssetEntity" />
+
         <action
-            android:id="@+id/action_assetDetailsFragment_to_createTransactionFragment"
+            android:id="@+id/action_create_transaction"
             app:destination="@id/createTransactionFragment" />
+
     </fragment>
+
     <fragment
         android:id="@+id/createTransactionFragment"
         android:name="me.kofesst.android.moneyapp.view.asset.CreateTransactionFragment"
-        android:label="CreateTransactionFragment" >
+        android:label="CreateTransactionFragment">
+
         <argument
             android:name="targetAsset"
             app:argType="me.kofesst.android.moneyapp.model.AssetEntity" />
+
         <argument
             android:name="isTransfer"
             app:argType="boolean"
             android:defaultValue="false" />
+
     </fragment>
+
     <fragment
         android:id="@+id/createCategoryFragment"
         android:name="me.kofesst.android.moneyapp.view.category.CreateCategoryFragment"
-        android:label="CreateCategoryFragment" >
+        android:label="CreateCategoryFragment">
+
         <argument
             android:name="editing"
             app:argType="me.kofesst.android.moneyapp.model.CategoryEntity"
             app:nullable="true"
             android:defaultValue="@null" />
+
     </fragment>
+
     <fragment
         android:id="@+id/categoryDetailsFragment"
         android:name="me.kofesst.android.moneyapp.view.category.CategoryDetailsFragment"
         android:label="fragment_category_details"
-        tools:layout="@layout/fragment_category_details" >
+        tools:layout="@layout/fragment_category_details">
+
         <argument
             android:name="targetCategory"
             app:argType="me.kofesst.android.moneyapp.model.CategoryEntity" />
+
         <action
-            android:id="@+id/action_categoryDetailsFragment_to_createCategoryFragment"
+            android:id="@+id/action_edit_category"
             app:destination="@id/createCategoryFragment" />
+
     </fragment>
 
 </navigation>

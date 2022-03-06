@@ -58,7 +58,7 @@ class AssetsFragment: Fragment() {
             itemClickListener = object : ItemClickListener<AssetEntity> {
                 override fun onClick(view: View, item: AssetEntity) {
                     val extras = R.string.asset_details_transition_name include binding.topBar
-                    val direction = AssetsFragmentDirections.actionAssetsFragmentToAssetDetailsFragment(item)
+                    val direction = AssetsFragmentDirections.actionAssetDetails(item)
                     findNavController().navigate(direction, extras)
                 }
 
@@ -79,7 +79,7 @@ class AssetsFragment: Fragment() {
         binding.newAssetButton.apply {
             setOnClickListener { button ->
                 val extras = R.string.edit_shared_transition_name include button
-                val direction = AssetsFragmentDirections.actionAssetsFragmentToCreateAssetFragment()
+                val direction = AssetsFragmentDirections.actionCreateAsset()
                 findNavController().navigate(direction, extras)
             }
         }

@@ -62,8 +62,7 @@ class CategoriesFragment : Fragment() {
             itemClickListener = object: ItemClickListener<CategoryEntity> {
                 override fun onClick(view: View, item: CategoryEntity) {
                     val extras = R.string.category_details_transition_name include binding.topBar
-                    val direction =
-                        CategoriesFragmentDirections.actionCategoriesFragmentToCategoryDetailsFragment(item)
+                    val direction = CategoriesFragmentDirections.actionCategoryDetails(item)
                     findNavController().navigate(direction, extras)
                 }
 
@@ -84,8 +83,7 @@ class CategoriesFragment : Fragment() {
         binding.newCategoryButton.apply {
             setOnClickListener { button ->
                 val extras = R.string.edit_shared_transition_name include button
-                val direction =
-                    CategoriesFragmentDirections.actionCategoriesFragmentToCreateCategoryFragment()
+                val direction = CategoriesFragmentDirections.actionCreateCategory()
                 findNavController().navigate(direction, extras)
             }
         }
