@@ -73,6 +73,14 @@ class AssetDetailsFragment: Fragment() {
     }
 
     private fun setupActions() {
+        binding.editButton.apply {
+            setOnClickListener { button ->
+                val extras = R.string.edit_shared_transition_name include button
+                val direction = AssetDetailsFragmentDirections.actionEditAsset(targetAsset)
+                findNavController().navigate(direction, extras)
+            }
+        }
+
         binding.transactionButton.apply {
             setOnClickListener { button ->
                 val extras = R.string.add_transaction_transition_name include button

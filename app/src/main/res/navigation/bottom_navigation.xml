@@ -48,7 +48,13 @@
         android:id="@+id/createAssetFragment"
         android:name="me.kofesst.android.moneyapp.view.asset.CreateAssetFragment"
         android:label="fragment_create_asset"
-        tools:layout="@layout/fragment_create_asset" />
+        tools:layout="@layout/fragment_create_asset" >
+        <argument
+            android:name="editing"
+            app:argType="me.kofesst.android.moneyapp.model.AssetEntity"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 
     <fragment
         android:id="@+id/assetDetailsFragment"
@@ -63,6 +69,10 @@
         <action
             android:id="@+id/action_create_transaction"
             app:destination="@id/createTransactionFragment" />
+
+        <action
+            android:id="@+id/action_edit_asset"
+            app:destination="@id/createAssetFragment" />
 
     </fragment>
 

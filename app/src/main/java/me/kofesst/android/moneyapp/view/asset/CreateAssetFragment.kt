@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCreateAssetBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
@@ -23,7 +24,10 @@ class CreateAssetFragment : Fragment() {
     )
 
     private lateinit var binding: FragmentCreateAssetBinding
+    private var editing: AssetEntity? = null
     private var selectedType: AssetTypes? = null
+
+    private val args: CreateAssetFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +46,8 @@ class CreateAssetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        editing = args.editing
+
         setupTopBar()
         setupTypes()
         setupViews()
@@ -49,6 +55,10 @@ class CreateAssetFragment : Fragment() {
 
     private fun setupTopBar() {
         binding.topBar.apply {
+            if (editing != null) {
+                setTitle(R.string.edit_asset)
+            }
+
             setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
@@ -68,10 +78,32 @@ class CreateAssetFragment : Fragment() {
     }
 
     private fun setupViews() {
+        if (editing != null) {
+            binding.nameText.setText(editing!!.name)
+            binding.balanceText.setText(editing!!.balance.toString())
+
+            selectedType = AssetTypes.values()[editing!!.type]
+            binding.typeText.setText(getString(selectedType!!.titleRes), false)
+        }
+
         binding.saveButton.apply {
+            if (editing != null) {
+                setText(R.string.edit_asset)
+            }
+
             setOnClickListener {
                 val asset = getModelFromFields() ?: return@setOnClickListener
-                viewModel.addAsset(asset)
+
+                if (editing != null) {
+                    editing!!.name = asset.name
+                    editing!!.balance = asset.balance
+                    editing!!.type = asset.type
+                    viewModel.addAsset(editing!!)
+                }
+                else {
+                    viewModel.addAsset(asset)
+                }
+
                 findNavController().navigateUp()
             }
         }
