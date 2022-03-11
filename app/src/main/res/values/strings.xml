@@ -50,4 +50,19 @@
     <string name="new_category">Новая категория</string>
     <string name="category_details_transition_name">category_details</string>
     <string name="edit_category_transition_name">edit_category</string>
+    <string name="credit">Зачисление</string>
+    <string name="debit">Списание</string>
+    <string name="subscription_type">Тип автоплатежа</string>
+    <string name="subscriptions">Автоплатежи</string>
+    <string name="subscriptions_transition_name">subscriptions_list</string>
+    <string name="new_subscription">Новый автоплатёж</string>
+    <string name="subscription_name">Описание</string>
+    <string name="subscription_amount">Сумма</string>
+    <string name="create_subscription">Создать автоплатёж</string>
+    <string name="edit_subscription">Изменить автоплатёж</string>
+    <string name="subscription_day">День автоплатежа</string>
+    <string name="error_subscription_day">Некорректный день</string>
+    <string name="delete_subscription">Удалить автоплатёж</string>
+    <string name="delete_subscription_message">Вы действительно хотите удалить этот автоплатёж?</string>
+    <string name="snackbar_subscription_deleted">Автоплатёж удалён</string>
 </resources>

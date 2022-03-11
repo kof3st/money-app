@@ -48,12 +48,14 @@
         android:id="@+id/createAssetFragment"
         android:name="me.kofesst.android.moneyapp.view.asset.CreateAssetFragment"
         android:label="fragment_create_asset"
-        tools:layout="@layout/fragment_create_asset" >
+        tools:layout="@layout/fragment_create_asset">
+
         <argument
             android:name="editing"
+            android:defaultValue="@null"
             app:argType="me.kofesst.android.moneyapp.model.AssetEntity"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
+
     </fragment>
 
     <fragment
@@ -62,10 +64,6 @@
         android:label="fragment_asset_details"
         tools:layout="@layout/fragment_asset_details">
 
-        <argument
-            android:name="targetAsset"
-            app:argType="me.kofesst.android.moneyapp.model.AssetEntity" />
-
         <action
             android:id="@+id/action_create_transaction"
             app:destination="@id/createTransactionFragment" />
@@ -73,6 +71,10 @@
         <action
             android:id="@+id/action_edit_asset"
             app:destination="@id/createAssetFragment" />
+
+        <argument
+            android:name="targetAsset"
+            app:argType="me.kofesst.android.moneyapp.model.AssetWithSubscriptions" />
 
     </fragment>
 
@@ -87,8 +89,8 @@
 
         <argument
             android:name="isTransfer"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
 
     </fragment>
 
@@ -99,9 +101,9 @@
 
         <argument
             android:name="editing"
+            android:defaultValue="@null"
             app:argType="me.kofesst.android.moneyapp.model.CategoryEntity"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
 
     </fragment>
 
@@ -118,6 +120,36 @@
         <action
             android:id="@+id/action_edit_category"
             app:destination="@id/createCategoryFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/subscriptionsFragment"
+        android:name="me.kofesst.android.moneyapp.view.subscription.SubscriptionsFragment"
+        android:label="fragment_asset_subscriptions"
+        tools:layout="@layout/fragment_subscriptions">
+
+        <argument
+            android:name="targetAsset"
+            app:argType="me.kofesst.android.moneyapp.model.AssetWithSubscriptions" />
+
+        <action
+            android:id="@+id/action_create_subscription"
+            app:destination="@id/createSubscriptionFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/createSubscriptionFragment"
+        android:name="me.kofesst.android.moneyapp.view.subscription.CreateSubscriptionFragment"
+        android:label="fragment_create_subscription"
+        tools:layout="@layout/fragment_create_subscription">
+
+        <argument
+            android:name="editing"
+            android:defaultValue="@null"
+            app:argType="me.kofesst.android.moneyapp.model.SubscriptionEntity"
+            app:nullable="true" />
 
     </fragment>
 

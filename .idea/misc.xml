@@ -16,18 +16,23 @@
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/create_bottom_dialog.xml" value="0.3523550724637681" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_asset_details.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_asset_model.xml" value="0.3555253623188406" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_asset_subscriptions.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_assets.xml" value="0.35208333333333336" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_categories.xml" value="0.3523550724637681" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_category_details.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_create_asset.xml" value="0.3523550724637681" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_create_category.xml" value="0.3555253623188406" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_create_subscription.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_create_transaction.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_history.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_statistics.xml" value="0.3555253623188406" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_subscriptions.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/history_item.xml" value="0.3523550724637681" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/menu_dialog.xml" value="0.3523550724637681" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/model_bottom_dialog.xml" value="0.3523550724637681" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/subscription_item.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1693121693121693" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/menu/delete_model_top_bar_menu.xml" value="0.36614583333333334" />
       </map>
     </option>
   </component>

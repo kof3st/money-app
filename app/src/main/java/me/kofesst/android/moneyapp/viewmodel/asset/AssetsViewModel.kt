@@ -8,26 +8,36 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.database.MainDatabase
-import me.kofesst.android.moneyapp.model.AssetEntity
-import me.kofesst.android.moneyapp.model.CategoryEntity
-import me.kofesst.android.moneyapp.model.TransactionEntity
+import me.kofesst.android.moneyapp.model.*
 
 class AssetsViewModel(
     application: Application
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
     private val database = MainDatabase.get(application)
     private val assetsDao = database.getAssetsDao()
     private val categoriesDao = database.getCategoriesDao()
     private val transactionsDao = database.getTransactionsDao()
+    private val subscriptionsDao = database.getSubscriptionsDao()
 
-    private val _assets = MutableStateFlow(listOf<AssetEntity>())
+    private val _assets = MutableStateFlow(listOf<AssetWithSubscriptions>())
     val assets get() = _assets.asStateFlow()
+
+    /**
+     * Добавляет новые автоплатежи [subscriptions]
+     */
+    fun addSubscriptions(subscriptions: List<SubscriptionEntity>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            subscriptions.forEach { subscription ->
+                subscriptionsDao.addSubscription(subscription)
+            }
+        }
+    }
 
     /**
      * Возвращает итоговый баланс, считая его из
      * всех счетов пользователя
      */
-    fun getTotalBalance(): Double = assets.value.sumOf { it.balance }
+    fun getTotalBalance(): Double = assets.value.sumOf { it.asset.balance }
 
     /**
      * Возвращает список всех категорий

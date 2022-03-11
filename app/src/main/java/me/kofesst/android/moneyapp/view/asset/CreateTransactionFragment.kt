@@ -74,7 +74,9 @@ class CreateTransactionFragment: Fragment() {
             binding.amountText.inputType = InputType.TYPE_CLASS_NUMBER
 
             lifecycleScope.launch(Dispatchers.IO) {
-                targets = viewModel.assets.value.filter { it.assetId != targetAsset.assetId }
+                targets = viewModel.assets.value
+                    .map { it.asset }
+                    .filter { it.assetId != targetAsset.assetId }
 
                 val targetsAdapter = ArrayAdapter(
                     requireContext(),

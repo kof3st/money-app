@@ -4,18 +4,18 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import me.kofesst.android.moneyapp.databinding.AssetItemBinding
-import me.kofesst.android.moneyapp.model.AssetEntity
+import me.kofesst.android.moneyapp.model.AssetWithSubscriptions
 
 class AssetsAdapter(
     private val context: Context
-): BaseAdapter<AssetEntity, AssetViewHolder>(DIFFER) {
+) : BaseAdapter<AssetWithSubscriptions, AssetViewHolder>(DIFFER) {
     companion object {
-        private val DIFFER = ItemsDiffBuilder<AssetEntity>().apply {
-            itemsCheck = { old, new -> old.assetId == new.assetId }
+        private val DIFFER = ItemsDiffBuilder<AssetWithSubscriptions>().apply {
+            itemsCheck = { old, new -> old.asset.assetId == new.asset.assetId }
             contentsCheck = { old, new ->
-                old.name == new.name &&
-                old.balance == new.balance &&
-                old.type == new.type
+                old.asset.name == new.asset.name &&
+                        old.asset.balance == new.asset.balance &&
+                        old.asset.type == new.asset.type
             }
         }
     }
