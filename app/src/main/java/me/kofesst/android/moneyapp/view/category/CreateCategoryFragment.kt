@@ -1,10 +1,10 @@
 package me.kofesst.android.moneyapp.view.category
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -75,8 +75,7 @@ class CreateCategoryFragment : Fragment() {
                 if (editing != null) {
                     editing!!.name = category.name
                     viewModel.addCategory(editing!!)
-                }
-                else {
+                } else {
                     viewModel.addCategory(category)
                 }
 
@@ -92,8 +91,7 @@ class CreateCategoryFragment : Fragment() {
         if (name == null || name.trim().isEmpty()) {
             binding.nameTextLayout.error = getString(R.string.error_required)
             return null
-        }
-        else if (name.length > binding.nameTextLayout.counterMaxLength) {
+        } else if (name.length > binding.nameTextLayout.counterMaxLength) {
             binding.nameTextLayout.error = getString(R.string.error_counter)
             return null
         }

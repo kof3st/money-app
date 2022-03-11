@@ -8,7 +8,7 @@ import me.kofesst.android.moneyapp.model.CategoryEntity
 
 class CategoriesAdapter(
     private val context: Context
-): BaseAdapter<CategoryEntity, CategoryViewHolder>(DIFFER) {
+) : BaseAdapter<CategoryEntity, CategoryViewHolder>(DIFFER) {
     companion object {
         private val DIFFER = ItemsDiffBuilder<CategoryEntity>().apply {
             itemsCheck = { old, new -> old.categoryId == new.categoryId }

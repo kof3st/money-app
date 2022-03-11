@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:transitionName="@string/category_details_transition_name"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:transitionName="@string/category_details_transition_name"
     tools:context=".view.category.CategoryDetailsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -15,10 +14,10 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/top_bar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -33,14 +32,14 @@
             android:padding="20dp">
 
             <Button
-                android:transitionName="@string/edit_shared_transition_name"
                 android:id="@+id/edit_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/edit_category"
                 android:textAlignment="viewStart"
+                android:transitionName="@string/edit_shared_transition_name"
                 app:icon="@drawable/ic_baseline_add_task_24"
-                app:iconPadding="20dp"/>
+                app:iconPadding="20dp" />
 
             <Button
                 android:id="@+id/delete_button"
@@ -49,7 +48,7 @@
                 android:text="@string/delete_category"
                 android:textAlignment="viewStart"
                 app:icon="@drawable/ic_baseline_delete_outline_24"
-                app:iconPadding="20dp"/>
+                app:iconPadding="20dp" />
 
         </LinearLayout>
 

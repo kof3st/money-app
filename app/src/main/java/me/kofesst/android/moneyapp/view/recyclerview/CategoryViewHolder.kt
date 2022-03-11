@@ -5,7 +5,7 @@ import me.kofesst.android.moneyapp.model.CategoryEntity
 
 class CategoryViewHolder(
     binding: CategoryItemBinding
-): BaseViewHolder<CategoryEntity>(binding.root) {
+) : BaseViewHolder<CategoryEntity>(binding.root) {
     private val nameText = binding.nameText
 
     override fun bind(item: CategoryEntity) {

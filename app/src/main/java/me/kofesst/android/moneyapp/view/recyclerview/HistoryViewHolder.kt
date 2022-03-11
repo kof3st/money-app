@@ -9,7 +9,7 @@ import me.kofesst.android.moneyapp.util.formatWithCurrency
 
 class HistoryViewHolder(
     binding: HistoryItemBinding
-): BaseViewHolder<TransactionEntity>(binding.root) {
+) : BaseViewHolder<TransactionEntity>(binding.root) {
     private val titleText = binding.titleText
     private val amountText = binding.amountText
     private val assetNameText = binding.assetNameText

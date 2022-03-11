@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 
 class AssetsViewModelFactory(
     private val application: Application
-): ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return AssetsViewModel(application) as T

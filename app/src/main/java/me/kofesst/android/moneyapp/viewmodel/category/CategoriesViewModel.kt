@@ -12,7 +12,7 @@ import me.kofesst.android.moneyapp.model.CategoryEntity
 
 class CategoriesViewModel(
     application: Application
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
     private val database = MainDatabase.get(application)
     private val categoriesDao = database.getCategoriesDao()
 

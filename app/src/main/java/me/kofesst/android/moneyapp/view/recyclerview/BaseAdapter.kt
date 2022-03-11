@@ -4,9 +4,9 @@ import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-abstract class BaseAdapter<M, VH: BaseViewHolder<M>>(
+abstract class BaseAdapter<M, VH : BaseViewHolder<M>>(
     itemsDiffCallback: DiffUtil.ItemCallback<M>
-): ListAdapter<M, VH>(itemsDiffCallback) {
+) : ListAdapter<M, VH>(itemsDiffCallback) {
     var itemClickListener: ItemClickListener<M>? = null
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -38,7 +38,7 @@ interface ItemClickListener<T> {
 
 }
 
-class ItemsDiffBuilder<T>: DiffUtil.ItemCallback<T>() {
+class ItemsDiffBuilder<T> : DiffUtil.ItemCallback<T>() {
     var itemsCheck: (T, T) -> Boolean = { _, _ -> true }
     var contentsCheck: (T, T) -> Boolean = { _, _ -> true }
 

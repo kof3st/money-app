@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal"
     android:padding="10dp">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_baseline_calendar_month_24"
-        android:contentDescription="@string/subscription_type"/>
+        android:contentDescription="@string/subscription_type"
+        android:src="@drawable/ic_baseline_calendar_month_24" />
 
     <Space
         android:layout_width="10dp"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +37,7 @@
                 android:layout_weight="1"
                 android:text="ВТБ степуха"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/action_info_text"
@@ -46,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="23.01.2020"
                 android:textSize="16sp"
-                android:textStyle="italic"/>
+                android:textStyle="italic" />
 
         </LinearLayout>
 
@@ -56,7 +55,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="-50 500,50 руб."
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
     </LinearLayout>
 

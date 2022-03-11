@@ -8,7 +8,7 @@ import me.kofesst.android.moneyapp.database.MainDatabase
 
 class HistoryViewModel(
     application: Application
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
     private val database = MainDatabase.get(application)
     private val transactionsDao = database.getTransactionsDao()
 

@@ -23,7 +23,7 @@ import me.kofesst.android.moneyapp.util.setEnterSharedTransition
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModelFactory
 
-class CreateTransactionFragment: Fragment() {
+class CreateTransactionFragment : Fragment() {
     private val viewModel: AssetsViewModel by viewModels(
         ownerProducer = { requireActivity() },
         factoryProducer = { AssetsViewModelFactory(requireActivity().application) }
@@ -91,8 +91,7 @@ class CreateTransactionFragment: Fragment() {
                     }
                 }
             }
-        }
-        else {
+        } else {
             binding.root.transitionName = getString(R.string.add_transaction_transition_name)
 
             binding.targetTextLayout.visibility = View.GONE
@@ -126,8 +125,7 @@ class CreateTransactionFragment: Fragment() {
 
                     selectedTarget!!.balance += transaction.amount
                     viewModel.addAsset(selectedTarget!!)
-                }
-                else {
+                } else {
                     targetAsset.balance += transaction.amount
                     viewModel.addAsset(targetAsset)
                 }
@@ -148,8 +146,7 @@ class CreateTransactionFragment: Fragment() {
         if (title == null || title.trim().isEmpty()) {
             binding.titleTextLayout.error = getString(R.string.error_required)
             error = true
-        }
-        else if (title.length > binding.titleTextLayout.counterMaxLength) {
+        } else if (title.length > binding.titleTextLayout.counterMaxLength) {
             binding.titleTextLayout.error = getString(R.string.error_counter)
             error = true
         }
@@ -159,8 +156,7 @@ class CreateTransactionFragment: Fragment() {
                 binding.targetTextLayout.error = getString(R.string.error_required)
                 error = true
             }
-        }
-        else {
+        } else {
             if (selectedCategory == null) {
                 binding.categoryTextLayout.error = getString(R.string.error_required)
                 error = true
@@ -178,7 +174,7 @@ class CreateTransactionFragment: Fragment() {
         val amount: Double
         try {
             amount = amountStr!!.toDouble()
-        } catch(exception: Exception) {
+        } catch (exception: Exception) {
             binding.amountTextLayout.error = getString(R.string.error_incorrect)
             return null
         }

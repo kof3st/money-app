@@ -8,7 +8,7 @@ import java.io.Serializable
 data class CategoryEntity(
     @PrimaryKey(autoGenerate = true) val categoryId: Int = 0,
     var name: String
-): Serializable {
+) : Serializable {
     override fun toString(): String {
         return name
     }

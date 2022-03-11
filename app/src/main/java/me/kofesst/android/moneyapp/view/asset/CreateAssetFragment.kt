@@ -99,8 +99,7 @@ class CreateAssetFragment : Fragment() {
                     editing!!.balance = asset.balance
                     editing!!.type = asset.type
                     viewModel.addAsset(editing!!)
-                }
-                else {
+                } else {
                     viewModel.addAsset(asset)
                 }
 

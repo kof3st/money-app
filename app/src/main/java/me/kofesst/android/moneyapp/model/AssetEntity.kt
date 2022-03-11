@@ -13,10 +13,10 @@ data class AssetEntity(
     var name: String = "",
     var balance: Double = 0.0,
     var type: Int = AssetTypes.CARD.ordinal
-): Serializable {
+) : Serializable {
     companion object {
         const val NEGATIVE_BALANCE_COLOR_RES = R.color.negative
-        const val NEUTRAL_BALANCE_COLOR_RES  = R.color.neutral
+        const val NEUTRAL_BALANCE_COLOR_RES = R.color.neutral
         const val POSITIVE_BALANCE_COLOR_RES = R.color.positive
     }
 

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:transitionName="@string/add_transaction_transition_name"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:transitionName="@string/add_transaction_transition_name">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,10 +16,10 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/top_bar"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,18 +39,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/transaction_title"
-                    app:startIconDrawable="@drawable/ic_baseline_text_snippet_24"
-                    app:startIconContentDescription="@string/transaction_title"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="20"
                     app:endIconMode="clear_text"
                     app:errorEnabled="true"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="20">
+                    app:startIconContentDescription="@string/transaction_title"
+                    app:startIconDrawable="@drawable/ic_baseline_text_snippet_24">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/title_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"/>
+                        android:inputType="text" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,17 +60,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/transaction_amount"
-                    app:suffixText="@string/rub_suffix"
-                    app:startIconDrawable="@drawable/ic_baseline_attach_money_24"
-                    app:startIconContentDescription="@string/transaction_amount"
                     app:endIconMode="clear_text"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    app:startIconContentDescription="@string/transaction_amount"
+                    app:startIconDrawable="@drawable/ic_baseline_attach_money_24"
+                    app:suffixText="@string/rub_suffix">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/amount_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal|numberSigned"/>
+                        android:inputType="numberDecimal|numberSigned" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,15 +80,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/category"
-                    app:startIconDrawable="@drawable/ic_baseline_notes_24"
+                    app:errorEnabled="true"
                     app:startIconContentDescription="@string/category"
-                    app:errorEnabled="true">
+                    app:startIconDrawable="@drawable/ic_baseline_notes_24">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/category_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"/>
+                        android:inputType="none" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,15 +98,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/asset_name"
-                    app:startIconDrawable="@drawable/ic_baseline_credit_card_24"
+                    app:errorEnabled="true"
                     app:startIconContentDescription="@string/asset_name"
-                    app:errorEnabled="true">
+                    app:startIconDrawable="@drawable/ic_baseline_credit_card_24">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/target_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"/>
+                        android:inputType="none" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

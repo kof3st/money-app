@@ -14,9 +14,9 @@ class SubscriptionsAdapter(
             itemsCheck = { old, new -> old.subscriptionId == new.subscriptionId }
             contentsCheck = { old, new ->
                 old.title == new.title &&
-                old.amount == new.amount &&
-                old.type == new.type &&
-                old.day == new.day
+                        old.amount == new.amount &&
+                        old.type == new.type &&
+                        old.day == new.day
             }
         }
     }

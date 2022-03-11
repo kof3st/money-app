@@ -56,7 +56,8 @@ class SubscriptionsFragment : Fragment() {
         subscriptionsAdapter = SubscriptionsAdapter(requireContext()).apply {
             itemClickListener = object : ItemClickListener<SubscriptionEntity> {
                 override fun onClick(view: View, item: SubscriptionEntity) {
-                    val extras = R.string.edit_shared_transition_name include binding.newSubscriptionButton
+                    val extras =
+                        R.string.edit_shared_transition_name include binding.newSubscriptionButton
                     val direction = SubscriptionsFragmentDirections.actionCreateSubscription(
                         editing = item
                     )

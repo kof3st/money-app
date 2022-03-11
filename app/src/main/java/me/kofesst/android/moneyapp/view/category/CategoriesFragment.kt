@@ -59,14 +59,14 @@ class CategoriesFragment : Fragment() {
 
     private fun setupViews() {
         categoriesAdapter = CategoriesAdapter(requireContext()).apply {
-            itemClickListener = object: ItemClickListener<CategoryEntity> {
+            itemClickListener = object : ItemClickListener<CategoryEntity> {
                 override fun onClick(view: View, item: CategoryEntity) {
                     val extras = R.string.category_details_transition_name include binding.topBar
                     val direction = CategoriesFragmentDirections.actionCategoryDetails(item)
                     findNavController().navigate(direction, extras)
                 }
 
-                override fun onLongClick(view: View, item: CategoryEntity) { }
+                override fun onLongClick(view: View, item: CategoryEntity) {}
             }
         }
 
