@@ -1,30 +1,31 @@
-package me.kofesst.android.moneyapp.viewmodel.asset
+package me.kofesst.android.moneyapp.viewmodel.subscription
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import me.kofesst.android.moneyapp.database.MainDatabase
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
+import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
 
 class SubscriptionsViewModel(
     application: Application
-) : AndroidViewModel(application) {
-    private val database = MainDatabase.get(application)
-    private val assetsDao = database.getAssetsDao()
-    private val subscriptionsDao = database.getSubscriptionsDao()
-
+) : ViewModelBase(application) {
     private val _subscriptions = MutableStateFlow(listOf<SubscriptionEntity>())
     val subscriptions get() = _subscriptions.asStateFlow()
 
+    /**
+     * Возвращает счёт с айди [id]
+     */
     suspend fun getAsset(id: Long): AssetEntity? {
         return assetsDao.getAsset(id)
     }
 
+    /**
+     * Возвращает список всех счетов
+     */
     suspend fun getAssets(): List<AssetEntity> {
         return assetsDao.getAssets().map { it.asset }
     }

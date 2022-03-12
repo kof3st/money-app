@@ -5,48 +5,40 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCreateAssetBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.default.AssetTypes
-import me.kofesst.android.moneyapp.util.setEnterSharedTransition
+import me.kofesst.android.moneyapp.view.EnterSharedTransition
+import me.kofesst.android.moneyapp.view.ExitSharedTransition
+import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.navigateUp
+import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
-import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModelFactory
 
-class CreateAssetFragment : Fragment() {
+class CreateAssetFragment : FragmentBase<FragmentCreateAssetBinding>(), EnterSharedTransition,
+    ExitSharedTransition {
     private val viewModel: AssetsViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = { AssetsViewModelFactory(requireActivity().application) }
+        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
     )
 
-    private lateinit var binding: FragmentCreateAssetBinding
-    private var editing: AssetEntity? = null
     private var selectedType: AssetTypes? = null
 
     private val args: CreateAssetFragmentArgs by navArgs()
+    private val editing by lazy { args.editing }
 
-    override fun onCreateView(
+    override fun getViewBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateAssetBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setEnterSharedTransition(R.integer.shared_transition_duration_short)
+        container: ViewGroup?
+    ): FragmentCreateAssetBinding {
+        return FragmentCreateAssetBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        editing = args.editing
 
         setupTopBar()
         setupTypes()
@@ -55,13 +47,8 @@ class CreateAssetFragment : Fragment() {
 
     private fun setupTopBar() {
         binding.topBar.apply {
-            if (editing != null) {
-                setTitle(R.string.edit_asset)
-            }
-
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
+            if (editing != null) setTitle(R.string.edit_asset)
+            setNavigationOnClickListener { navigateUp() }
         }
     }
 
@@ -87,9 +74,7 @@ class CreateAssetFragment : Fragment() {
         }
 
         binding.saveButton.apply {
-            if (editing != null) {
-                setText(R.string.edit_asset)
-            }
+            if (editing != null) setText(R.string.edit_asset)
 
             setOnClickListener {
                 val asset = getModelFromFields() ?: return@setOnClickListener
@@ -103,7 +88,7 @@ class CreateAssetFragment : Fragment() {
                     viewModel.addAsset(asset)
                 }
 
-                findNavController().navigateUp()
+                navigateUp()
             }
         }
     }

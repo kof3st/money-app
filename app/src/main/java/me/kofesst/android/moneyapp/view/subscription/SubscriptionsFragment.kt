@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.collect
@@ -15,36 +13,34 @@ import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentSubscriptionsBinding
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
-import me.kofesst.android.moneyapp.util.include
-import me.kofesst.android.moneyapp.util.setExitSharedTransition
-import me.kofesst.android.moneyapp.util.setPostpone
+import me.kofesst.android.moneyapp.view.ExitSharedTransition
+import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.Postpone
+import me.kofesst.android.moneyapp.view.navigateToShared
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.view.recyclerview.SubscriptionsAdapter
-import me.kofesst.android.moneyapp.viewmodel.asset.SubscriptionsViewModel
-import me.kofesst.android.moneyapp.viewmodel.asset.SubscriptionsViewModelFactory
+import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
+import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
+import me.kofesst.android.moneyapp.viewmodel.subscription.SubscriptionsViewModel
 
-class SubscriptionsFragment : Fragment() {
+class SubscriptionsFragment : FragmentBase<FragmentSubscriptionsBinding>(), Postpone,
+    ExitSharedTransition {
     private val viewModel: SubscriptionsViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = { SubscriptionsViewModelFactory(requireActivity().application) }
+        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
     )
 
-    private lateinit var binding: FragmentSubscriptionsBinding
     private lateinit var subscriptionsAdapter: SubscriptionsAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSubscriptionsBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSubscriptionsBinding {
+        return FragmentSubscriptionsBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setPostpone(view)
-        setExitSharedTransition(R.integer.shared_transition_duration_short)
 
         setupViews()
         setupObserves()
@@ -56,12 +52,11 @@ class SubscriptionsFragment : Fragment() {
         subscriptionsAdapter = SubscriptionsAdapter(requireContext()).apply {
             itemClickListener = object : ItemClickListener<SubscriptionEntity> {
                 override fun onClick(view: View, item: SubscriptionEntity) {
-                    val extras =
-                        R.string.edit_shared_transition_name include binding.newSubscriptionButton
-                    val direction = SubscriptionsFragmentDirections.actionCreateSubscription(
-                        editing = item
+                    navigateToShared(
+                        R.string.edit_shared_transition_name,
+                        binding.newSubscriptionButton,
+                        SubscriptionsFragmentDirections.actionCreateSubscription(item)
                     )
-                    findNavController().navigate(direction, extras)
                 }
 
                 override fun onLongClick(view: View, item: SubscriptionEntity) {}
@@ -79,9 +74,11 @@ class SubscriptionsFragment : Fragment() {
 
         binding.newSubscriptionButton.apply {
             setOnClickListener { button ->
-                val extras = R.string.edit_shared_transition_name include button
-                val direction = SubscriptionsFragmentDirections.actionCreateSubscription()
-                findNavController().navigate(direction, extras)
+                navigateToShared(
+                    R.string.edit_shared_transition_name,
+                    button,
+                    SubscriptionsFragmentDirections.actionCreateSubscription()
+                )
             }
         }
     }

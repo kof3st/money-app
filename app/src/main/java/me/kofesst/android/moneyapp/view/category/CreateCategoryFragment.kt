@@ -4,45 +4,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCreateCategoryBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
-import me.kofesst.android.moneyapp.util.setEnterSharedTransition
+import me.kofesst.android.moneyapp.view.EnterSharedTransition
+import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.navigateUp
+import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
-import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModelFactory
 
-class CreateCategoryFragment : Fragment() {
+class CreateCategoryFragment : FragmentBase<FragmentCreateCategoryBinding>(),
+    EnterSharedTransition {
     private val viewModel: CategoriesViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = { CategoriesViewModelFactory(requireActivity().application) }
+        factoryProducer = { ViewModelFactory { CategoriesViewModel(requireActivity().application) } }
     )
 
-    private lateinit var binding: FragmentCreateCategoryBinding
-    private var editing: CategoryEntity? = null
-
     private val args: CreateCategoryFragmentArgs by navArgs()
+    private val editing by lazy { args.editing }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateCategoryBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setEnterSharedTransition(R.integer.shared_transition_duration_short)
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentCreateCategoryBinding {
+        return FragmentCreateCategoryBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        editing = args.editing
 
         setupTopBar()
         setupViews()
@@ -50,25 +41,16 @@ class CreateCategoryFragment : Fragment() {
 
     private fun setupTopBar() {
         binding.topBar.apply {
-            if (editing != null) {
-                setTitle(R.string.edit_category)
-            }
-
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
+            if (editing != null) setTitle(R.string.edit_category)
+            setNavigationOnClickListener { navigateUp() }
         }
     }
 
     private fun setupViews() {
-        if (editing != null) {
-            binding.nameText.setText(editing!!.name)
-        }
+        if (editing != null) binding.nameText.setText(editing!!.name)
 
         binding.saveButton.apply {
-            if (editing != null) {
-                setText(R.string.edit_category)
-            }
+            if (editing != null) setText(R.string.edit_category)
 
             setOnClickListener {
                 val category = getModelFromFields() ?: return@setOnClickListener
@@ -79,7 +61,7 @@ class CreateCategoryFragment : Fragment() {
                     viewModel.addCategory(category)
                 }
 
-                findNavController().navigateUp()
+                navigateUp()
             }
         }
     }

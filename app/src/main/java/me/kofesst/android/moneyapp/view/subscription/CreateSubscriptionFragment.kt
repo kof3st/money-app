@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,18 +16,19 @@ import me.kofesst.android.moneyapp.databinding.FragmentCreateSubscriptionBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
 import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
-import me.kofesst.android.moneyapp.util.setEnterSharedTransition
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
-import me.kofesst.android.moneyapp.viewmodel.asset.SubscriptionsViewModel
-import me.kofesst.android.moneyapp.viewmodel.asset.SubscriptionsViewModelFactory
+import me.kofesst.android.moneyapp.view.EnterSharedTransition
+import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.navigateUp
+import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
+import me.kofesst.android.moneyapp.viewmodel.subscription.SubscriptionsViewModel
 
-class CreateSubscriptionFragment : Fragment() {
+class CreateSubscriptionFragment : FragmentBase<FragmentCreateSubscriptionBinding>(),
+    EnterSharedTransition {
     private val viewModel: SubscriptionsViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = { SubscriptionsViewModelFactory(requireActivity().application) }
+        factoryProducer = { ViewModelFactory { SubscriptionsViewModel(requireActivity().application) } }
     )
-
-    private lateinit var binding: FragmentCreateSubscriptionBinding
 
     private var selectedAsset: AssetEntity? = null
     private var selectedType: SubscriptionTypes? = null
@@ -37,17 +36,11 @@ class CreateSubscriptionFragment : Fragment() {
     private val args: CreateSubscriptionFragmentArgs by navArgs()
     private val editing: SubscriptionEntity? by lazy { args.editing }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateSubscriptionBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setEnterSharedTransition(R.integer.shared_transition_duration_short)
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentCreateSubscriptionBinding {
+        return FragmentCreateSubscriptionBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,15 +53,10 @@ class CreateSubscriptionFragment : Fragment() {
 
     private fun setupTopBar() {
         binding.topBar.apply {
-            if (editing != null) {
-                setTitle(R.string.edit_subscription)
-            } else {
-                menu.findItem(R.id.delete).isVisible = false
-            }
+            if (editing != null) setTitle(R.string.edit_subscription)
+            else menu.findItem(R.id.delete).isVisible = false
 
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
+            setNavigationOnClickListener { navigateUp() }
 
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
@@ -80,7 +68,7 @@ class CreateSubscriptionFragment : Fragment() {
                             snackbarMessageRes = R.string.snackbar_subscription_deleted,
                             deleteAction = {
                                 viewModel.deleteSubscription(editing!!)
-                                findNavController().navigateUp()
+                                navigateUp()
                             },
                             undoAction = {
                                 viewModel.addSubscription(editing!!)
@@ -153,11 +141,9 @@ class CreateSubscriptionFragment : Fragment() {
                         type = subscription.type
                     }
                     viewModel.addSubscription(editing!!)
-                } else {
-                    viewModel.addSubscription(subscription)
-                }
+                } else viewModel.addSubscription(subscription)
 
-                findNavController().navigateUp()
+                navigateUp()
             }
         }
     }

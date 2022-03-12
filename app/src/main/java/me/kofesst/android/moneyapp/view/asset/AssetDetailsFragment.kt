@@ -4,49 +4,40 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentAssetDetailsBinding
 import me.kofesst.android.moneyapp.model.default.AssetTypes
-import me.kofesst.android.moneyapp.util.*
+import me.kofesst.android.moneyapp.util.balanceColor
+import me.kofesst.android.moneyapp.util.formatWithCurrency
+import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
+import me.kofesst.android.moneyapp.view.*
+import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
-import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModelFactory
 
-class AssetDetailsFragment : Fragment() {
+class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding>(), EnterSharedTransition,
+    ExitSharedTransition {
     private val viewModel: AssetsViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = { AssetsViewModelFactory(requireActivity().application) }
+        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
     )
-
-    private lateinit var binding: FragmentAssetDetailsBinding
 
     private val args: AssetDetailsFragmentArgs by navArgs()
     private val targetAsset by lazy { args.targetAsset }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAssetDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setEnterSharedTransition(R.integer.shared_transition_duration_short)
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentAssetDetailsBinding {
+        return FragmentAssetDetailsBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setExitSharedTransition(R.integer.shared_transition_duration_short)
 
         setupViews()
         setupTopBar()
@@ -68,7 +59,7 @@ class AssetDetailsFragment : Fragment() {
         binding.topBar.apply {
             title = targetAsset.asset.name
             setNavigationOnClickListener {
-                findNavController().navigateUp()
+                navigateUp()
             }
         }
     }
@@ -76,31 +67,37 @@ class AssetDetailsFragment : Fragment() {
     private fun setupActions() {
         binding.editButton.apply {
             setOnClickListener { button ->
-                val extras = R.string.edit_shared_transition_name include button
-                val direction = AssetDetailsFragmentDirections.actionEditAsset(targetAsset.asset)
-                findNavController().navigate(direction, extras)
+                navigateToShared(
+                    R.string.edit_shared_transition_name,
+                    button,
+                    AssetDetailsFragmentDirections.actionEditAsset(targetAsset.asset)
+                )
             }
         }
 
         binding.transactionButton.apply {
             setOnClickListener { button ->
-                val extras = R.string.add_transaction_transition_name include button
-                val direction = AssetDetailsFragmentDirections.actionCreateTransaction(
-                    targetAsset = targetAsset.asset,
-                    isTransfer = false
+                navigateToShared(
+                    R.string.add_transaction_transition_name,
+                    button,
+                    AssetDetailsFragmentDirections.actionCreateTransaction(
+                        targetAsset = targetAsset.asset,
+                        isTransfer = false
+                    )
                 )
-                findNavController().navigate(direction, extras)
             }
         }
 
         binding.transferButton.apply {
             setOnClickListener { button ->
-                val extras = R.string.transfer_transition_name include button
-                val direction = AssetDetailsFragmentDirections.actionCreateTransaction(
-                    targetAsset = targetAsset.asset,
-                    isTransfer = true
+                navigateToShared(
+                    R.string.add_transaction_transition_name,
+                    button,
+                    AssetDetailsFragmentDirections.actionCreateTransaction(
+                        targetAsset = targetAsset.asset,
+                        isTransfer = true
+                    )
                 )
-                findNavController().navigate(direction, extras)
             }
         }
 
@@ -113,7 +110,7 @@ class AssetDetailsFragment : Fragment() {
                     snackbarMessageRes = R.string.snackbar_asset_deleted,
                     deleteAction = {
                         viewModel.deleteAsset(targetAsset.asset)
-                        findNavController().navigateUp()
+                        navigateUp()
                     },
                     undoAction = {
                         viewModel.addAsset(targetAsset.asset)

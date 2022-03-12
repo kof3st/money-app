@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,21 +17,29 @@ import me.kofesst.android.moneyapp.databinding.FragmentCreateTransactionBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.model.TransactionEntity
-import me.kofesst.android.moneyapp.util.setEnterSharedTransition
+import me.kofesst.android.moneyapp.view.EnterSharedTransition
+import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.navigateUp
+import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
-import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModelFactory
 
-class CreateTransactionFragment : Fragment() {
+class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding>(),
+    EnterSharedTransition {
     private val viewModel: AssetsViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = { AssetsViewModelFactory(requireActivity().application) }
+        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
     )
 
-    private lateinit var binding: FragmentCreateTransactionBinding
-    private lateinit var targetAsset: AssetEntity
-    private var isTransfer: Boolean = false
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentCreateTransactionBinding {
+        return FragmentCreateTransactionBinding.inflate(inflater, container, false)
+    }
 
     private val args: CreateTransactionFragmentArgs by navArgs()
+    private val targetAsset by lazy { args.targetAsset }
+    private val isTransfer by lazy { args.isTransfer }
 
     private lateinit var categories: List<CategoryEntity>
     private lateinit var targets: List<AssetEntity>
@@ -41,24 +47,8 @@ class CreateTransactionFragment : Fragment() {
     private var selectedTarget: AssetEntity? = null
     private var selectedCategory: CategoryEntity? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateTransactionBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setEnterSharedTransition(R.integer.shared_transition_duration_short)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        targetAsset = args.targetAsset
-        isTransfer = args.isTransfer
 
         setupViews()
         setupTopBar()
@@ -130,7 +120,7 @@ class CreateTransactionFragment : Fragment() {
                     viewModel.addAsset(targetAsset)
                 }
 
-                findNavController().navigateUp()
+                navigateUp()
             }
         }
     }
@@ -207,9 +197,7 @@ class CreateTransactionFragment : Fragment() {
                 if (isTransfer) R.string.transfer_action
                 else R.string.new_transaction
             )
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
+            setNavigationOnClickListener { navigateUp() }
         }
     }
 }

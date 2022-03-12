@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.collect
@@ -16,36 +14,32 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentAssetsBinding
 import me.kofesst.android.moneyapp.model.AssetWithSubscriptions
 import me.kofesst.android.moneyapp.util.formatWithCurrency
-import me.kofesst.android.moneyapp.util.include
-import me.kofesst.android.moneyapp.util.setExitSharedTransition
-import me.kofesst.android.moneyapp.util.setPostpone
+import me.kofesst.android.moneyapp.view.ExitSharedTransition
+import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.Postpone
+import me.kofesst.android.moneyapp.view.navigateToShared
 import me.kofesst.android.moneyapp.view.recyclerview.AssetsAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
+import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
-import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModelFactory
 
-class AssetsFragment : Fragment() {
+class AssetsFragment : FragmentBase<FragmentAssetsBinding>(), Postpone, ExitSharedTransition {
     private val viewModel: AssetsViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = { AssetsViewModelFactory(requireActivity().application) }
+        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
     )
 
-    private lateinit var binding: FragmentAssetsBinding
     private lateinit var assetsAdapter: AssetsAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAssetsBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentAssetsBinding {
+        return FragmentAssetsBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setPostpone(view)
-        setExitSharedTransition(R.integer.shared_transition_duration_short)
 
         setupViews()
         setupObserves()
@@ -57,9 +51,11 @@ class AssetsFragment : Fragment() {
         assetsAdapter = AssetsAdapter(requireContext()).apply {
             itemClickListener = object : ItemClickListener<AssetWithSubscriptions> {
                 override fun onClick(view: View, item: AssetWithSubscriptions) {
-                    val extras = R.string.asset_details_transition_name include binding.topBar
-                    val direction = AssetsFragmentDirections.actionAssetDetails(item)
-                    findNavController().navigate(direction, extras)
+                    navigateToShared(
+                        R.string.asset_details_transition_name,
+                        binding.topBar,
+                        AssetsFragmentDirections.actionAssetDetails(item)
+                    )
                 }
 
                 override fun onLongClick(view: View, item: AssetWithSubscriptions) {}
@@ -78,9 +74,11 @@ class AssetsFragment : Fragment() {
 
         binding.newAssetButton.apply {
             setOnClickListener { button ->
-                val extras = R.string.edit_shared_transition_name include button
-                val direction = AssetsFragmentDirections.actionCreateAsset()
-                findNavController().navigate(direction, extras)
+                navigateToShared(
+                    R.string.edit_shared_transition_name,
+                    button,
+                    AssetsFragmentDirections.actionCreateAsset()
+                )
             }
         }
     }

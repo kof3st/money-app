@@ -1,17 +1,13 @@
 package me.kofesst.android.moneyapp.viewmodel.history
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import me.kofesst.android.moneyapp.database.MainDatabase
+import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
 
 class HistoryViewModel(
     application: Application
-) : AndroidViewModel(application) {
-    private val database = MainDatabase.get(application)
-    private val transactionsDao = database.getTransactionsDao()
-
+) : ViewModelBase(application) {
     val history = Pager(
         PagingConfig(
             pageSize = 5,
