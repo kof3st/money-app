@@ -15,10 +15,10 @@ import java.io.Serializable
     )]
 )
 data class SubscriptionEntity(
-    @PrimaryKey(autoGenerate = true) val subscriptionId: Int = 0,
+    @PrimaryKey(autoGenerate = true) val subscriptionId: Long = 0,
     var title: String = "",
     var amount: Double = 1.0,
-    val assetId: Int = 0,
+    val assetId: Long = 0,
     var day: Int = 1,
     var type: Int = SubscriptionTypes.DEBIT.ordinal
 ) : Serializable

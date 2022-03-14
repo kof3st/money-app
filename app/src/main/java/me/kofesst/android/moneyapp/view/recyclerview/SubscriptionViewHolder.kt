@@ -4,7 +4,9 @@ import me.kofesst.android.moneyapp.databinding.SubscriptionItemBinding
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
 import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
 import me.kofesst.android.moneyapp.util.balanceColor
+import me.kofesst.android.moneyapp.util.formatDate
 import me.kofesst.android.moneyapp.util.formatWithCurrency
+import me.kofesst.android.moneyapp.util.getNextDate
 
 class SubscriptionViewHolder(
     binding: SubscriptionItemBinding
@@ -20,7 +22,6 @@ class SubscriptionViewHolder(
         amountText.text = amount.formatWithCurrency(sign = true)
         amountText.setTextColor(amount.balanceColor(itemView.context))
 
-        actionText.text = item.day.toString()
-        // TODO replace day.toString() to next debit/credit date
+        actionText.text = item.day.getNextDate().formatDate(showTime = false)
     }
 }

@@ -57,12 +57,20 @@ class AssetsViewModel(
 
     /**
      * Добавляет новый счёт [asset] в базу данных.
-     * Если счёт с таким id уже существует, то
-     * обновляет его
      */
     fun addAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             assetsDao.addAsset(asset)
+            updateAssets()
+        }
+    }
+
+    /**
+     * Обновляет счёт [asset] в базе данных.
+     */
+    fun updateAsset(asset: AssetEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            assetsDao.updateAsset(asset)
             updateAssets()
         }
     }

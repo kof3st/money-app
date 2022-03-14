@@ -39,10 +39,11 @@ android {
 
 dependencies {
     // Worker
-    implementation "android.arch.work:work-runtime:1.0.1"
+    def work_version = "2.7.1"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
     // Paging RecyclerView
-    def paging_version = "3.1.0"
+    def paging_version = "3.1.1"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     implementation "androidx.room:room-paging:2.5.0-alpha01"
 

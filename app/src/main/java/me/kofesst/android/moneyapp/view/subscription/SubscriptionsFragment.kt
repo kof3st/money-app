@@ -20,14 +20,13 @@ import me.kofesst.android.moneyapp.view.navigateToShared
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.view.recyclerview.SubscriptionsAdapter
 import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
-import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 import me.kofesst.android.moneyapp.viewmodel.subscription.SubscriptionsViewModel
 
 class SubscriptionsFragment : FragmentBase<FragmentSubscriptionsBinding>(), Postpone,
     ExitSharedTransition {
     private val viewModel: SubscriptionsViewModel by viewModels(
         ownerProducer = { requireActivity() },
-        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
+        factoryProducer = { ViewModelFactory { SubscriptionsViewModel(requireActivity().application) } }
     )
 
     private lateinit var subscriptionsAdapter: SubscriptionsAdapter

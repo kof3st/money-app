@@ -6,7 +6,7 @@ import java.io.Serializable
 
 @Entity(tableName = "categories")
 data class CategoryEntity(
-    @PrimaryKey(autoGenerate = true) val categoryId: Int = 0,
+    @PrimaryKey(autoGenerate = true) val categoryId: Long = 0,
     var name: String
 ) : Serializable {
     override fun toString(): String {

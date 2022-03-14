@@ -1,6 +1,7 @@
 package me.kofesst.android.moneyapp.viewmodel.subscription
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +37,7 @@ class SubscriptionsViewModel(
     fun updateSubscriptions() {
         viewModelScope.launch(Dispatchers.IO) {
             _subscriptions.value = subscriptionsDao.getSubscriptions()
+            Log.d("AAA", "VM: ${_subscriptions.value.toString()}")
         }
     }
 

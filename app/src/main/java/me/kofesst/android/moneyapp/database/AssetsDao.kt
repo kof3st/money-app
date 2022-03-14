@@ -14,8 +14,11 @@ interface AssetsDao {
     @Query("SELECT * FROM assets ORDER BY assetId ASC")
     suspend fun getAssets(): List<AssetWithSubscriptions>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addAsset(asset: AssetEntity): Long
+
+    @Update
+    suspend fun updateAsset(asset: AssetEntity)
 
     @Delete
     suspend fun deleteAsset(asset: AssetEntity)

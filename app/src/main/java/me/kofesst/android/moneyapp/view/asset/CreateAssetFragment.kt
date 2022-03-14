@@ -83,7 +83,7 @@ class CreateAssetFragment : FragmentBase<FragmentCreateAssetBinding>(), EnterSha
                     editing!!.name = asset.name
                     editing!!.balance = asset.balance
                     editing!!.type = asset.type
-                    viewModel.addAsset(editing!!)
+                    viewModel.updateAsset(editing!!)
                 } else {
                     viewModel.addAsset(asset)
                 }

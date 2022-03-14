@@ -6,7 +6,7 @@ import java.util.*
 
 @Entity(tableName = "transactions")
 data class TransactionEntity(
-    @PrimaryKey(autoGenerate = true) val transactionId: Int = 0,
+    @PrimaryKey(autoGenerate = true) val transactionId: Long = 0,
     val date: Long = Date().time,
 
     val categoryId: Long? = 0,
@@ -18,5 +18,7 @@ data class TransactionEntity(
     val targetName: String? = null,
 
     var title: String = "",
-    var amount: Double = 0.0
+    var amount: Double = 0.0,
+
+    val subscriptionId: Long? = null
 )

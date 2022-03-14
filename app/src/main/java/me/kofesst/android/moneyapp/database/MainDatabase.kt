@@ -4,7 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import me.kofesst.android.moneyapp.model.*
+import me.kofesst.android.moneyapp.model.AssetEntity
+import me.kofesst.android.moneyapp.model.CategoryEntity
+import me.kofesst.android.moneyapp.model.SubscriptionEntity
+import me.kofesst.android.moneyapp.model.TransactionEntity
 
 @Database(
     entities = [
@@ -13,24 +16,25 @@ import me.kofesst.android.moneyapp.model.*
         TransactionEntity::class,
         SubscriptionEntity::class
     ],
-    version = 16,
+    version = 22,
     exportSchema = false
 )
-abstract class MainDatabase: RoomDatabase() {
+abstract class MainDatabase : RoomDatabase() {
     companion object {
+        @Volatile
         private var INSTANCE: MainDatabase? = null
 
         fun get(context: Context): MainDatabase {
-            if (INSTANCE != null) return INSTANCE!!
-
-            INSTANCE = Room.databaseBuilder(
-                context.applicationContext,
-                MainDatabase::class.java,
-                "main_database"
-            ).fallbackToDestructiveMigration().build()
-
-            return INSTANCE!!
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: buildInstance(context).also { INSTANCE = it }
+            }
         }
+
+        private fun buildInstance(context: Context) = Room.databaseBuilder(
+            context.applicationContext,
+            MainDatabase::class.java,
+            "main_database"
+        ).fallbackToDestructiveMigration().build()
     }
 
     abstract fun getAssetsDao(): AssetsDao

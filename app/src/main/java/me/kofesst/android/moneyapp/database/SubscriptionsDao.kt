@@ -6,6 +6,9 @@ import me.kofesst.android.moneyapp.model.SubscriptionEntity
 @Dao
 interface SubscriptionsDao {
 
+    @Query("SELECT * FROM subscriptions WHERE subscriptionId = :id LIMIT 1")
+    suspend fun getSubscription(id: Long): SubscriptionEntity?
+
     @Query("SELECT * FROM subscriptions ORDER BY subscriptionId ASC")
     suspend fun getSubscriptions(): List<SubscriptionEntity>
 

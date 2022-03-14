@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import me.kofesst.android.moneyapp.databinding.ActivityMainBinding
@@ -45,9 +46,13 @@ class MainActivity : AppCompatActivity() {
     private fun setupSubscriptionWorker() {
         val workRequest = PeriodicWorkRequest.Builder(
             SubscriptionsWorker::class.java,
-            10L,
-            TimeUnit.SECONDS
+            15L,
+            TimeUnit.MINUTES
         ).build()
-        WorkManager.getInstance().enqueue(workRequest)
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            SubscriptionsWorker.TAG,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            workRequest
+        )
     }
 }

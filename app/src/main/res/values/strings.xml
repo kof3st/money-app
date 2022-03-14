@@ -65,4 +65,6 @@
     <string name="delete_subscription">Удалить автоплатёж</string>
     <string name="delete_subscription_message">Вы действительно хотите удалить этот автоплатёж?</string>
     <string name="snackbar_subscription_deleted">Автоплатёж удалён</string>
+    <string name="subscription">Автоплатеж</string>
+    <string name="update_subscriptions">Обновление автоплатежей...</string>
 </resources>

@@ -15,5 +15,5 @@ class HistoryViewModel(
             initialLoadSize = 15,
             enablePlaceholders = false
         )
-    ) { transactionsDao.getTransactions() }.flow
+    ) { transactionsDao.getTransactionsPaged() }.flow
 }

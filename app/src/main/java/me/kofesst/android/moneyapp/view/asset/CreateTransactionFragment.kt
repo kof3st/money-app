@@ -111,13 +111,13 @@ class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding>
 
                 if (isTransfer && selectedTarget != null) {
                     targetAsset.balance -= transaction.amount
-                    viewModel.addAsset(targetAsset)
+                    viewModel.updateAsset(targetAsset)
 
                     selectedTarget!!.balance += transaction.amount
-                    viewModel.addAsset(selectedTarget!!)
+                    viewModel.updateAsset(selectedTarget!!)
                 } else {
                     targetAsset.balance += transaction.amount
-                    viewModel.addAsset(targetAsset)
+                    viewModel.updateAsset(targetAsset)
                 }
 
                 navigateUp()
@@ -180,9 +180,9 @@ class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding>
         }
 
         return TransactionEntity(
-            categoryId = selectedCategory?.categoryId?.toLong(),
-            assetId = targetAsset.assetId.toLong(),
-            targetId = selectedTarget?.assetId?.toLong(),
+            categoryId = selectedCategory?.categoryId,
+            assetId = targetAsset.assetId,
+            targetId = selectedTarget?.assetId,
             categoryName = selectedCategory?.name ?: getString(R.string.transfer_category),
             assetName = targetAsset.name,
             targetName = selectedTarget?.name,
