@@ -21,6 +21,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupNavigation()
+        setupSubscriptionWorker()
+    }
+
+    private fun setupNavigation() {
         val navHostFragment = supportFragmentManager.findFragmentById(
             binding.fragmentContainer.id
         ) as NavHostFragment
@@ -39,8 +44,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        setupSubscriptionWorker()
     }
 
     private fun setupSubscriptionWorker() {
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             15L,
             TimeUnit.MINUTES
         ).build()
+
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             SubscriptionsWorker.TAG,
             ExistingPeriodicWorkPolicy.REPLACE,

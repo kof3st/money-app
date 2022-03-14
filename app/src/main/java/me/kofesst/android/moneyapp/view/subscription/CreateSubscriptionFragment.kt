@@ -120,7 +120,7 @@ class CreateSubscriptionFragment : FragmentBase<FragmentCreateSubscriptionBindin
             binding.typeText.setText(getString(SubscriptionTypes.values()[it.type].titleRes), false)
 
             lifecycleScope.launch(Dispatchers.IO) {
-                val asset = viewModel.getAsset(it.assetId.toLong()) ?: return@launch
+                val asset = viewModel.getAsset(it.assetId) ?: return@launch
                 selectedAsset = asset
 
                 withContext(Dispatchers.Main) {
