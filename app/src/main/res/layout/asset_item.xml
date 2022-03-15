@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
@@ -14,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/asset_type"
-        android:src="@drawable/ic_baseline_account_balance_wallet_24" />
+        android:src="@drawable/ic_baseline_account_balance_wallet_24"
+        app:tint="?attr/colorOnBackground" />
 
     <Space
         android:layout_width="10dp"
@@ -30,15 +32,17 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:fontFamily="@font/rubikregular"
+            android:textColor="?attr/colorOnBackground"
             android:text="ВТБ степуха"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/balance_text"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:fontFamily="@font/rubikregular"
             android:text="-50 500,50 руб."
             android:textSize="16sp" />
 

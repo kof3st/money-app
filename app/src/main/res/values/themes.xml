@@ -11,6 +11,27 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
+        <item name="textAppearanceHeadline6">@style/TextAppearance.AppCompat.RubikH6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.AppCompat.RubikS1</item>
+
+        <item name="bottomNavigationStyle">@style/Widget.AppCompat.BottomNavigationView</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.RubikH6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/rubikregular</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.RubikS1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/rubikregular</item>
+    </style>
+
+    <style name="Widget.AppCompat.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppCompat.BottomNavigationView</item>
+    </style>
+
+    <style name="ThemeOverlay.AppCompat.BottomNavigationView" parent="">
+        <item name="fontFamily">@font/rubikregular</item>
     </style>
 
 </resources>

@@ -44,21 +44,22 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubiksemibold"
                         android:text="@string/asset_balance"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubiksemibold"
                         android:text=": "
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/balance_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubikregular"
                         android:text="-500 руб."
                         android:textColor="@color/negative"
                         android:textSize="18sp" />
@@ -74,22 +75,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="0"
+                        android:fontFamily="@font/rubiksemibold"
                         android:text="@string/asset_type"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubiksemibold"
                         android:text=": "
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/type_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
+                        android:fontFamily="@font/rubikregular"
                         android:text="Карта"
                         android:textSize="18sp" />
 
@@ -111,6 +113,7 @@
                     android:id="@+id/edit_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubiksemibold"
                     android:text="@string/edit_asset"
                     android:textAlignment="viewStart"
                     android:transitionName="@string/edit_shared_transition_name"
@@ -121,6 +124,7 @@
                     android:id="@+id/transaction_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubiksemibold"
                     android:text="@string/new_transaction"
                     android:textAlignment="viewStart"
                     android:transitionName="@string/add_transaction_transition_name"
@@ -131,6 +135,7 @@
                     android:id="@+id/transfer_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubiksemibold"
                     android:text="@string/transfer_action"
                     android:textAlignment="viewStart"
                     android:transitionName="@string/transfer_transition_name"
@@ -141,6 +146,7 @@
                     android:id="@+id/delete_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubiksemibold"
                     android:text="@string/delete_asset"
                     android:textAlignment="viewStart"
                     app:icon="@drawable/ic_baseline_delete_outline_24"
