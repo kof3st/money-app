@@ -7,6 +7,11 @@
     android:orientation="vertical"
     tools:context=".view.history.HistoryFragment">
 
+    <include
+        android:id="@+id/empty_source_view"
+        layout="@layout/empty_source_view"
+        android:visibility="gone"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
