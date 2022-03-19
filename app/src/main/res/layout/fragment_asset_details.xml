@@ -139,7 +139,7 @@
                     android:text="@string/transfer_action"
                     android:textAlignment="viewStart"
                     android:transitionName="@string/transfer_transition_name"
-                    app:icon="@drawable/ic_baseline_cached_24"
+                    app:icon="@drawable/ic_baseline_currency_exchange_24"
                     app:iconPadding="20dp" />
 
                 <Button
