@@ -1,6 +1,7 @@
 package me.kofesst.android.moneyapp.view.recyclerview
 
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import me.kofesst.android.moneyapp.databinding.HistoryItemBinding
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.util.balanceColor
@@ -9,7 +10,7 @@ import me.kofesst.android.moneyapp.util.formatWithCurrency
 
 class HistoryViewHolder(
     binding: HistoryItemBinding
-) : BaseViewHolder<TransactionEntity>(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
     private val titleText = binding.titleText
     private val amountText = binding.amountText
     private val assetNameText = binding.assetNameText
@@ -19,7 +20,7 @@ class HistoryViewHolder(
     private val targetNameText = binding.targetNameText
     private val targetAmountText = binding.targetAmountText
 
-    override fun bind(item: TransactionEntity) {
+    fun bind(item: TransactionEntity) {
         titleText.text = item.title
 
         amountText.text = item.amount.formatWithCurrency(sign = true)
