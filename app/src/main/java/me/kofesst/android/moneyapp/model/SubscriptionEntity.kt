@@ -21,7 +21,28 @@ data class SubscriptionEntity(
     val assetId: Long = 0,
     var day: Int = 1,
     var type: Int = SubscriptionTypes.DEBIT.ordinal
-) : Serializable
+) : Serializable {
+    override fun equals(other: Any?): Boolean {
+        if (other !is SubscriptionEntity) return false
+
+        return subscriptionId == other.subscriptionId &&
+                title == other.title &&
+                amount == other.amount &&
+                assetId == other.assetId &&
+                day == other.day &&
+                type == other.type
+    }
+
+    override fun hashCode(): Int {
+        var result = subscriptionId.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + amount.hashCode()
+        result = 31 * result + assetId.hashCode()
+        result = 31 * result + day
+        result = 31 * result + type
+        return result
+    }
+}
 
 data class AssetWithSubscriptions(
     @Embedded val asset: AssetEntity,
@@ -32,4 +53,19 @@ data class AssetWithSubscriptions(
         entity = SubscriptionEntity::class
     )
     val subscriptions: List<SubscriptionEntity>
-) : Serializable
+) : Serializable {
+    override fun equals(other: Any?): Boolean {
+        if (other !is AssetWithSubscriptions) return false
+
+        return asset == other.asset &&
+                // Check for lists equality
+                subscriptions.size == other.subscriptions.size &&
+                subscriptions.zip(other.subscriptions).all { (x, y) -> x == y }
+    }
+
+    override fun hashCode(): Int {
+        var result = asset.hashCode()
+        result = 31 * result + subscriptions.hashCode()
+        return result
+    }
+}

@@ -27,7 +27,10 @@ data class AssetEntity(
     override fun equals(other: Any?): Boolean {
         if (other !is AssetEntity) return false
 
-        return name == other.name && balance == other.balance && type == other.type
+        return assetId == other.assetId &&
+                name == other.name &&
+                balance == other.balance &&
+                type == other.type
     }
 
     override fun hashCode(): Int {

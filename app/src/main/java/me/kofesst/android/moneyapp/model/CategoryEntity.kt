@@ -12,4 +12,17 @@ data class CategoryEntity(
     override fun toString(): String {
         return name
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is CategoryEntity) return false
+
+        return categoryId == other.categoryId &&
+                name == other.name
+    }
+
+    override fun hashCode(): Int {
+        var result = categoryId.hashCode()
+        result = 31 * result + name.hashCode()
+        return result
+    }
 }
