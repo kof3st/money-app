@@ -9,7 +9,7 @@ import me.kofesst.android.moneyapp.model.TransactionEntity
 
 class HistoryAdapter(
     private val context: Context
-) : PagingDataAdapter<TransactionEntity, HistoryViewHolder>(ItemsDiffBuilder()) {
+) : PagingDataAdapter<TransactionEntity, HistoryViewHolder>(ItemsDiffer()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val inflater = LayoutInflater.from(context)

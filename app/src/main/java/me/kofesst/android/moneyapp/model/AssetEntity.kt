@@ -23,4 +23,18 @@ data class AssetEntity(
     override fun toString(): String {
         return "$name (${balance.formatWithCurrency()})"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is AssetEntity) return false
+
+        return name == other.name && balance == other.balance && type == other.type
+    }
+
+    override fun hashCode(): Int {
+        var result = assetId.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + balance.hashCode()
+        result = 31 * result + type
+        return result
+    }
 }

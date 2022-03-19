@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
+import me.kofesst.android.moneyapp.databinding.CategoryItemBinding
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
@@ -16,21 +17,28 @@ import me.kofesst.android.moneyapp.view.ExitSharedTransition
 import me.kofesst.android.moneyapp.view.ListFragmentBase
 import me.kofesst.android.moneyapp.view.Postpone
 import me.kofesst.android.moneyapp.view.navigateToShared
-import me.kofesst.android.moneyapp.view.recyclerview.CategoriesAdapter
-import me.kofesst.android.moneyapp.view.recyclerview.CategoryViewHolder
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
 
-class CategoriesFragment : ListFragmentBase<FragmentCategoriesBinding,
-        CategoriesViewModel,
-        CategoryEntity,
-        CategoryViewHolder,
-        CategoriesAdapter>(
-    CategoriesViewModel::class
-), Postpone, ExitSharedTransition {
+class CategoriesFragment :
+    ListFragmentBase<FragmentCategoriesBinding, CategoriesViewModel, CategoryEntity, CategoryItemBinding>(
+        CategoriesViewModel::class
+    ), Postpone, ExitSharedTransition {
     companion object {
         private const val CATEGORIES_CASES_WORD_UID = "categories_count"
     }
+
+    override val viewHolderBindingProducer: (LayoutInflater, ViewGroup) -> CategoryItemBinding
+        get() = { inflater, parent -> CategoryItemBinding.inflate(inflater, parent, false) }
+
+    override val onViewHolderBindCallback: (CategoryItemBinding, CategoryEntity) -> Unit
+        get() = { binding, item -> binding.nameText.text = item.name }
+
+    override val itemsComparator: (CategoryEntity, CategoryEntity) -> Boolean
+        get() = { first, second -> first.categoryId == second.categoryId }
+
+    override val listStateFlow: StateFlow<List<CategoryEntity>>
+        get() = viewModel.categories
 
     override val divider: RecyclerView.ItemDecoration
         get() = MaterialDividerItemDecoration(
@@ -38,8 +46,18 @@ class CategoriesFragment : ListFragmentBase<FragmentCategoriesBinding,
             LinearLayoutManager.VERTICAL
         )
 
-    override val listStateFlow: StateFlow<List<CategoryEntity>>
-        get() = viewModel.categories
+    override val onItemClickListener: ItemClickListener<CategoryEntity>
+        get() = object : ItemClickListener<CategoryEntity> {
+            override fun onClick(view: View, item: CategoryEntity) {
+                navigateToShared(
+                    R.string.category_details_transition_name,
+                    binding.topBar,
+                    CategoriesFragmentDirections.actionCategoryDetails(item)
+                )
+            }
+
+            override fun onLongClick(view: View, item: CategoryEntity) = Unit
+        }
 
     override fun createViewModel(): CategoriesViewModel =
         CategoriesViewModel(requireActivity().application)
@@ -49,20 +67,6 @@ class CategoriesFragment : ListFragmentBase<FragmentCategoriesBinding,
         container: ViewGroup?
     ): FragmentCategoriesBinding {
         return FragmentCategoriesBinding.inflate(inflater, container, false)
-    }
-
-    override fun createAdapter(): CategoriesAdapter = CategoriesAdapter(requireContext()).apply {
-        itemClickListener = object : ItemClickListener<CategoryEntity> {
-            override fun onClick(view: View, item: CategoryEntity) {
-                navigateToShared(
-                    R.string.category_details_transition_name,
-                    binding.topBar,
-                    CategoriesFragmentDirections.actionCategoryDetails(item)
-                )
-            }
-
-            override fun onLongClick(view: View, item: CategoryEntity) {}
-        }
     }
 
     override fun getRecyclerView(): RecyclerView = binding.categoriesView
