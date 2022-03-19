@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
+import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentSubscriptionsBinding
 import me.kofesst.android.moneyapp.databinding.SubscriptionItemBinding
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
@@ -52,6 +53,9 @@ class SubscriptionsFragment :
 
     override val listStateFlow: StateFlow<List<SubscriptionEntity>>
         get() = viewModel.subscriptions
+
+    override val emptySourceView: EmptySourceViewBinding
+        get() = binding.emptySourceView
 
     override val divider: RecyclerView.ItemDecoration
         get() = MaterialDividerItemDecoration(

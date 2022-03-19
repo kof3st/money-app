@@ -10,6 +10,7 @@ import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.view.recyclerview.InlineAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
@@ -25,6 +26,7 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
     protected abstract val onViewHolderBindCallback: (ItemBinding, Model) -> Unit
     protected abstract val itemsComparator: (Model, Model) -> Boolean
     protected abstract val listStateFlow: StateFlow<List<Model>>
+    protected abstract val emptySourceView: EmptySourceViewBinding
 
     protected open val divider: RecyclerView.ItemDecoration? get() = null
     protected open val onItemClickListener: ItemClickListener<Model>? get() = null
@@ -61,12 +63,18 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
 
     private fun setupObserves() {
         lifecycleScope.launchWhenStarted {
-            listStateFlow.also {
-                it.onEach { models ->
-                    fragmentAdapter.submitList(models)
-                    onListObserved(models)
-                }.collect()
-            }
+            listStateFlow.onEach { models ->
+                fragmentAdapter.submitList(models)
+                onListObserved(models)
+
+                if (models.isEmpty()) {
+                    emptySourceView.root.visibility = View.VISIBLE
+                    emptySourceView.image.playAnimation()
+                } else {
+                    emptySourceView.root.visibility = View.GONE
+                    emptySourceView.image.cancelAnimation()
+                }
+            }.collect()
         }
     }
 }

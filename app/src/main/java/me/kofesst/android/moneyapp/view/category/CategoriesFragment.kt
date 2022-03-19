@@ -10,6 +10,7 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.CategoryItemBinding
+import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
@@ -39,6 +40,9 @@ class CategoriesFragment :
 
     override val listStateFlow: StateFlow<List<CategoryEntity>>
         get() = viewModel.categories
+
+    override val emptySourceView: EmptySourceViewBinding
+        get() = binding.emptySourceView
 
     override val divider: RecyclerView.ItemDecoration
         get() = MaterialDividerItemDecoration(
