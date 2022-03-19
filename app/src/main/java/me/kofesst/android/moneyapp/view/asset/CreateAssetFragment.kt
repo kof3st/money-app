@@ -6,19 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.appbar.MaterialToolbar
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCreateAssetBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.default.AssetTypes
-import me.kofesst.android.moneyapp.view.EnterSharedTransition
-import me.kofesst.android.moneyapp.view.ExitSharedTransition
-import me.kofesst.android.moneyapp.view.FragmentBase
-import me.kofesst.android.moneyapp.view.navigateUp
+import me.kofesst.android.moneyapp.view.*
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 
 class CreateAssetFragment : FragmentBase<FragmentCreateAssetBinding, AssetsViewModel>(
     AssetsViewModel::class
 ), EnterSharedTransition, ExitSharedTransition {
+    override val topBar: MaterialToolbar
+        get() = binding.topBar
+
+    override val topBarConfig: FragmentTopBarConfig
+        get() = FragmentTopBarConfig(
+            titleSetter = { if (editing != null) it.setTitle(R.string.edit_asset) },
+            hasBackButton = true
+        )
+
     private var selectedType: AssetTypes? = null
 
     private val args: CreateAssetFragmentArgs by navArgs()
@@ -37,16 +44,8 @@ class CreateAssetFragment : FragmentBase<FragmentCreateAssetBinding, AssetsViewM
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupTopBar()
         setupTypes()
         setupViews()
-    }
-
-    private fun setupTopBar() {
-        binding.topBar.apply {
-            if (editing != null) setTitle(R.string.edit_asset)
-            setNavigationOnClickListener { navigateUp() }
-        }
     }
 
     private fun setupTypes() {

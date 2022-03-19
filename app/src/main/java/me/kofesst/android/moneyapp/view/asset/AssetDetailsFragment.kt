@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.R
@@ -20,6 +21,15 @@ import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsViewModel>(
     AssetsViewModel::class
 ), EnterSharedTransition, ExitSharedTransition {
+    override val topBar: MaterialToolbar
+        get() = binding.topBar
+
+    override val topBarConfig: FragmentTopBarConfig
+        get() = FragmentTopBarConfig(
+            titleSetter = { it.title = targetAsset.asset.name },
+            hasBackButton = true
+        )
+
     private val args: AssetDetailsFragmentArgs by navArgs()
     private val targetAsset by lazy { args.targetAsset }
 
@@ -37,7 +47,6 @@ class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsVie
         super.onViewCreated(view, savedInstanceState)
 
         setupViews()
-        setupTopBar()
         setupActions()
     }
 
@@ -49,15 +58,6 @@ class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsVie
 
         binding.typeText.apply {
             setText(AssetTypes.values()[targetAsset.asset.type].titleRes)
-        }
-    }
-
-    private fun setupTopBar() {
-        binding.topBar.apply {
-            title = targetAsset.asset.name
-            setNavigationOnClickListener {
-                navigateUp()
-            }
         }
     }
 

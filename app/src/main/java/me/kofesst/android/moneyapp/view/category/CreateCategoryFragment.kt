@@ -5,17 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.appbar.MaterialToolbar
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCreateCategoryBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.view.EnterSharedTransition
 import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.FragmentTopBarConfig
 import me.kofesst.android.moneyapp.view.navigateUp
 import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
 
 class CreateCategoryFragment : FragmentBase<FragmentCreateCategoryBinding, CategoriesViewModel>(
     CategoriesViewModel::class
 ), EnterSharedTransition {
+    override val topBar: MaterialToolbar
+        get() = binding.topBar
+
+    override val topBarConfig: FragmentTopBarConfig
+        get() = FragmentTopBarConfig(
+            titleSetter = { if (editing != null) it.setTitle(R.string.edit_category) },
+            hasBackButton = true
+        )
+
     private val args: CreateCategoryFragmentArgs by navArgs()
     private val editing by lazy { args.editing }
 

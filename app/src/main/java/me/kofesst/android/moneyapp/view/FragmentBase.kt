@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.appbar.MaterialToolbar
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.util.include
 import me.kofesst.android.moneyapp.util.setEnterSharedTransition
@@ -32,6 +33,9 @@ abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : V
         ownerProducer = { requireActivity() },
         factoryProducer = { ViewModelFactory { createViewModel() } }
     )
+
+    protected open val topBar: MaterialToolbar? get() = null
+    protected open val topBarConfig: FragmentTopBarConfig? get() = null
 
     protected abstract fun getViewBinding(
         inflater: LayoutInflater,
@@ -60,6 +64,20 @@ abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : V
 
         if (this is Postpone) setPostpone(view)
         if (this is ExitSharedTransition) setExitSharedTransition(R.integer.shared_transition_duration_short)
+
+        setupTopBar()
+    }
+
+    private fun setupTopBar() {
+        topBar?.also { bar ->
+            topBarConfig?.also { config ->
+                config.titleSetter?.also { it(bar) }
+                config.subtitleSetter?.also { it(bar) }
+                if (config.hasBackButton) {
+                    bar.setNavigationOnClickListener { navigateUp() }
+                }
+            }
+        }
     }
 
     private fun Fragment.viewModel(
@@ -68,6 +86,12 @@ abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : V
         factoryProducer: (() -> ViewModelProvider.Factory)? = null,
     ) = createViewModelLazy(clazz, { ownerProducer().viewModelStore }, factoryProducer)
 }
+
+data class FragmentTopBarConfig(
+    val titleSetter: ((MaterialToolbar) -> Unit)? = null,
+    val subtitleSetter: ((MaterialToolbar) -> Unit)? = null,
+    val hasBackButton: Boolean = false
+)
 
 fun Fragment.navigateToShared(
     @StringRes transitionNameRes: Int,

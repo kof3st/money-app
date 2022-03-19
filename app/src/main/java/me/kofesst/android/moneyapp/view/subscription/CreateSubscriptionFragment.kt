@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,6 +19,7 @@ import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.EnterSharedTransition
 import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.FragmentTopBarConfig
 import me.kofesst.android.moneyapp.view.navigateUp
 import me.kofesst.android.moneyapp.viewmodel.subscription.SubscriptionsViewModel
 
@@ -25,6 +27,15 @@ class CreateSubscriptionFragment :
     FragmentBase<FragmentCreateSubscriptionBinding, SubscriptionsViewModel>(
         SubscriptionsViewModel::class
     ), EnterSharedTransition {
+    override val topBar: MaterialToolbar
+        get() = binding.topBar
+
+    override val topBarConfig: FragmentTopBarConfig
+        get() = FragmentTopBarConfig(
+            titleSetter = { if (editing != null) it.setTitle(R.string.edit_subscription) },
+            hasBackButton = true
+        )
+
     private var selectedAsset: AssetEntity? = null
     private var selectedType: SubscriptionTypes? = null
 
@@ -51,10 +62,7 @@ class CreateSubscriptionFragment :
 
     private fun setupTopBar() {
         binding.topBar.apply {
-            if (editing != null) setTitle(R.string.edit_subscription)
-            else menu.findItem(R.id.delete).isVisible = false
-
-            setNavigationOnClickListener { navigateUp() }
+            if (editing == null) menu.findItem(R.id.delete).isVisible = false
 
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,12 +19,22 @@ import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.view.EnterSharedTransition
 import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.FragmentTopBarConfig
 import me.kofesst.android.moneyapp.view.navigateUp
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 
 class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding, AssetsViewModel>(
     AssetsViewModel::class
 ), EnterSharedTransition {
+    override val topBar: MaterialToolbar
+        get() = binding.topBar
+
+    override val topBarConfig: FragmentTopBarConfig
+        get() = FragmentTopBarConfig(
+            titleSetter = { if (isTransfer) it.setTitle(R.string.transfer_action) },
+            hasBackButton = true
+        )
+
     override fun createViewModel(): AssetsViewModel =
         AssetsViewModel(requireActivity().application)
 
@@ -48,7 +59,6 @@ class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding,
         super.onViewCreated(view, savedInstanceState)
 
         setupViews()
-        setupTopBar()
     }
 
     private fun setupViews() {
@@ -186,15 +196,5 @@ class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding,
             title = title!!,
             amount = amount
         )
-    }
-
-    private fun setupTopBar() {
-        binding.topBar.apply {
-            setTitle(
-                if (isTransfer) R.string.transfer_action
-                else R.string.new_transaction
-            )
-            setNavigationOnClickListener { navigateUp() }
-        }
     }
 }

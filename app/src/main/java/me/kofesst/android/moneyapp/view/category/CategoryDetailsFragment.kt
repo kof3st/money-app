@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.appbar.MaterialToolbar
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCategoryDetailsBinding
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
@@ -14,6 +15,15 @@ import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
 class CategoryDetailsFragment : FragmentBase<FragmentCategoryDetailsBinding, CategoriesViewModel>(
     CategoriesViewModel::class
 ), EnterSharedTransition, ExitSharedTransition {
+    override val topBar: MaterialToolbar
+        get() = binding.topBar
+
+    override val topBarConfig: FragmentTopBarConfig
+        get() = FragmentTopBarConfig(
+            titleSetter = { it.title = category.name },
+            hasBackButton = true
+        )
+
     private val args: CategoryDetailsFragmentArgs by navArgs()
     private val category by lazy { args.targetCategory }
 
