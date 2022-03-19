@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.Dispatchers
@@ -20,15 +19,13 @@ import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.view.EnterSharedTransition
 import me.kofesst.android.moneyapp.view.FragmentBase
 import me.kofesst.android.moneyapp.view.navigateUp
-import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 
-class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding>(),
-    EnterSharedTransition {
-    private val viewModel: AssetsViewModel by viewModels(
-        ownerProducer = { requireActivity() },
-        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
-    )
+class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding, AssetsViewModel>(
+    AssetsViewModel::class
+), EnterSharedTransition {
+    override fun createViewModel(): AssetsViewModel =
+        AssetsViewModel(requireActivity().application)
 
     override fun getViewBinding(
         inflater: LayoutInflater,

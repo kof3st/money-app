@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.Dispatchers
@@ -20,21 +19,20 @@ import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.EnterSharedTransition
 import me.kofesst.android.moneyapp.view.FragmentBase
 import me.kofesst.android.moneyapp.view.navigateUp
-import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.subscription.SubscriptionsViewModel
 
-class CreateSubscriptionFragment : FragmentBase<FragmentCreateSubscriptionBinding>(),
-    EnterSharedTransition {
-    private val viewModel: SubscriptionsViewModel by viewModels(
-        ownerProducer = { requireActivity() },
-        factoryProducer = { ViewModelFactory { SubscriptionsViewModel(requireActivity().application) } }
-    )
-
+class CreateSubscriptionFragment :
+    FragmentBase<FragmentCreateSubscriptionBinding, SubscriptionsViewModel>(
+        SubscriptionsViewModel::class
+    ), EnterSharedTransition {
     private var selectedAsset: AssetEntity? = null
     private var selectedType: SubscriptionTypes? = null
 
     private val args: CreateSubscriptionFragmentArgs by navArgs()
     private val editing: SubscriptionEntity? by lazy { args.editing }
+
+    override fun createViewModel(): SubscriptionsViewModel =
+        SubscriptionsViewModel(requireActivity().application)
 
     override fun getViewBinding(
         inflater: LayoutInflater,

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCreateAssetBinding
@@ -15,20 +14,18 @@ import me.kofesst.android.moneyapp.view.EnterSharedTransition
 import me.kofesst.android.moneyapp.view.ExitSharedTransition
 import me.kofesst.android.moneyapp.view.FragmentBase
 import me.kofesst.android.moneyapp.view.navigateUp
-import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 
-class CreateAssetFragment : FragmentBase<FragmentCreateAssetBinding>(), EnterSharedTransition,
-    ExitSharedTransition {
-    private val viewModel: AssetsViewModel by viewModels(
-        ownerProducer = { requireActivity() },
-        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
-    )
-
+class CreateAssetFragment : FragmentBase<FragmentCreateAssetBinding, AssetsViewModel>(
+    AssetsViewModel::class
+), EnterSharedTransition, ExitSharedTransition {
     private var selectedType: AssetTypes? = null
 
     private val args: CreateAssetFragmentArgs by navArgs()
     private val editing by lazy { args.editing }
+
+    override fun createViewModel(): AssetsViewModel =
+        AssetsViewModel(requireActivity().application)
 
     override fun getViewBinding(
         inflater: LayoutInflater,

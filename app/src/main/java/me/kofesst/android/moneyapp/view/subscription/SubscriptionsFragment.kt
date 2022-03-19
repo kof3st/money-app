@@ -4,32 +4,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentSubscriptionsBinding
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
 import me.kofesst.android.moneyapp.view.ExitSharedTransition
-import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.ListFragmentBase
 import me.kofesst.android.moneyapp.view.Postpone
 import me.kofesst.android.moneyapp.view.navigateToShared
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
+import me.kofesst.android.moneyapp.view.recyclerview.SubscriptionViewHolder
 import me.kofesst.android.moneyapp.view.recyclerview.SubscriptionsAdapter
-import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.subscription.SubscriptionsViewModel
 
-class SubscriptionsFragment : FragmentBase<FragmentSubscriptionsBinding>(), Postpone,
+class SubscriptionsFragment : ListFragmentBase<FragmentSubscriptionsBinding,
+        SubscriptionsViewModel,
+        SubscriptionEntity,
+        SubscriptionViewHolder,
+        SubscriptionsAdapter>(
+    SubscriptionsViewModel::class
+), Postpone,
     ExitSharedTransition {
-    private val viewModel: SubscriptionsViewModel by viewModels(
-        ownerProducer = { requireActivity() },
-        factoryProducer = { ViewModelFactory { SubscriptionsViewModel(requireActivity().application) } }
-    )
+    override val divider: RecyclerView.ItemDecoration
+        get() = MaterialDividerItemDecoration(
+            requireContext(),
+            LinearLayoutManager.VERTICAL
+        )
 
-    private lateinit var subscriptionsAdapter: SubscriptionsAdapter
+    override val listStateFlow: StateFlow<List<SubscriptionEntity>>
+        get() = viewModel.subscriptions
+
+    override fun createViewModel(): SubscriptionsViewModel =
+        SubscriptionsViewModel(requireActivity().application)
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -38,17 +47,8 @@ class SubscriptionsFragment : FragmentBase<FragmentSubscriptionsBinding>(), Post
         return FragmentSubscriptionsBinding.inflate(inflater, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupViews()
-        setupObserves()
-
-        viewModel.updateSubscriptions()
-    }
-
-    private fun setupViews() {
-        subscriptionsAdapter = SubscriptionsAdapter(requireContext()).apply {
+    override fun createAdapter(): SubscriptionsAdapter =
+        SubscriptionsAdapter(requireContext()).apply {
             itemClickListener = object : ItemClickListener<SubscriptionEntity> {
                 override fun onClick(view: View, item: SubscriptionEntity) {
                     navigateToShared(
@@ -61,16 +61,17 @@ class SubscriptionsFragment : FragmentBase<FragmentSubscriptionsBinding>(), Post
                 override fun onLongClick(view: View, item: SubscriptionEntity) {}
             }
         }
-        binding.subscriptionsView.apply {
-            adapter = subscriptionsAdapter
-            addItemDecoration(
-                MaterialDividerItemDecoration(
-                    requireContext(),
-                    LinearLayoutManager.VERTICAL
-                )
-            )
-        }
 
+    override fun getRecyclerView(): RecyclerView = binding.subscriptionsView
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupViews()
+        viewModel.updateSubscriptions()
+    }
+
+    private fun setupViews() {
         binding.newSubscriptionButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
@@ -79,16 +80,6 @@ class SubscriptionsFragment : FragmentBase<FragmentSubscriptionsBinding>(), Post
                     SubscriptionsFragmentDirections.actionCreateSubscription()
                 )
             }
-        }
-    }
-
-    private fun setupObserves() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.subscriptions
-                .onEach { subscriptions ->
-                    subscriptionsAdapter.submitList(subscriptions)
-                }
-                .collect()
         }
     }
 }

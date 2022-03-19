@@ -4,24 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCategoryDetailsBinding
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.*
-import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
 
-class CategoryDetailsFragment : FragmentBase<FragmentCategoryDetailsBinding>(),
-    EnterSharedTransition, ExitSharedTransition {
-    private val viewModel: CategoriesViewModel by viewModels(
-        ownerProducer = { requireActivity() },
-        factoryProducer = { ViewModelFactory { CategoriesViewModel(requireActivity().application) } }
-    )
-
+class CategoryDetailsFragment : FragmentBase<FragmentCategoryDetailsBinding, CategoriesViewModel>(
+    CategoriesViewModel::class
+), EnterSharedTransition, ExitSharedTransition {
     private val args: CategoryDetailsFragmentArgs by navArgs()
     private val category by lazy { args.targetCategory }
+
+    override fun createViewModel(): CategoriesViewModel =
+        CategoriesViewModel(requireActivity().application)
 
     override fun getViewBinding(
         inflater: LayoutInflater,

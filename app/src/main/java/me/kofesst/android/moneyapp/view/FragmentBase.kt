@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.createViewModelLazy
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
@@ -14,12 +17,28 @@ import me.kofesst.android.moneyapp.util.include
 import me.kofesst.android.moneyapp.util.setEnterSharedTransition
 import me.kofesst.android.moneyapp.util.setExitSharedTransition
 import me.kofesst.android.moneyapp.util.setPostpone
+import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
+import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
+import kotlin.reflect.KClass
 
-abstract class FragmentBase<B : ViewBinding> : Fragment() {
-    private var _viewBinding: B? = null
+abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : ViewModelBase>(
+    viewModelClass: KClass<FragmentViewModel>
+) : Fragment() {
+    private var _viewBinding: FragmentBinding? = null
     protected val binding get() = checkNotNull(_viewBinding)
 
-    protected abstract fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): B
+    protected val viewModel: FragmentViewModel by viewModel(
+        viewModelClass,
+        ownerProducer = { requireActivity() },
+        factoryProducer = { ViewModelFactory { createViewModel() } }
+    )
+
+    protected abstract fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentBinding
+
+    protected abstract fun createViewModel(): FragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +61,12 @@ abstract class FragmentBase<B : ViewBinding> : Fragment() {
         if (this is Postpone) setPostpone(view)
         if (this is ExitSharedTransition) setExitSharedTransition(R.integer.shared_transition_duration_short)
     }
+
+    private fun Fragment.viewModel(
+        clazz: KClass<FragmentViewModel>,
+        ownerProducer: () -> ViewModelStoreOwner = { this },
+        factoryProducer: (() -> ViewModelProvider.Factory)? = null,
+    ) = createViewModelLazy(clazz, { ownerProducer().viewModelStore }, factoryProducer)
 }
 
 fun Fragment.navigateToShared(

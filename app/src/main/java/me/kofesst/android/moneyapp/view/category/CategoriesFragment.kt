@@ -4,37 +4,45 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
 import me.kofesst.android.moneyapp.view.ExitSharedTransition
-import me.kofesst.android.moneyapp.view.FragmentBase
+import me.kofesst.android.moneyapp.view.ListFragmentBase
 import me.kofesst.android.moneyapp.view.Postpone
 import me.kofesst.android.moneyapp.view.navigateToShared
 import me.kofesst.android.moneyapp.view.recyclerview.CategoriesAdapter
+import me.kofesst.android.moneyapp.view.recyclerview.CategoryViewHolder
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
-import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
 
-class CategoriesFragment : FragmentBase<FragmentCategoriesBinding>(), Postpone,
-    ExitSharedTransition {
+class CategoriesFragment : ListFragmentBase<FragmentCategoriesBinding,
+        CategoriesViewModel,
+        CategoryEntity,
+        CategoryViewHolder,
+        CategoriesAdapter>(
+    CategoriesViewModel::class
+), Postpone, ExitSharedTransition {
     companion object {
         private const val CATEGORIES_CASES_WORD_UID = "categories_count"
     }
 
-    private val viewModel: CategoriesViewModel by viewModels(
-        ownerProducer = { requireActivity() },
-        factoryProducer = { ViewModelFactory { CategoriesViewModel(requireActivity().application) } }
-    )
+    override val divider: RecyclerView.ItemDecoration
+        get() = MaterialDividerItemDecoration(
+            requireContext(),
+            LinearLayoutManager.VERTICAL
+        )
 
-    private lateinit var categoriesAdapter: CategoriesAdapter
+    override val listStateFlow: StateFlow<List<CategoryEntity>>
+        get() = viewModel.categories
+
+    override fun createViewModel(): CategoriesViewModel =
+        CategoriesViewModel(requireActivity().application)
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -43,41 +51,33 @@ class CategoriesFragment : FragmentBase<FragmentCategoriesBinding>(), Postpone,
         return FragmentCategoriesBinding.inflate(inflater, container, false)
     }
 
+    override fun createAdapter(): CategoriesAdapter = CategoriesAdapter(requireContext()).apply {
+        itemClickListener = object : ItemClickListener<CategoryEntity> {
+            override fun onClick(view: View, item: CategoryEntity) {
+                navigateToShared(
+                    R.string.category_details_transition_name,
+                    binding.topBar,
+                    CategoriesFragmentDirections.actionCategoryDetails(item)
+                )
+            }
+
+            override fun onLongClick(view: View, item: CategoryEntity) {}
+        }
+    }
+
+    override fun getRecyclerView(): RecyclerView = binding.categoriesView
+
+    override fun onListObserved(list: List<CategoryEntity>) = updateTopBar(list.size)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupViews()
         setupCases()
-        setupObserves()
-
         viewModel.updateCategories()
     }
 
     private fun setupViews() {
-        categoriesAdapter = CategoriesAdapter(requireContext()).apply {
-            itemClickListener = object : ItemClickListener<CategoryEntity> {
-                override fun onClick(view: View, item: CategoryEntity) {
-                    navigateToShared(
-                        R.string.category_details_transition_name,
-                        binding.topBar,
-                        CategoriesFragmentDirections.actionCategoryDetails(item)
-                    )
-                }
-
-                override fun onLongClick(view: View, item: CategoryEntity) {}
-            }
-        }
-
-        binding.categoriesView.apply {
-            adapter = categoriesAdapter
-            addItemDecoration(
-                MaterialDividerItemDecoration(
-                    requireContext(),
-                    LinearLayoutManager.VERTICAL
-                )
-            )
-        }
-
         binding.newCategoryButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
@@ -96,17 +96,6 @@ class CategoriesFragment : FragmentBase<FragmentCategoriesBinding>(), Postpone,
             secondCase = "категории",
             thirdCase = "категорий"
         )
-    }
-
-    private fun setupObserves() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.categories
-                .onEach { categories ->
-                    categoriesAdapter.submitList(categories)
-                    updateTopBar(categories.size)
-                }
-                .collect()
-        }
     }
 
     private fun updateTopBar(count: Int) {

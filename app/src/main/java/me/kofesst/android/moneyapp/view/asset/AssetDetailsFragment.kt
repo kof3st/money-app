@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.Dispatchers
@@ -16,18 +15,16 @@ import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatWithCurrency
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.*
-import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 
-class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding>(), EnterSharedTransition,
-    ExitSharedTransition {
-    private val viewModel: AssetsViewModel by viewModels(
-        ownerProducer = { requireActivity() },
-        factoryProducer = { ViewModelFactory { AssetsViewModel(requireActivity().application) } }
-    )
-
+class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsViewModel>(
+    AssetsViewModel::class
+), EnterSharedTransition, ExitSharedTransition {
     private val args: AssetDetailsFragmentArgs by navArgs()
     private val targetAsset by lazy { args.targetAsset }
+
+    override fun createViewModel(): AssetsViewModel =
+        AssetsViewModel(requireActivity().application)
 
     override fun getViewBinding(
         inflater: LayoutInflater,
