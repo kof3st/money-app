@@ -14,11 +14,8 @@ import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
-import me.kofesst.android.moneyapp.view.ExitSharedTransition
-import me.kofesst.android.moneyapp.view.ListFragmentBase
-import me.kofesst.android.moneyapp.view.Postpone
-import me.kofesst.android.moneyapp.view.navigateToShared
-import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
+import me.kofesst.android.moneyapp.util.shared
+import me.kofesst.android.moneyapp.view.*
 import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
 
 class CategoriesFragment :
@@ -50,18 +47,11 @@ class CategoriesFragment :
             LinearLayoutManager.VERTICAL
         )
 
-    override val onItemClickListener: ItemClickListener<CategoryEntity>
-        get() = object : ItemClickListener<CategoryEntity> {
-            override fun onClick(view: View, item: CategoryEntity) {
-                navigateToShared(
-                    R.string.category_details_transition_name,
-                    binding.topBar,
-                    CategoriesFragmentDirections.actionCategoryDetails(item)
-                )
-            }
-
-            override fun onLongClick(view: View, item: CategoryEntity) = Unit
-        }
+    override val itemTransitionConfig: ItemTransitionConfig<CategoryItemBinding, CategoryEntity>
+        get() = ItemTransitionConfig(
+            directionProducer = { CategoriesFragmentDirections.actionCategoryDetails(it) },
+            itemIdProducer = { it.categoryId.toString() }
+        )
 
     override fun createViewModel(): CategoriesViewModel =
         CategoriesViewModel(requireActivity().application)
@@ -89,8 +79,7 @@ class CategoriesFragment :
         binding.newCategoryButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
-                    R.string.edit_shared_transition_name,
-                    button,
+                    listOf(button shared R.string.edit_shared_transition_name),
                     CategoriesFragmentDirections.actionCreateCategory()
                 )
             }

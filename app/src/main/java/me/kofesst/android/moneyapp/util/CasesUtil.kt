@@ -23,8 +23,10 @@ class CasesUtil {
             return Words.getOrElse(uid.lowercase()) { InvalidCasesWord }
         }
 
-        fun getCase(uid: String, amount: Int): String {
-            return "%d %s".format(amount, getWord(uid).getCase(amount))
+        fun getCase(uid: String, amount: Int, includeAmount: Boolean = true): String {
+            return "${if (includeAmount) amount.toString() else ""} %s".format(
+                getWord(uid).getCase(amount)
+            )
         }
     }
 }

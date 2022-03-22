@@ -14,13 +14,15 @@ import me.kofesst.android.moneyapp.databinding.FragmentAssetDetailsBinding
 import me.kofesst.android.moneyapp.model.default.AssetTypes
 import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatWithCurrency
+import me.kofesst.android.moneyapp.util.shared
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.*
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 
-class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsViewModel>(
-    AssetsViewModel::class
-), EnterSharedTransition, ExitSharedTransition {
+class AssetDetailsFragment :
+    ItemDetailsFragmentBase<FragmentAssetDetailsBinding, AssetsViewModel>(
+        AssetsViewModel::class
+    ), EnterSharedTransition, ExitSharedTransition {
     override val topBar: MaterialToolbar
         get() = binding.topBar
 
@@ -29,6 +31,9 @@ class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsVie
             titleSetter = { it.title = targetAsset.asset.name },
             hasBackButton = true
         )
+
+    override val itemId: String
+        get() = targetAsset.asset.assetId.toString()
 
     private val args: AssetDetailsFragmentArgs by navArgs()
     private val targetAsset by lazy { args.targetAsset }
@@ -65,8 +70,7 @@ class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsVie
         binding.editButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
-                    R.string.edit_shared_transition_name,
-                    button,
+                    listOf(button shared R.string.edit_shared_transition_name),
                     AssetDetailsFragmentDirections.actionEditAsset(targetAsset.asset)
                 )
             }
@@ -75,8 +79,7 @@ class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsVie
         binding.transactionButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
-                    R.string.add_transaction_transition_name,
-                    button,
+                    listOf(button shared R.string.add_transaction_transition_name),
                     AssetDetailsFragmentDirections.actionCreateTransaction(
                         targetAsset = targetAsset.asset,
                         isTransfer = false
@@ -88,8 +91,7 @@ class AssetDetailsFragment : FragmentBase<FragmentAssetDetailsBinding, AssetsVie
         binding.transferButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
-                    R.string.add_transaction_transition_name,
-                    button,
+                    listOf(button shared R.string.add_transaction_transition_name),
                     AssetDetailsFragmentDirections.actionCreateTransaction(
                         targetAsset = targetAsset.asset,
                         isTransfer = true

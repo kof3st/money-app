@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.ViewModelProvider
@@ -14,10 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.MaterialToolbar
 import me.kofesst.android.moneyapp.R
-import me.kofesst.android.moneyapp.util.include
-import me.kofesst.android.moneyapp.util.setEnterSharedTransition
-import me.kofesst.android.moneyapp.util.setExitSharedTransition
-import me.kofesst.android.moneyapp.util.setPostpone
+import me.kofesst.android.moneyapp.util.*
 import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
 import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import kotlin.reflect.KClass
@@ -94,11 +90,10 @@ data class FragmentTopBarConfig(
 )
 
 fun Fragment.navigateToShared(
-    @StringRes transitionNameRes: Int,
-    sharedView: View,
+    sharedElements: List<SharedElement>,
     direction: NavDirections
 ) {
-    val extras = transitionNameRes include sharedView
+    val extras = sharedElements.extras()
     findNavController().navigate(direction, extras)
 }
 

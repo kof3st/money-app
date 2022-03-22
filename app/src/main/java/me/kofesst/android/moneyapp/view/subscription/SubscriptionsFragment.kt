@@ -8,21 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.StateFlow
-import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentSubscriptionsBinding
 import me.kofesst.android.moneyapp.databinding.SubscriptionItemBinding
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
 import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
-import me.kofesst.android.moneyapp.util.balanceColor
-import me.kofesst.android.moneyapp.util.formatDate
-import me.kofesst.android.moneyapp.util.formatWithCurrency
-import me.kofesst.android.moneyapp.util.getNextDate
-import me.kofesst.android.moneyapp.view.ExitSharedTransition
-import me.kofesst.android.moneyapp.view.ListFragmentBase
-import me.kofesst.android.moneyapp.view.Postpone
-import me.kofesst.android.moneyapp.view.navigateToShared
-import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
+import me.kofesst.android.moneyapp.util.*
+import me.kofesst.android.moneyapp.view.*
 import me.kofesst.android.moneyapp.viewmodel.subscription.SubscriptionsViewModel
 
 class SubscriptionsFragment :
@@ -63,18 +55,11 @@ class SubscriptionsFragment :
             LinearLayoutManager.VERTICAL
         )
 
-    override val onItemClickListener: ItemClickListener<SubscriptionEntity>
-        get() = object : ItemClickListener<SubscriptionEntity> {
-            override fun onClick(view: View, item: SubscriptionEntity) {
-                navigateToShared(
-                    R.string.edit_shared_transition_name,
-                    binding.newSubscriptionButton,
-                    SubscriptionsFragmentDirections.actionCreateSubscription(item)
-                )
-            }
-
-            override fun onLongClick(view: View, item: SubscriptionEntity) = Unit
-        }
+    override val itemTransitionConfig: ItemTransitionConfig<SubscriptionItemBinding, SubscriptionEntity>
+        get() = ItemTransitionConfig(
+            directionProducer = { SubscriptionsFragmentDirections.actionCreateSubscription(it) },
+            itemIdProducer = { it.subscriptionId.toString() }
+        )
 
     override fun createViewModel(): SubscriptionsViewModel =
         SubscriptionsViewModel(requireActivity().application)
@@ -99,8 +84,7 @@ class SubscriptionsFragment :
         binding.newSubscriptionButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
-                    R.string.edit_shared_transition_name,
-                    button,
+                    listOf(button shared "item_details_transition"),
                     SubscriptionsFragmentDirections.actionCreateSubscription()
                 )
             }

@@ -8,13 +8,15 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.MaterialToolbar
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentCategoryDetailsBinding
+import me.kofesst.android.moneyapp.util.shared
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.*
 import me.kofesst.android.moneyapp.viewmodel.category.CategoriesViewModel
 
-class CategoryDetailsFragment : FragmentBase<FragmentCategoryDetailsBinding, CategoriesViewModel>(
-    CategoriesViewModel::class
-), EnterSharedTransition, ExitSharedTransition {
+class CategoryDetailsFragment :
+    ItemDetailsFragmentBase<FragmentCategoryDetailsBinding, CategoriesViewModel>(
+        CategoriesViewModel::class
+    ), EnterSharedTransition, ExitSharedTransition {
     override val topBar: MaterialToolbar
         get() = binding.topBar
 
@@ -23,6 +25,9 @@ class CategoryDetailsFragment : FragmentBase<FragmentCategoryDetailsBinding, Cat
             titleSetter = { it.title = category.name },
             hasBackButton = true
         )
+
+    override val itemId: String
+        get() = category.categoryId.toString()
 
     private val args: CategoryDetailsFragmentArgs by navArgs()
     private val category by lazy { args.targetCategory }
@@ -55,8 +60,8 @@ class CategoryDetailsFragment : FragmentBase<FragmentCategoryDetailsBinding, Cat
         binding.editButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
-                    R.string.edit_shared_transition_name,
-                    button, CategoryDetailsFragmentDirections.actionEditCategory(category)
+                    listOf(button shared R.string.edit_shared_transition_name),
+                    CategoryDetailsFragmentDirections.actionEditCategory(category)
                 )
             }
         }

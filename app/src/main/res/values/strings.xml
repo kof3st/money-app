@@ -42,7 +42,7 @@
     <string name="all_time">За всё время</string>
     <string name="edit_shared_transition_name">edit_transition</string>
     <string name="transactions">Транзакции</string>
-    <string name="asset_details_transition_name">asset_details</string>
+    <string name="asset_details_transition_name">asset_details_%d</string>
     <string name="create_transaction">Добавить транзакцию</string>
     <string name="add_transaction_transition_name">add_transaction</string>
     <string name="transfer_transition_name">transfer</string>
@@ -66,5 +66,11 @@
     <string name="delete_subscription_message">Вы действительно хотите удалить этот автоплатёж?</string>
     <string name="snackbar_subscription_deleted">Автоплатёж удалён</string>
     <string name="subscription">Автоплатеж</string>
-    <string name="update_subscriptions">Обновление автоплатежей...</string>
+    <string name="update_subscriptions">Обновление автоплатежей…</string>
+    <string name="history_limit">Лимит истории</string>
+    <string name="save">Сохранить</string>
+    <string name="limit_saved">Лимит сохранён</string>
+    <string name="small_limit">Минимальный лимит: %s</string>
+    <string name="big_limit">Максимальный лимит: %s</string>
+    <string name="item_details_transition_name">item_details_transition%s</string>
 </resources>

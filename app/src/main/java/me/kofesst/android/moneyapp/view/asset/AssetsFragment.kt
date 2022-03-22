@@ -16,11 +16,8 @@ import me.kofesst.android.moneyapp.model.AssetWithSubscriptions
 import me.kofesst.android.moneyapp.model.default.AssetTypes
 import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatWithCurrency
-import me.kofesst.android.moneyapp.view.ExitSharedTransition
-import me.kofesst.android.moneyapp.view.ListFragmentBase
-import me.kofesst.android.moneyapp.view.Postpone
-import me.kofesst.android.moneyapp.view.navigateToShared
-import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
+import me.kofesst.android.moneyapp.util.shared
+import me.kofesst.android.moneyapp.view.*
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 
 class AssetsFragment :
@@ -55,18 +52,11 @@ class AssetsFragment :
             LinearLayoutManager.VERTICAL
         )
 
-    override val onItemClickListener: ItemClickListener<AssetWithSubscriptions>
-        get() = object : ItemClickListener<AssetWithSubscriptions> {
-            override fun onClick(view: View, item: AssetWithSubscriptions) {
-                navigateToShared(
-                    R.string.asset_details_transition_name,
-                    binding.topBar,
-                    AssetsFragmentDirections.actionAssetDetails(item)
-                )
-            }
-
-            override fun onLongClick(view: View, item: AssetWithSubscriptions) = Unit
-        }
+    override val itemTransitionConfig: ItemTransitionConfig<AssetItemBinding, AssetWithSubscriptions>
+        get() = ItemTransitionConfig(
+            directionProducer = { AssetsFragmentDirections.actionAssetDetails(it) },
+            itemIdProducer = { it.asset.assetId.toString() }
+        )
 
     override fun createViewModel(): AssetsViewModel =
         AssetsViewModel(requireActivity().application)
@@ -93,8 +83,7 @@ class AssetsFragment :
         binding.newAssetButton.apply {
             setOnClickListener { button ->
                 navigateToShared(
-                    R.string.edit_shared_transition_name,
-                    button,
+                    listOf(button shared R.string.edit_shared_transition_name),
                     AssetsFragmentDirections.actionCreateAsset()
                 )
             }
