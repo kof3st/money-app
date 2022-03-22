@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
+import me.kofesst.android.moneyapp.util.SharedElement
 import me.kofesst.android.moneyapp.view.recyclerview.InlineAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
@@ -28,8 +32,11 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
     protected abstract val listStateFlow: StateFlow<List<Model>>
     protected abstract val emptySourceView: EmptySourceViewBinding
 
-    protected open val divider: RecyclerView.ItemDecoration? get() = null
-    protected open val onItemClickListener: ItemClickListener<Model>? get() = null
+    protected open val divider: RecyclerView.ItemDecoration?
+        get() = null
+
+    protected open val itemTransitionConfig: ItemTransitionConfig<ItemBinding, Model>?
+        get() = null
 
     private lateinit var fragmentAdapter: InlineAdapter<ItemBinding, Model>
 
@@ -49,6 +56,10 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
         getRecyclerView().apply {
             adapter = fragmentAdapter
             divider?.also { addItemDecoration(it) }
+            viewTreeObserver.addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
         }
     }
 
@@ -57,8 +68,36 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
             context = requireContext(),
             bindingProducer = { inflater, parent -> viewHolderBindingProducer(inflater, parent) },
             itemsComparator = itemsComparator,
-            onItemClickListener = onItemClickListener,
-            onItemBindCallback = onViewHolderBindCallback
+            onItemClickListener = object : ItemClickListener<ItemBinding, Model> {
+                override fun onClick(binding: ItemBinding, item: Model) {
+                    itemTransitionConfig?.also { config ->
+                        navigateToShared(
+                            listOf(
+                                *config.sharedElementsProducer(binding).toTypedArray(),
+                                binding.root to getString(R.string.item_details_transition_name).format(
+                                    config.itemIdProducer(item)
+                                )
+                            ),
+                            config.directionProducer(item)
+                        )
+                    }
+                }
+
+                override fun onLongClick(binding: ItemBinding, item: Model) {}
+            },
+
+            onItemBindCallback = { binding, model ->
+                onViewHolderBindCallback(binding, model)
+
+                itemTransitionConfig?.also { config ->
+                    ViewCompat.setTransitionName(
+                        binding.root,
+                        getString(R.string.item_details_transition_name).format(
+                            config.itemIdProducer(model)
+                        )
+                    )
+                }
+            }
         )
 
     private fun setupObserves() {
@@ -78,3 +117,9 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
         }
     }
 }
+
+data class ItemTransitionConfig<Binding : ViewBinding, Item>(
+    val directionProducer: (Item) -> NavDirections,
+    val sharedElementsProducer: (Binding) -> List<SharedElement> = { listOf() },
+    val itemIdProducer: (Item) -> String = { "" }
+)

@@ -1,6 +1,7 @@
 package me.kofesst.android.moneyapp.view.subscription
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,13 +19,13 @@ import me.kofesst.android.moneyapp.model.SubscriptionEntity
 import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
 import me.kofesst.android.moneyapp.util.showDeleteDialogWithSnackbar
 import me.kofesst.android.moneyapp.view.EnterSharedTransition
-import me.kofesst.android.moneyapp.view.FragmentBase
 import me.kofesst.android.moneyapp.view.FragmentTopBarConfig
+import me.kofesst.android.moneyapp.view.ItemDetailsFragmentBase
 import me.kofesst.android.moneyapp.view.navigateUp
 import me.kofesst.android.moneyapp.viewmodel.subscription.SubscriptionsViewModel
 
 class CreateSubscriptionFragment :
-    FragmentBase<FragmentCreateSubscriptionBinding, SubscriptionsViewModel>(
+    ItemDetailsFragmentBase<FragmentCreateSubscriptionBinding, SubscriptionsViewModel>(
         SubscriptionsViewModel::class
     ), EnterSharedTransition {
     override val topBar: MaterialToolbar
@@ -35,6 +36,9 @@ class CreateSubscriptionFragment :
             titleSetter = { if (editing != null) it.setTitle(R.string.edit_subscription) },
             hasBackButton = true
         )
+
+    override val itemId: String
+        get() = editing?.subscriptionId?.toString() ?: ""
 
     private var selectedAsset: AssetEntity? = null
     private var selectedType: SubscriptionTypes? = null
@@ -54,6 +58,8 @@ class CreateSubscriptionFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d("AAA", binding.root.transitionName)
 
         setupTopBar()
         setupTypes()

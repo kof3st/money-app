@@ -3,6 +3,7 @@ package me.kofesst.android.moneyapp.util
 import android.graphics.Color
 import android.view.View
 import androidx.annotation.IntegerRes
+import androidx.annotation.StringRes
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigator
@@ -34,7 +35,16 @@ fun Fragment.setExitSharedTransition(@IntegerRes durationRes: Int) {
     }
 }
 
-infix fun Int.include(view: View): FragmentNavigator.Extras {
-    val transitionName = view.resources.getString(this)
-    return FragmentNavigatorExtras(view to transitionName)
+typealias SharedElement = Pair<View, String>
+
+fun List<SharedElement>.extras(): FragmentNavigator.Extras {
+    return FragmentNavigatorExtras(*this.toTypedArray())
+}
+
+infix fun View.shared(@StringRes transitionNameRes: Int): SharedElement {
+    return this to this.resources.getString(transitionNameRes)
+}
+
+infix fun View.shared(transitionName: String): SharedElement {
+    return this to transitionName
 }

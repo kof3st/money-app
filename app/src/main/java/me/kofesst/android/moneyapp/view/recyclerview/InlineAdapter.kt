@@ -2,7 +2,6 @@ package me.kofesst.android.moneyapp.view.recyclerview
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,7 +11,7 @@ class InlineAdapter<Binding : ViewBinding, Model>(
     private val context: Context,
     private val bindingProducer: (LayoutInflater, ViewGroup) -> Binding,
     itemsComparator: (Model, Model) -> Boolean = { _, _ -> true },
-    private val onItemClickListener: ItemClickListener<Model>? = null,
+    private val onItemClickListener: ItemClickListener<Binding, Model>? = null,
     private val onItemBindCallback: (Binding, Model) -> Unit = { _, _ -> }
 ) : ListAdapter<Model, InlineViewHolder<Binding, Model>>(ItemsDiffer<Model>().apply {
     itemsCheck = itemsComparator
@@ -31,9 +30,12 @@ class InlineAdapter<Binding : ViewBinding, Model>(
         holder.onBind(holder.binding, item)
 
         onItemClickListener?.also { listener ->
-            holder.itemView.setOnClickListener { listener.onClick(it, item) }
+            holder.itemView.setOnClickListener {
+                listener.onClick(holder.binding, item)
+            }
+
             holder.itemView.setOnLongClickListener {
-                listener.onLongClick(it, item)
+                listener.onLongClick(holder.binding, item)
                 true
             }
         }
@@ -44,11 +46,11 @@ class InlineAdapter<Binding : ViewBinding, Model>(
     }
 }
 
-interface ItemClickListener<T> {
+interface ItemClickListener<Binding : ViewBinding, T> {
 
-    fun onClick(view: View, item: T)
+    fun onClick(binding: Binding, item: T)
 
-    fun onLongClick(view: View, item: T)
+    fun onLongClick(binding: Binding, item: T)
 
 }
 
