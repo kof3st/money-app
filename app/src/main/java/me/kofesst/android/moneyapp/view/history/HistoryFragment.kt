@@ -7,18 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentHistoryBinding
 import me.kofesst.android.moneyapp.databinding.HistoryItemBinding
 import me.kofesst.android.moneyapp.model.TransactionEntity
+import me.kofesst.android.moneyapp.model.state.HistoryFilter
 import me.kofesst.android.moneyapp.util.CasesUtil
 import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatDate
@@ -68,7 +67,7 @@ class HistoryFragment :
         get() = { first, second -> first.transactionId == second.transactionId }
 
     override val listStateFlow: StateFlow<List<TransactionEntity>>
-        get() = viewModel.history
+        get() = viewModel.filteredHistory
 
     override val emptySourceView: EmptySourceViewBinding
         get() = binding.emptySourceView
@@ -105,59 +104,86 @@ class HistoryFragment :
     }
 
     private fun setupViews() {
+        binding.historyFilters.apply {
+            HistoryFilter.FILTERS.forEach { filter ->
+                addTab(newTab().setText(filter.titleResId))
+            }
+
+            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    if (tab == null) return
+
+                    val historyTab = HistoryFilter.FILTERS[tab.position]
+                    viewModel.filterHistory(historyTab)
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
+            })
+        }
+
         binding.limitSaveButton.apply {
             setOnClickListener {
-                try {
-                    val limitInput = binding.limitText.text.toString()
-                    val limit = limitInput.toInt()
-
-                    if (limit < HISTORY_LIMIT_MINIMUM) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.small_limit).format(
-                                CasesUtil.getCase(
-                                    uid = HISTORY_LIMIT_CASES_WORD_UID,
-                                    amount = HISTORY_LIMIT_MINIMUM
-                                )
-                            ),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@setOnClickListener
-                    }
-
-                    if (limit > HISTORY_LIMIT_MAXIMUM) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.big_limit).format(
-                                CasesUtil.getCase(
-                                    uid = HISTORY_LIMIT_CASES_WORD_UID,
-                                    amount = HISTORY_LIMIT_MAXIMUM
-                                )
-                            ),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@setOnClickListener
-                    }
-
-                    viewModel.setLimit(limit)
-
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.limit_saved,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } catch (exception: NumberFormatException) {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.error_incorrect,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                handleHistoryLimit()
             }
         }
     }
 
+    private fun handleHistoryLimit() {
+        try {
+            val limitInput = binding.limitText.text.toString()
+            val limit = limitInput.toInt()
+
+            if (limit < HISTORY_LIMIT_MINIMUM) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.small_limit).format(
+                        CasesUtil.getCase(
+                            uid = HISTORY_LIMIT_CASES_WORD_UID,
+                            amount = HISTORY_LIMIT_MINIMUM
+                        )
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+
+            if (limit > HISTORY_LIMIT_MAXIMUM) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.big_limit).format(
+                        CasesUtil.getCase(
+                            uid = HISTORY_LIMIT_CASES_WORD_UID,
+                            amount = HISTORY_LIMIT_MAXIMUM
+                        )
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+
+            viewModel.setLimit(limit)
+
+            Toast.makeText(
+                requireContext(),
+                R.string.limit_saved,
+                Toast.LENGTH_SHORT
+            ).show()
+        } catch (exception: NumberFormatException) {
+            Toast.makeText(
+                requireContext(),
+                R.string.error_incorrect,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     private fun setupObserves() {
+        observe(viewModel.currentFilter) { filter ->
+            binding.historyFilters.getTabAt(filter.id)?.select()
+        }
+
         observe(viewModel.historyLimit) { limit ->
             binding.limitText.setText(limit.toString())
 

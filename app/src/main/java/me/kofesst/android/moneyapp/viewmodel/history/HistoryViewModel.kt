@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.model.TransactionEntity
+import me.kofesst.android.moneyapp.model.state.HistoryFilter
 import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
 
 class HistoryViewModel(
@@ -24,11 +25,25 @@ class HistoryViewModel(
         private val HISTORY_LIMIT_KEY = intPreferencesKey("history_limit")
     }
 
+    private val _currentFilter: MutableStateFlow<HistoryFilter> =
+        MutableStateFlow(HistoryFilter.DayHistoryFilter)
+    val currentFilter get() = _currentFilter.asStateFlow()
+
     private val _history = MutableStateFlow(listOf<TransactionEntity>())
     val history get() = _history.asStateFlow()
 
+    private val _filteredHistory = MutableStateFlow(listOf<TransactionEntity>())
+    val filteredHistory get() = _filteredHistory.asStateFlow()
+
     private val _historyLimit = MutableStateFlow(DEFAULT_HISTORY_LIMIT)
     val historyLimit get() = _historyLimit.asStateFlow()
+
+    fun filterHistory(filter: HistoryFilter) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _currentFilter.value = filter
+            _filteredHistory.value = history.value.filter { filter.filter(it) }
+        }
+    }
 
     /**
      * Обновляет список транзакций [history]
@@ -36,6 +51,7 @@ class HistoryViewModel(
     fun updateHistory() {
         viewModelScope.launch(Dispatchers.IO) {
             _history.value = transactionsDao.getTransactions()
+            filterHistory(currentFilter.value)
         }
     }
 

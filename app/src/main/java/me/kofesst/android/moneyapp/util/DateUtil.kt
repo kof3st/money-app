@@ -2,6 +2,41 @@ package me.kofesst.android.moneyapp.util
 
 import java.util.*
 
+fun Long.date(): Date {
+    return Date(this)
+}
+
+fun Date.get(field: Int): Int {
+    val calendar = Calendar.getInstance()
+    calendar.time = this
+
+    return calendar.get(field)
+}
+
+fun Date.year(): Int = this.get(Calendar.YEAR)
+fun Date.month(): Int = this.get(Calendar.MONTH)
+fun Date.yearDay(): Int = this.get(Calendar.DAY_OF_YEAR)
+fun Date.yearWeek(): Int = this.get(Calendar.WEEK_OF_YEAR)
+
+infix fun Date.compareYear(other: Date): Boolean {
+    return this.year() == other.year()
+}
+
+infix fun Date.compareMonth(other: Date): Boolean {
+    if (!(this compareYear other)) return false
+    return this.month() == other.month()
+}
+
+infix fun Date.compareWeek(other: Date): Boolean {
+    if (!(this compareYear other)) return false
+    return this.yearWeek() == other.yearWeek()
+}
+
+infix fun Date.compareDay(other: Date): Boolean {
+    if (!(this compareYear other)) return false
+    return this.yearDay() == other.yearDay()
+}
+
 fun Int.getNextDate(): Long {
     val now = Calendar.getInstance()
     val today = now.get(Calendar.DAY_OF_MONTH)
