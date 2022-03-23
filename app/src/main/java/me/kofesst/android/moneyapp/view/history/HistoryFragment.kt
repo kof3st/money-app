@@ -128,10 +128,12 @@ class HistoryFragment :
         }
 
         observe(viewModel.filteredHistory) { list ->
-            val credits = list.filter { it.amount > 0.0 }.sumOf { it.amount }
-            val debits = list.filter { it.amount < 0.0 }.sumOf { it.amount }
-            binding.creditsInfo.setText(credits.format(sign = true), true)
-            binding.debitsInfo.setText(debits.format(sign = true), true)
+            val history = list.filter { it.targetId == null }
+            val credits = history.filter { it.amount > 0.0 }.sumOf { it.amount }
+            val debits = history.filter { it.amount < 0.0 }.sumOf { it.amount }
+
+            binding.creditsInfo.setText(credits.formatWithCurrency(sign = true), true)
+            binding.debitsInfo.setText(debits.formatWithCurrency(sign = true), true)
         }
     }
 }
