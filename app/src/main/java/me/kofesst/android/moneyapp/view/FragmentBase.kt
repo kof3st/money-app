@@ -8,10 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.util.*
 import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
@@ -88,6 +92,12 @@ data class FragmentTopBarConfig(
     val subtitleSetter: ((MaterialToolbar) -> Unit)? = null,
     val hasBackButton: Boolean = false
 )
+
+fun <T> Fragment.observe(stateFlow: StateFlow<T>, block: (T) -> Unit) =
+    lifecycleScope.launchWhenStarted { stateFlow collectWith block }
+
+suspend infix fun <T> StateFlow<T>.collectWith(block: (T) -> Unit) =
+    this.onEach { block(it) }.collect()
 
 fun Fragment.navigateToShared(
     sharedElements: List<SharedElement>,

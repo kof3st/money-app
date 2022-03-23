@@ -24,6 +24,7 @@ import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatDate
 import me.kofesst.android.moneyapp.util.formatWithCurrency
 import me.kofesst.android.moneyapp.view.ListFragmentBase
+import me.kofesst.android.moneyapp.view.observe
 import me.kofesst.android.moneyapp.viewmodel.history.HistoryViewModel
 
 class HistoryFragment :
@@ -157,16 +158,14 @@ class HistoryFragment :
     }
 
     private fun setupObserves() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.historyLimit.onEach { limit ->
-                binding.limitText.setText(limit.toString())
+        observe(viewModel.historyLimit) { limit ->
+            binding.limitText.setText(limit.toString())
 
-                binding.limitCase.text = CasesUtil.getCase(
-                    uid = HISTORY_LIMIT_CASES_WORD_UID,
-                    amount = limit,
-                    includeAmount = false
-                )
-            }.collect()
+            binding.limitCase.text = CasesUtil.getCase(
+                uid = HISTORY_LIMIT_CASES_WORD_UID,
+                amount = limit,
+                includeAmount = false
+            )
         }
     }
 
