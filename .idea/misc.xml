@@ -30,11 +30,13 @@
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_statistics.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/fragment_subscriptions.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/history_item.xml" value="0.3523550724637681" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/history_limit_dialog.xml" value="0.35643115942028986" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/menu_dialog.xml" value="0.3523550724637681" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/model_bottom_dialog.xml" value="0.3523550724637681" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/layout/subscription_item.xml" value="0.3555253623188406" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1693121693121693" />
         <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/menu/delete_model_top_bar_menu.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/MoneyApp/app/src/main/res/menu/history_fragment_top_bar_menu.xml" value="0.36614583333333334" />
       </map>
     </option>
   </component>

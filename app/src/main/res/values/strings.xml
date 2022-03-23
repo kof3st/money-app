@@ -73,4 +73,8 @@
     <string name="small_limit">Минимальный лимит: %s</string>
     <string name="big_limit">Максимальный лимит: %s</string>
     <string name="item_details_transition_name">item_details_transition%s</string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
 </resources>

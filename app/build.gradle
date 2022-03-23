@@ -38,8 +38,8 @@ android {
 }
 
 dependencies {
-    // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    // Integer animations
+    implementation 'com.robinhood.ticker:ticker:2.0.4'
 
     // Lottie
     implementation 'com.airbnb.android:lottie:4.2.0'
