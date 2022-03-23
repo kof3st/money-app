@@ -77,4 +77,7 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="year">Год</string>
+    <string name="subscriptions_updated">Выполнено автоплатежей: %d</string>
+    <string name="credit_line">Зачислено: %s</string>
+    <string name="debit_line">Списано: %s</string>
 </resources>
