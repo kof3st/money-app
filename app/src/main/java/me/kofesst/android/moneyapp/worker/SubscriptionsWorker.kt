@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
@@ -13,12 +14,18 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.database.MainDatabase
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
+import me.kofesst.android.moneyapp.util.formatWithCurrency
 import java.util.*
 
 class SubscriptionsWorker(
     private val context: Context,
     workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams) {
+    private val notificationTitle = context.getString(R.string.subscriptions)
+    private val notificationText = context.getString(R.string.subscriptions_updated)
+    private val notificationCreditText = context.getString(R.string.credit_line)
+    private val notificationDebitText = context.getString(R.string.debit_line)
+
     companion object {
         const val TAG = "subscriptions_worker"
         const val CHANNEL_ID = "MoneyAppNotifies"
@@ -27,23 +34,60 @@ class SubscriptionsWorker(
     private val notificationManager = context.getSystemService(
         Context.NOTIFICATION_SERVICE
     ) as NotificationManager
-    private val notificationId: Int = 500
+    private val notificationId: Int = 2
 
     override suspend fun doWork(): Result {
         setForegroundAsync(createForegroundInfo(context.getString(R.string.update_subscriptions)))
-        updateSubscriptions { setForegroundAsync(createForegroundInfo(it)) }
+        updateSubscriptions(
+            iterationCallback = {
+                setForegroundAsync(
+                    createForegroundInfo(
+                        it
+                    )
+                )
+            },
+            resultCallback = { credit, debit, amount ->
+                sendResultNotification(credit, debit, amount)
+            }
+        )
 
         return Result.success()
     }
 
-    private suspend fun updateSubscriptions(callback: (String) -> Unit) {
+    private fun sendResultNotification(credit: Double, debit: Double, count: Int) {
+        if (count == 0) return
+
+        val style = NotificationCompat.InboxStyle()
+            .addLine(notificationCreditText.format(credit.formatWithCurrency(sign = true)))
+            .addLine(notificationDebitText.format(debit.formatWithCurrency(sign = true)))
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_baseline_attach_money_24)
+            .setContentTitle(notificationTitle)
+            .setContentText(notificationText.format(count))
+            .setStyle(style)
+            .build()
+
+        with(NotificationManagerCompat.from(context)) {
+            notify(notificationId, notification)
+        }
+    }
+
+    private suspend fun updateSubscriptions(
+        iterationCallback: (String) -> Unit,
+        resultCallback: (Double, Double, Int) -> Unit
+    ) {
         val database = MainDatabase.get(context)
         val assetsDao = database.getAssetsDao()
         val transactionsDao = database.getTransactionsDao()
         val subscriptions = database.getSubscriptionsDao().getSubscriptions().toList()
 
+        var creditAmount = 0.0
+        var debitAmount = 0.0
+        var count = 0
+
         subscriptions.forEach { subscription ->
-            callback(subscription.title)
+            iterationCallback(subscription.title)
 
             val transaction = transactionsDao.getSubscriptionTransaction(
                 subscriptionId = subscription.subscriptionId
@@ -78,7 +122,14 @@ class SubscriptionsWorker(
 
             asset.balance += amount
             assetsDao.updateAsset(asset)
+
+            if (amount > 0.0) creditAmount += amount
+            else debitAmount += amount
+
+            count++
         }
+
+        resultCallback(creditAmount, debitAmount, count)
     }
 
     private fun tryCreateNotificationChannel() {
@@ -108,7 +159,7 @@ class SubscriptionsWorker(
             .setVibrate(longArrayOf(0))
             .build()
 
-        return ForegroundInfo(notificationId, notification)
+        return ForegroundInfo(1, notification)
     }
 
 }
