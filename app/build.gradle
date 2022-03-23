@@ -38,6 +38,9 @@ android {
 }
 
 dependencies {
+    // Integer animations
+    implementation 'com.robinhood.ticker:ticker:2.0.4'
+
     // Lottie
     implementation 'com.airbnb.android:lottie:4.2.0'
 

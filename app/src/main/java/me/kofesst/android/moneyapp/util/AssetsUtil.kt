@@ -13,7 +13,7 @@ fun Double.format(sign: Boolean = false): String {
     }
 
     val format = formatter.format(this)
-    if (sign) {
+    if (sign && this != 0.0) {
         return "${if (this < 0.0) "" else "+"}$format"
     }
 

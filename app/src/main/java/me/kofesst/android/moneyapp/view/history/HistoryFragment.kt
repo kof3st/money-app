@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.tabs.TabLayout
+import com.robinhood.ticker.TickerUtils
 import kotlinx.coroutines.flow.StateFlow
+import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentHistoryBinding
 import me.kofesst.android.moneyapp.databinding.HistoryItemBinding
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.model.state.HistoryFilter
 import me.kofesst.android.moneyapp.util.balanceColor
+import me.kofesst.android.moneyapp.util.format
 import me.kofesst.android.moneyapp.util.formatDate
 import me.kofesst.android.moneyapp.util.formatWithCurrency
 import me.kofesst.android.moneyapp.view.ListFragmentBase
@@ -89,6 +93,15 @@ class HistoryFragment :
     }
 
     private fun setupViews() {
+        binding.creditsInfo.apply {
+            setCharacterLists(TickerUtils.provideNumberList())
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.rubikmedium)
+        }
+        binding.debitsInfo.apply {
+            setCharacterLists(TickerUtils.provideNumberList())
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.rubikmedium)
+        }
+
         binding.historyFilters.apply {
             HistoryFilter.FILTERS.forEach { filter ->
                 addTab(newTab().setText(filter.titleResId))
@@ -112,6 +125,13 @@ class HistoryFragment :
     private fun setupObserves() {
         observe(viewModel.currentFilter) { filter ->
             binding.historyFilters.getTabAt(filter.id)?.select()
+        }
+
+        observe(viewModel.filteredHistory) { list ->
+            val credits = list.filter { it.amount > 0.0 }.sumOf { it.amount }
+            val debits = list.filter { it.amount < 0.0 }.sumOf { it.amount }
+            binding.creditsInfo.setText(credits.format(sign = true), true)
+            binding.debitsInfo.setText(debits.format(sign = true), true)
         }
     }
 }

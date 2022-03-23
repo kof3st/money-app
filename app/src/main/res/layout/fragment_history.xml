@@ -25,6 +25,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <com.robinhood.ticker.TickerView
+            android:id="@+id/credits_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="0"
+            android:textColor="@color/positive"
+            android:textSize="18sp"
+            app:ticker_animationDuration="500" />
+
+        <com.robinhood.ticker.TickerView
+            android:id="@+id/debits_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="@color/negative"
+            android:textSize="18sp"
+            app:ticker_animationDuration="500" />
+
+    </LinearLayout>
+
     <include
         android:id="@+id/empty_source_view"
         layout="@layout/empty_source_view"
