@@ -16,74 +16,15 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/history_fragment_top_bar_menu"
             app:title="@string/history" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--TODO Move history limit card-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/rubikregular"
-                android:text="@string/history_limit"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/rubikregular"
-                android:text=": "
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/limit_text"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/rubikmedium"
-                android:inputType="number"
-                android:maxWidth="50dp"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/rubikregular"
-                android:text=" "
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/limit_case"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/rubikregular"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/limit_save_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save" />
-
-    </LinearLayout>
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/history_filters"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <include
         android:id="@+id/empty_source_view"

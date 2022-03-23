@@ -1,24 +1,19 @@
 package me.kofesst.android.moneyapp.view.history
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.StateFlow
-import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentHistoryBinding
 import me.kofesst.android.moneyapp.databinding.HistoryItemBinding
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.model.state.HistoryFilter
-import me.kofesst.android.moneyapp.util.CasesUtil
 import me.kofesst.android.moneyapp.util.balanceColor
 import me.kofesst.android.moneyapp.util.formatDate
 import me.kofesst.android.moneyapp.util.formatWithCurrency
@@ -30,12 +25,6 @@ class HistoryFragment :
     ListFragmentBase<FragmentHistoryBinding, HistoryViewModel, TransactionEntity, HistoryItemBinding>(
         HistoryViewModel::class
     ) {
-    companion object {
-        private const val HISTORY_LIMIT_CASES_WORD_UID = "history_limit"
-        private const val HISTORY_LIMIT_MINIMUM = 5
-        private const val HISTORY_LIMIT_MAXIMUM = 1000
-    }
-
     override val viewHolderBindingProducer: (LayoutInflater, ViewGroup) -> HistoryItemBinding
         get() = { inflater, parent -> HistoryItemBinding.inflate(inflater, parent, false) }
 
@@ -78,10 +67,8 @@ class HistoryFragment :
             LinearLayoutManager.VERTICAL
         )
 
-    private val Context.dataStore by preferencesDataStore("user_prefs")
-
     override fun createViewModel(): HistoryViewModel =
-        HistoryViewModel(requireActivity().application, requireContext().dataStore)
+        HistoryViewModel(requireActivity().application)
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -97,10 +84,8 @@ class HistoryFragment :
 
         setupViews()
         setupObserves()
-        setupCases()
 
         viewModel.updateHistory()
-        viewModel.updateLimit()
     }
 
     private fun setupViews() {
@@ -122,85 +107,11 @@ class HistoryFragment :
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
             })
         }
-
-        binding.limitSaveButton.apply {
-            setOnClickListener {
-                handleHistoryLimit()
-            }
-        }
-    }
-
-    private fun handleHistoryLimit() {
-        try {
-            val limitInput = binding.limitText.text.toString()
-            val limit = limitInput.toInt()
-
-            if (limit < HISTORY_LIMIT_MINIMUM) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.small_limit).format(
-                        CasesUtil.getCase(
-                            uid = HISTORY_LIMIT_CASES_WORD_UID,
-                            amount = HISTORY_LIMIT_MINIMUM
-                        )
-                    ),
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            }
-
-            if (limit > HISTORY_LIMIT_MAXIMUM) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.big_limit).format(
-                        CasesUtil.getCase(
-                            uid = HISTORY_LIMIT_CASES_WORD_UID,
-                            amount = HISTORY_LIMIT_MAXIMUM
-                        )
-                    ),
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            }
-
-            viewModel.setLimit(limit)
-
-            Toast.makeText(
-                requireContext(),
-                R.string.limit_saved,
-                Toast.LENGTH_SHORT
-            ).show()
-        } catch (exception: NumberFormatException) {
-            Toast.makeText(
-                requireContext(),
-                R.string.error_incorrect,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
     }
 
     private fun setupObserves() {
         observe(viewModel.currentFilter) { filter ->
             binding.historyFilters.getTabAt(filter.id)?.select()
         }
-
-        observe(viewModel.historyLimit) { limit ->
-            binding.limitText.setText(limit.toString())
-
-            binding.limitCase.text = CasesUtil.getCase(
-                uid = HISTORY_LIMIT_CASES_WORD_UID,
-                amount = limit,
-                includeAmount = false
-            )
-        }
-    }
-
-    private fun setupCases() {
-        CasesUtil.registerWord(
-            uid = HISTORY_LIMIT_CASES_WORD_UID,
-            firstCase = "запись",
-            secondCase = "записи",
-            thirdCase = "записей"
-        )
     }
 }
