@@ -15,6 +15,7 @@ fun Date.get(field: Int): Int {
 
 fun Date.year(): Int = this.get(Calendar.YEAR)
 fun Date.month(): Int = this.get(Calendar.MONTH)
+fun Date.monthDay(): Int = this.get(Calendar.DAY_OF_MONTH)
 fun Date.yearDay(): Int = this.get(Calendar.DAY_OF_YEAR)
 fun Date.yearWeek(): Int = this.get(Calendar.WEEK_OF_YEAR)
 

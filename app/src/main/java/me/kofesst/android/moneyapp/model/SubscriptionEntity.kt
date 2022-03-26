@@ -22,6 +22,9 @@ data class SubscriptionEntity(
     var day: Int = 1,
     var type: Int = SubscriptionTypes.DEBIT.ordinal
 ) : Serializable {
+    val transactionAmount
+        get() = amount * if (type == SubscriptionTypes.DEBIT.ordinal) -1 else 1
+
     override fun equals(other: Any?): Boolean {
         if (other !is SubscriptionEntity) return false
 

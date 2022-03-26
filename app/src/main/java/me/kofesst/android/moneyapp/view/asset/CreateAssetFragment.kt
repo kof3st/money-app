@@ -75,12 +75,13 @@ class CreateAssetFragment : FragmentBase<FragmentCreateAssetBinding, AssetsViewM
             setOnClickListener {
                 val asset = getModelFromFields() ?: return@setOnClickListener
 
-                if (editing != null) {
-                    editing!!.name = asset.name
-                    editing!!.balance = asset.balance
-                    editing!!.type = asset.type
-                    viewModel.updateAsset(editing!!)
-                } else {
+                editing?.also {
+                    it.name = asset.name
+                    it.balance = asset.balance
+                    it.type = asset.type
+
+                    viewModel.updateAsset(it)
+                } ?: kotlin.run {
                     viewModel.addAsset(asset)
                 }
 

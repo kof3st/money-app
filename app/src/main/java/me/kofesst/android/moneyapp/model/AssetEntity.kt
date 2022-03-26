@@ -6,6 +6,7 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.model.default.AssetTypes
 import me.kofesst.android.moneyapp.util.formatWithCurrency
 import java.io.Serializable
+import kotlin.math.abs
 
 @Entity(tableName = "assets")
 data class AssetEntity(
@@ -18,6 +19,23 @@ data class AssetEntity(
         const val NEGATIVE_BALANCE_COLOR_RES = R.color.negative
         const val NEUTRAL_BALANCE_COLOR_RES = R.color.neutral
         const val POSITIVE_BALANCE_COLOR_RES = R.color.positive
+    }
+
+    fun add(amount: Double) {
+        balance += amount
+    }
+
+    fun withdraw(amount: Double) {
+        balance -= abs(amount)
+    }
+
+    fun deposit(amount: Double) {
+        balance += abs(amount)
+    }
+
+    fun transfer(other: AssetEntity, amount: Double) {
+        withdraw(amount)
+        other.deposit(amount)
     }
 
     override fun toString(): String {

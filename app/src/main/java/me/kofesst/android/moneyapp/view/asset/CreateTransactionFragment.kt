@@ -131,14 +131,15 @@ class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding,
     private fun addTransaction(transaction: TransactionEntity) {
         viewModel.addTransaction(transaction)
 
-        if (isTransfer && selectedTarget != null) {
-            targetAsset.balance -= transaction.amount
-            viewModel.updateAsset(targetAsset)
+        if (isTransfer) {
+            selectedTarget?.also {
+                targetAsset.transfer(it, transaction.amount)
 
-            selectedTarget!!.balance += transaction.amount
-            viewModel.updateAsset(selectedTarget!!)
+                viewModel.updateAsset(targetAsset)
+                viewModel.updateAsset(it)
+            }
         } else {
-            targetAsset.balance += transaction.amount
+            targetAsset.add(transaction.amount)
             viewModel.updateAsset(targetAsset)
         }
 
