@@ -80,4 +80,10 @@
     <string name="subscriptions_updated">Выполнено автоплатежей: %d</string>
     <string name="credit_line">Зачислено: %s</string>
     <string name="debit_line">Списано: %s</string>
+    <string name="negative_transaction_title">Отрицательный баланс</string>
+    <string name="negative_transaction_message">
+        Эта транзакция приведёт к отрицательному балансу на Вашем счёте.
+        Вы действительно хотите добавить данную транзакцию?
+    </string>
+    <string name="add">Добавить</string>
 </resources>
