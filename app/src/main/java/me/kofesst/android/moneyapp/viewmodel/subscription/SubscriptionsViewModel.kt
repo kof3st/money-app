@@ -1,21 +1,17 @@
 package me.kofesst.android.moneyapp.viewmodel.subscription
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
-import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
+import me.kofesst.android.moneyapp.viewmodel.ListViewModelBase
 
 class SubscriptionsViewModel(
     application: Application
-) : ViewModelBase(application) {
-    private val _subscriptions = MutableStateFlow(listOf<SubscriptionEntity>())
-    val subscriptions get() = _subscriptions.asStateFlow()
+) : ListViewModelBase<SubscriptionEntity>(application) {
+    override suspend fun getItems(): List<SubscriptionEntity> = subscriptionsDao.getSubscriptions()
 
     /**
      * Возвращает счёт с айди [id]
@@ -32,22 +28,12 @@ class SubscriptionsViewModel(
     }
 
     /**
-     * Обновляет список автоплатежей [subscriptions]
-     */
-    fun updateSubscriptions() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _subscriptions.value = subscriptionsDao.getSubscriptions()
-            Log.d("AAA", "VM: ${_subscriptions.value.toString()}")
-        }
-    }
-
-    /**
      * Добавляет новый автоплатёж [subscription]
      */
     fun addSubscription(subscription: SubscriptionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             subscriptionsDao.addSubscription(subscription)
-            updateSubscriptions()
+            updateItems()
         }
     }
 
@@ -57,7 +43,7 @@ class SubscriptionsViewModel(
     fun deleteSubscription(subscription: SubscriptionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             subscriptionsDao.deleteSubscription(subscription)
-            updateSubscriptions()
+            updateItems()
         }
     }
 }

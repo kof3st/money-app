@@ -3,17 +3,14 @@ package me.kofesst.android.moneyapp.viewmodel.asset
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.model.*
-import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
+import me.kofesst.android.moneyapp.viewmodel.ListViewModelBase
 
 class AssetsViewModel(
     application: Application
-) : ViewModelBase(application) {
-    private val _assets = MutableStateFlow(listOf<AssetWithSubscriptions>())
-    val assets get() = _assets.asStateFlow()
+) : ListViewModelBase<AssetWithSubscriptions>(application) {
+    override suspend fun getItems(): List<AssetWithSubscriptions> = assetsDao.getAssets()
 
     /**
      * Добавляет новые автоплатежи [subscriptions]
@@ -30,7 +27,7 @@ class AssetsViewModel(
      * Возвращает итоговый баланс, считая его из
      * всех счетов пользователя
      */
-    fun getTotalBalance(): Double = assets.value.sumOf { it.asset.balance }
+    fun getTotalBalance(): Double = items.value.sumOf { it.asset.balance }
 
     /**
      * Возвращает список всех категорий
@@ -47,21 +44,12 @@ class AssetsViewModel(
     }
 
     /**
-     * Обновляет список счетов [assets]
-     */
-    fun updateAssets() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _assets.value = assetsDao.getAssets()
-        }
-    }
-
-    /**
      * Добавляет новый счёт [asset] в базу данных.
      */
     fun addAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             assetsDao.addAsset(asset)
-            updateAssets()
+            updateItems()
         }
     }
 
@@ -71,7 +59,7 @@ class AssetsViewModel(
     fun updateAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             assetsDao.updateAsset(asset)
-            updateAssets()
+            updateItems()
         }
     }
 
@@ -81,7 +69,7 @@ class AssetsViewModel(
     fun deleteAsset(asset: AssetEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             assetsDao.deleteAsset(asset)
-            updateAssets()
+            updateItems()
         }
     }
 }

@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentSubscriptionsBinding
+import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.databinding.SubscriptionItemBinding
 import me.kofesst.android.moneyapp.model.SubscriptionEntity
 import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
@@ -43,11 +43,11 @@ class SubscriptionsFragment :
                     first.day == second.day
         }
 
-    override val listStateFlow: StateFlow<List<SubscriptionEntity>>
-        get() = viewModel.subscriptions
-
     override val emptySourceView: EmptySourceViewBinding
         get() = binding.emptySourceView
+
+    override val sourceView: SourceViewBinding
+        get() = binding.sourceView
 
     override val divider: RecyclerView.ItemDecoration
         get() = MaterialDividerItemDecoration(
@@ -71,13 +71,12 @@ class SubscriptionsFragment :
         return FragmentSubscriptionsBinding.inflate(inflater, container, false)
     }
 
-    override fun getRecyclerView(): RecyclerView = binding.subscriptionsView
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupViews()
-        viewModel.updateSubscriptions()
+
+        viewModel.updateItems()
     }
 
     private fun setupViews() {

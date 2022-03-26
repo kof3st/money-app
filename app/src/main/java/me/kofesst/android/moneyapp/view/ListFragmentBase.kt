@@ -9,19 +9,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
+import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.util.SharedElement
 import me.kofesst.android.moneyapp.view.recyclerview.InlineAdapter
 import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
-import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
+import me.kofesst.android.moneyapp.viewmodel.ListViewModelBase
 import kotlin.reflect.KClass
 
 abstract class ListFragmentBase<FragmentBinding : ViewBinding,
-        FragmentViewModel : ViewModelBase,
+        FragmentViewModel : ListViewModelBase<Model>,
         Model,
         ItemBinding : ViewBinding>(
     viewModelClass: KClass<FragmentViewModel>
@@ -29,8 +29,8 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
     protected abstract val viewHolderBindingProducer: (LayoutInflater, ViewGroup) -> ItemBinding
     protected abstract val onViewHolderBindCallback: (ItemBinding, Model) -> Unit
     protected abstract val itemsComparator: (Model, Model) -> Boolean
-    protected abstract val listStateFlow: StateFlow<List<Model>>
     protected abstract val emptySourceView: EmptySourceViewBinding
+    protected abstract val sourceView: SourceViewBinding
 
     protected open val divider: RecyclerView.ItemDecoration?
         get() = null
@@ -40,20 +40,30 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
 
     private lateinit var fragmentAdapter: InlineAdapter<ItemBinding, Model>
 
-    protected abstract fun getRecyclerView(): RecyclerView
-
     protected open fun onListObserved(list: List<Model>) {}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupRefreshLayout()
         setupRecyclerView()
         setupObserves()
     }
 
+    private fun setupRefreshLayout() {
+        sourceView.refreshLayout.apply {
+            setOnRefreshListener {
+                viewModel.updateItems {
+                    isRefreshing = false
+                }
+            }
+        }
+    }
+
     private fun setupRecyclerView() {
         fragmentAdapter = createAdapter()
-        getRecyclerView().apply {
+
+        sourceView.source.apply {
             adapter = fragmentAdapter
             divider?.also { addItemDecoration(it) }
             viewTreeObserver.addOnPreDrawListener {
@@ -102,7 +112,7 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
 
     private fun setupObserves() {
         lifecycleScope.launchWhenStarted {
-            listStateFlow.onEach { models ->
+            viewModel.items.onEach { models ->
                 fragmentAdapter.submitList(models)
                 onListObserved(models)
 

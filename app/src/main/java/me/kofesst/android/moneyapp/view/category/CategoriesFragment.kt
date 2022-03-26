@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.CategoryItemBinding
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
+import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.util.CasesUtil
 import me.kofesst.android.moneyapp.util.shared
@@ -35,11 +35,11 @@ class CategoriesFragment :
     override val itemsComparator: (CategoryEntity, CategoryEntity) -> Boolean
         get() = { first, second -> first.categoryId == second.categoryId }
 
-    override val listStateFlow: StateFlow<List<CategoryEntity>>
-        get() = viewModel.categories
-
     override val emptySourceView: EmptySourceViewBinding
         get() = binding.emptySourceView
+
+    override val sourceView: SourceViewBinding
+        get() = binding.sourceView
 
     override val divider: RecyclerView.ItemDecoration
         get() = MaterialDividerItemDecoration(
@@ -63,8 +63,6 @@ class CategoriesFragment :
         return FragmentCategoriesBinding.inflate(inflater, container, false)
     }
 
-    override fun getRecyclerView(): RecyclerView = binding.categoriesView
-
     override fun onListObserved(list: List<CategoryEntity>) = updateTopBar(list.size)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +70,8 @@ class CategoriesFragment :
 
         setupViews()
         setupCases()
-        viewModel.updateCategories()
+
+        viewModel.updateItems()
     }
 
     private fun setupViews() {

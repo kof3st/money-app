@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.AssetItemBinding
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentAssetsBinding
+import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.model.AssetWithSubscriptions
 import me.kofesst.android.moneyapp.model.default.AssetTypes
 import me.kofesst.android.moneyapp.util.balanceColor
@@ -40,11 +40,11 @@ class AssetsFragment :
     override val itemsComparator: (AssetWithSubscriptions, AssetWithSubscriptions) -> Boolean
         get() = { first, second -> first.asset.assetId == second.asset.assetId }
 
-    override val listStateFlow: StateFlow<List<AssetWithSubscriptions>>
-        get() = viewModel.assets
-
     override val emptySourceView: EmptySourceViewBinding
         get() = binding.emptySourceView
+
+    override val sourceView: SourceViewBinding
+        get() = binding.sourceView
 
     override val divider: RecyclerView.ItemDecoration
         get() = MaterialDividerItemDecoration(
@@ -68,15 +68,14 @@ class AssetsFragment :
         return FragmentAssetsBinding.inflate(inflater, container, false)
     }
 
-    override fun getRecyclerView(): RecyclerView = binding.assetsView
-
     override fun onListObserved(list: List<AssetWithSubscriptions>) = updateTopBarBalance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupViews()
-        viewModel.updateAssets()
+
+        viewModel.updateItems()
     }
 
     private fun setupViews() {

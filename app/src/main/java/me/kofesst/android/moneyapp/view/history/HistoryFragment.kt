@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.tabs.TabLayout
 import com.robinhood.ticker.TickerUtils
-import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentHistoryBinding
 import me.kofesst.android.moneyapp.databinding.HistoryItemBinding
+import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.model.TransactionEntity
 import me.kofesst.android.moneyapp.model.history.HistoryFilter
 import me.kofesst.android.moneyapp.util.balanceColor
@@ -58,11 +58,11 @@ class HistoryFragment :
     override val itemsComparator: (TransactionEntity, TransactionEntity) -> Boolean
         get() = { first, second -> first.transactionId == second.transactionId }
 
-    override val listStateFlow: StateFlow<List<TransactionEntity>>
-        get() = viewModel.filteredHistory
-
     override val emptySourceView: EmptySourceViewBinding
         get() = binding.emptySourceView
+
+    override val sourceView: SourceViewBinding
+        get() = binding.sourceView
 
     override val divider: RecyclerView.ItemDecoration
         get() = MaterialDividerItemDecoration(
@@ -80,15 +80,13 @@ class HistoryFragment :
         return FragmentHistoryBinding.inflate(inflater, container, false)
     }
 
-    override fun getRecyclerView(): RecyclerView = binding.historyView
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupViews()
         setupObserves()
 
-        viewModel.updateHistory()
+        viewModel.updateItems()
     }
 
     private fun setupViews() {
