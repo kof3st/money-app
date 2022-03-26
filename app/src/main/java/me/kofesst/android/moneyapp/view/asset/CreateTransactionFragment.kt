@@ -17,10 +17,7 @@ import me.kofesst.android.moneyapp.databinding.FragmentCreateTransactionBinding
 import me.kofesst.android.moneyapp.model.AssetEntity
 import me.kofesst.android.moneyapp.model.CategoryEntity
 import me.kofesst.android.moneyapp.model.TransactionEntity
-import me.kofesst.android.moneyapp.view.EnterSharedTransition
-import me.kofesst.android.moneyapp.view.FragmentBase
-import me.kofesst.android.moneyapp.view.FragmentTopBarConfig
-import me.kofesst.android.moneyapp.view.navigateUp
+import me.kofesst.android.moneyapp.view.*
 import me.kofesst.android.moneyapp.viewmodel.asset.AssetsViewModel
 
 class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding, AssetsViewModel>(
@@ -114,22 +111,38 @@ class CreateTransactionFragment : FragmentBase<FragmentCreateTransactionBinding,
         binding.saveButton.apply {
             setOnClickListener {
                 val transaction = getModelFromFields() ?: return@setOnClickListener
-                viewModel.addTransaction(transaction)
+                val amount = transaction.amount * if (isTransfer) -1 else 1
 
-                if (isTransfer && selectedTarget != null) {
-                    targetAsset.balance -= transaction.amount
-                    viewModel.updateAsset(targetAsset)
-
-                    selectedTarget!!.balance += transaction.amount
-                    viewModel.updateAsset(selectedTarget!!)
+                if (targetAsset.balance >= 0.0 && amount + targetAsset.balance < 0.0) {
+                    showConfirmDialog(
+                        R.string.negative_transaction_title,
+                        R.string.negative_transaction_message,
+                        R.string.add
+                    ) {
+                        addTransaction(transaction)
+                    }
                 } else {
-                    targetAsset.balance += transaction.amount
-                    viewModel.updateAsset(targetAsset)
+                    addTransaction(transaction)
                 }
-
-                navigateUp()
             }
         }
+    }
+
+    private fun addTransaction(transaction: TransactionEntity) {
+        viewModel.addTransaction(transaction)
+
+        if (isTransfer && selectedTarget != null) {
+            targetAsset.balance -= transaction.amount
+            viewModel.updateAsset(targetAsset)
+
+            selectedTarget!!.balance += transaction.amount
+            viewModel.updateAsset(selectedTarget!!)
+        } else {
+            targetAsset.balance += transaction.amount
+            viewModel.updateAsset(targetAsset)
+        }
+
+        navigateUp()
     }
 
     private fun getModelFromFields(): TransactionEntity? {
