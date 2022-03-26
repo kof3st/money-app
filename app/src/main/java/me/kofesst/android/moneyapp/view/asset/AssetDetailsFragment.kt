@@ -4,11 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.MaterialToolbar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.FragmentAssetDetailsBinding
 import me.kofesst.android.moneyapp.model.default.AssetTypes
@@ -113,11 +110,7 @@ class AssetDetailsFragment :
                     },
                     undoAction = {
                         viewModel.addAsset(targetAsset.asset)
-
-                        // Restoring deleted subscriptions
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            viewModel.addSubscriptions(targetAsset.subscriptions)
-                        }
+                        viewModel.addSubscriptions(targetAsset.subscriptions)
                     }
                 )
             }

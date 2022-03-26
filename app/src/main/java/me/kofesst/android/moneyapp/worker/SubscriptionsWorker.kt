@@ -13,8 +13,10 @@ import androidx.work.WorkerParameters
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.database.MainDatabase
 import me.kofesst.android.moneyapp.model.TransactionEntity
-import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
+import me.kofesst.android.moneyapp.util.compareMonth
+import me.kofesst.android.moneyapp.util.date
 import me.kofesst.android.moneyapp.util.formatWithCurrency
+import me.kofesst.android.moneyapp.util.monthDay
 import java.util.*
 
 class SubscriptionsWorker(
@@ -93,21 +95,15 @@ class SubscriptionsWorker(
                 subscriptionId = subscription.subscriptionId
             )
 
-            val now = Calendar.getInstance()
-            if (subscription.day != now.get(Calendar.DAY_OF_MONTH)) return@forEach
+            if (subscription.day != Date().monthDay()) return@forEach
 
-            if (transaction != null) {
-                val transactionDate = Calendar.getInstance()
-                transactionDate.timeInMillis = transaction.date
-
-                if (transactionDate.get(Calendar.MONTH) == now.get(Calendar.MONTH)) return@forEach
+            transaction?.also {
+                if (!(transaction.date.date() compareMonth Date()))
+                    return@forEach
             }
 
             val asset = assetsDao.getAsset(subscription.assetId) ?: return@forEach
-            val subscriptionType = SubscriptionTypes.values()[subscription.type]
-            val amount = subscription.amount *
-                    if (subscriptionType == SubscriptionTypes.DEBIT) -1
-                    else 1
+            val amount = subscription.transactionAmount
 
             val newTransaction = TransactionEntity(
                 categoryId = null,
@@ -120,7 +116,7 @@ class SubscriptionsWorker(
             )
             transactionsDao.addTransaction(newTransaction)
 
-            asset.balance += amount
+            asset.add(amount)
             assetsDao.updateAsset(asset)
 
             if (amount > 0.0) creditAmount += amount
@@ -143,7 +139,6 @@ class SubscriptionsWorker(
                 enableVibration(false)
             }
 
-            // Register the channel with the system
             notificationManager.createNotificationChannel(channel)
         }
     }

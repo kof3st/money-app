@@ -1,4 +1,4 @@
-package me.kofesst.android.moneyapp.model.state
+package me.kofesst.android.moneyapp.model.history
 
 import androidx.annotation.StringRes
 import me.kofesst.android.moneyapp.R

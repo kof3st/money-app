@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.kofesst.android.moneyapp.model.TransactionEntity
-import me.kofesst.android.moneyapp.model.state.HistoryFilter
+import me.kofesst.android.moneyapp.model.history.HistoryFilter
 import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
 
 class HistoryViewModel(application: Application) : ViewModelBase(application) {

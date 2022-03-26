@@ -16,9 +16,8 @@ import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentHistoryBinding
 import me.kofesst.android.moneyapp.databinding.HistoryItemBinding
 import me.kofesst.android.moneyapp.model.TransactionEntity
-import me.kofesst.android.moneyapp.model.state.HistoryFilter
+import me.kofesst.android.moneyapp.model.history.HistoryFilter
 import me.kofesst.android.moneyapp.util.balanceColor
-import me.kofesst.android.moneyapp.util.format
 import me.kofesst.android.moneyapp.util.formatDate
 import me.kofesst.android.moneyapp.util.formatWithCurrency
 import me.kofesst.android.moneyapp.view.ListFragmentBase
