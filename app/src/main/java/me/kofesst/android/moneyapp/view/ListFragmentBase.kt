@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
@@ -44,6 +45,9 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
 
     protected open val itemTransitionConfig: ItemTransitionConfig<ItemBinding, Model>?
         get() = null
+
+    protected open val sourceStateFlow: StateFlow<List<Model>>
+        get() = viewModel.items
 
     private lateinit var fragmentAdapter: InlineAdapter<ItemBinding, Model>
 
@@ -119,7 +123,7 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
 
     private fun setupObserves() {
         lifecycleScope.launchWhenStarted {
-            viewModel.items.onEach { models ->
+            sourceStateFlow.onEach { models ->
                 fragmentAdapter.submitList(models)
                 onListObserved(models)
 

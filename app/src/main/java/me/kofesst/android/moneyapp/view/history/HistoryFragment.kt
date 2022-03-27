@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.tabs.TabLayout
 import com.robinhood.ticker.TickerUtils
+import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentHistoryBinding
@@ -60,6 +61,9 @@ class HistoryFragment :
 
     override val sourceView: SourceViewBinding
         get() = binding.sourceView
+
+    override val sourceStateFlow: StateFlow<List<TransactionEntity>>
+        get() = viewModel.filteredHistory
 
     override fun createViewModel(): HistoryViewModel =
         HistoryViewModel(requireActivity().application)
