@@ -26,8 +26,11 @@ class HistoryFragment :
     ListFragmentBase<FragmentHistoryBinding, HistoryViewModel, TransactionEntity, HistoryItemBinding>(
         HistoryViewModel::class
     ) {
-    override val viewHolderBindingProducer: (LayoutInflater, ViewGroup) -> HistoryItemBinding
-        get() = { inflater, parent -> HistoryItemBinding.inflate(inflater, parent, false) }
+    override val itemLayoutResId: Int
+        get() = R.layout.history_item
+
+    override val viewHolderBindingProducer: (View) -> HistoryItemBinding
+        get() = { HistoryItemBinding.bind(it) }
 
     override val onViewHolderBindCallback: (HistoryItemBinding, TransactionEntity) -> Unit
         get() = { binding, item ->

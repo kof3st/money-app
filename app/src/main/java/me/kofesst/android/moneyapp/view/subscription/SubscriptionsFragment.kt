@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentSubscriptionsBinding
 import me.kofesst.android.moneyapp.databinding.SourceViewBinding
@@ -18,8 +19,11 @@ class SubscriptionsFragment :
     ListFragmentBase<FragmentSubscriptionsBinding, SubscriptionsViewModel, SubscriptionEntity, SubscriptionItemBinding>(
         SubscriptionsViewModel::class
     ), Postpone, ExitSharedTransition {
-    override val viewHolderBindingProducer: (LayoutInflater, ViewGroup) -> SubscriptionItemBinding
-        get() = { inflater, parent -> SubscriptionItemBinding.inflate(inflater, parent, false) }
+    override val itemLayoutResId: Int
+        get() = R.layout.subscription_item
+
+    override val viewHolderBindingProducer: (View) -> SubscriptionItemBinding
+        get() = { SubscriptionItemBinding.bind(it) }
 
     override val onViewHolderBindCallback: (SubscriptionItemBinding, SubscriptionEntity) -> Unit
         get() = { binding, item ->
