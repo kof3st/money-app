@@ -1,5 +1,6 @@
 package me.kofesst.android.moneyapp.view
 
+import android.content.res.Resources.getSystem
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -127,3 +128,5 @@ fun Fragment.showConfirmDialog(
         }
         .show()
 }
+
+val Int.dp get() = (this / getSystem().displayMetrics.density).toInt()

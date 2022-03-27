@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.divider.MaterialDividerItemDecoration
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentSubscriptionsBinding
 import me.kofesst.android.moneyapp.databinding.SourceViewBinding
@@ -48,12 +45,6 @@ class SubscriptionsFragment :
 
     override val sourceView: SourceViewBinding
         get() = binding.sourceView
-
-    override val divider: RecyclerView.ItemDecoration
-        get() = MaterialDividerItemDecoration(
-            requireContext(),
-            LinearLayoutManager.VERTICAL
-        )
 
     override val itemTransitionConfig: ItemTransitionConfig<SubscriptionItemBinding, SubscriptionEntity>
         get() = ItemTransitionConfig(

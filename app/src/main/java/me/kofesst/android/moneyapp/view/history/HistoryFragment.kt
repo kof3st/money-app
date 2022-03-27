@@ -5,9 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.tabs.TabLayout
 import com.robinhood.ticker.TickerUtils
 import me.kofesst.android.moneyapp.R
@@ -63,12 +60,6 @@ class HistoryFragment :
 
     override val sourceView: SourceViewBinding
         get() = binding.sourceView
-
-    override val divider: RecyclerView.ItemDecoration
-        get() = MaterialDividerItemDecoration(
-            requireContext(),
-            LinearLayoutManager.VERTICAL
-        )
 
     override fun createViewModel(): HistoryViewModel =
         HistoryViewModel(requireActivity().application)

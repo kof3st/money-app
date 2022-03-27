@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.divider.MaterialDividerItemDecoration
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.CategoryItemBinding
 import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
@@ -40,12 +37,6 @@ class CategoriesFragment :
 
     override val sourceView: SourceViewBinding
         get() = binding.sourceView
-
-    override val divider: RecyclerView.ItemDecoration
-        get() = MaterialDividerItemDecoration(
-            requireContext(),
-            LinearLayoutManager.VERTICAL
-        )
 
     override val itemTransitionConfig: ItemTransitionConfig<CategoryItemBinding, CategoryEntity>
         get() = ItemTransitionConfig(

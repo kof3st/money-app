@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
@@ -33,7 +35,12 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
     protected abstract val sourceView: SourceViewBinding
 
     protected open val divider: RecyclerView.ItemDecoration?
-        get() = null
+        get() = MaterialDividerItemDecoration(
+            requireContext(),
+            LinearLayoutManager.VERTICAL
+        ).apply {
+            dividerInsetStart = resources.getDimensionPixelSize(R.dimen.dividerInsetStart)
+        }
 
     protected open val itemTransitionConfig: ItemTransitionConfig<ItemBinding, Model>?
         get() = null
