@@ -30,7 +30,9 @@ class HistoryViewModel(
     }
 
     override fun updateItems(callback: () -> Unit) {
-        super.updateItems(callback)
-        filterHistory(currentFilter.value)
+        super.updateItems {
+            callback()
+            filterHistory(currentFilter.value)
+        }
     }
 }

@@ -1,6 +1,7 @@
 package me.kofesst.android.moneyapp.view.history
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,6 +121,9 @@ class HistoryFragment :
         }
 
         observe(viewModel.filteredHistory) { list ->
+            Log.d("AAA", list.size.toString())
+            Log.d("AAA", viewModel.items.value.size.toString())
+
             val history = list.filter { it.targetId == null }
             val credits = history.filter { it.amount > 0.0 }.sumOf { it.amount }
             val debits = history.filter { it.amount < 0.0 }.sumOf { it.amount }
