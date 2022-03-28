@@ -26,8 +26,11 @@ class CategoriesFragment :
         private const val CATEGORIES_CASES_WORD_UID = "categories_count"
     }
 
-    override val viewHolderBindingProducer: (LayoutInflater, ViewGroup) -> CategoryItemBinding
-        get() = { inflater, parent -> CategoryItemBinding.inflate(inflater, parent, false) }
+    override val itemLayoutResId: Int
+        get() = R.layout.category_item
+
+    override val viewHolderBindingProducer: (View) -> CategoryItemBinding
+        get() = { CategoryItemBinding.bind(it) }
 
     override val onViewHolderBindCallback: (CategoryItemBinding, CategoryEntity) -> Unit
         get() = { binding, item -> binding.nameText.text = item.name }

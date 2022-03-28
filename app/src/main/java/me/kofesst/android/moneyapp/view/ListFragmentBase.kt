@@ -1,9 +1,7 @@
 package me.kofesst.android.moneyapp.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -29,7 +27,8 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
         ItemBinding : ViewBinding>(
     viewModelClass: KClass<FragmentViewModel>
 ) : FragmentBase<FragmentBinding, FragmentViewModel>(viewModelClass) {
-    protected abstract val viewHolderBindingProducer: (LayoutInflater, ViewGroup) -> ItemBinding
+    protected abstract val itemLayoutResId: Int
+    protected abstract val viewHolderBindingProducer: (View) -> ItemBinding
     protected abstract val onViewHolderBindCallback: (ItemBinding, Model) -> Unit
     protected abstract val itemsComparator: (Model, Model) -> Boolean
     protected abstract val emptySourceView: EmptySourceViewBinding
@@ -87,7 +86,8 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
     private fun createAdapter(): InlineAdapter<ItemBinding, Model> =
         InlineAdapter(
             context = requireContext(),
-            bindingProducer = { inflater, parent -> viewHolderBindingProducer(inflater, parent) },
+            itemLayoutResId = itemLayoutResId,
+            bindingProducer = { view -> viewHolderBindingProducer(view) },
             itemsComparator = itemsComparator,
             onItemClickListener = object : ItemClickListener<ItemBinding, Model> {
                 override fun onClick(binding: ItemBinding, item: Model) {

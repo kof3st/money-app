@@ -1,42 +1,55 @@
 package me.kofesst.android.moneyapp.view.recyclerview
 
 import android.content.Context
-import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
+import me.kofesst.android.moneyapp.view.AsyncView
 
+@Suppress("UNCHECKED_CAST")
 class InlineAdapter<Binding : ViewBinding, Model>(
     private val context: Context,
-    private val bindingProducer: (LayoutInflater, ViewGroup) -> Binding,
+    @LayoutRes private val itemLayoutResId: Int,
+    private val bindingProducer: (View) -> Binding,
     itemsComparator: (Model, Model) -> Boolean = { _, _ -> true },
     private val onItemClickListener: ItemClickListener<Binding, Model>? = null,
     private val onItemBindCallback: (Binding, Model) -> Unit = { _, _ -> }
-) : ListAdapter<Model, InlineViewHolder<Binding, Model>>(ItemsDiffer<Model>().apply {
+) : ListAdapter<Model, InlineViewHolder>(ItemsDiffer<Model>().apply {
     itemsCheck = itemsComparator
 }) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): InlineViewHolder<Binding, Model> {
-        val inflater = LayoutInflater.from(context)
-        val binding = bindingProducer(inflater, parent)
-        return InlineViewHolder(binding, onItemBindCallback)
+    ): InlineViewHolder {
+        val view = AsyncView(
+            context = context,
+            layoutIdRes = itemLayoutResId,
+            bindingProducer = bindingProducer
+        ).apply {
+            inflate()
+        }
+
+        return InlineViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: InlineViewHolder<Binding, Model>, position: Int) {
+    override fun onBindViewHolder(holder: InlineViewHolder, position: Int) {
         val item = getItem(position)
-        holder.onBind(holder.binding, item)
 
-        onItemClickListener?.also { listener ->
-            holder.itemView.setOnClickListener {
-                listener.onClick(holder.binding, item)
-            }
+        (holder.itemView as AsyncView<Binding>).onBindCallback = { binding ->
+            onItemBindCallback(binding, item)
 
-            holder.itemView.setOnLongClickListener {
-                listener.onLongClick(holder.binding, item)
-                true
+            onItemClickListener?.also { listener ->
+                binding.root.setOnClickListener {
+                    listener.onClick(binding, item)
+                }
+
+                binding.root.setOnLongClickListener {
+                    listener.onLongClick(binding, item)
+                    true
+                }
             }
         }
     }

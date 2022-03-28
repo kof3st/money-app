@@ -21,8 +21,11 @@ class AssetsFragment :
     ListFragmentBase<FragmentAssetsBinding, AssetsViewModel, AssetWithSubscriptions, AssetItemBinding>(
         AssetsViewModel::class
     ), Postpone, ExitSharedTransition {
-    override val viewHolderBindingProducer: (LayoutInflater, ViewGroup) -> AssetItemBinding
-        get() = { inflater, parent -> AssetItemBinding.inflate(inflater, parent, false) }
+    override val itemLayoutResId: Int
+        get() = R.layout.asset_item
+
+    override val viewHolderBindingProducer: (View) -> AssetItemBinding
+        get() = { AssetItemBinding.bind(it) }
 
     override val onViewHolderBindCallback: (AssetItemBinding, AssetWithSubscriptions) -> Unit
         get() = { binding, item ->
