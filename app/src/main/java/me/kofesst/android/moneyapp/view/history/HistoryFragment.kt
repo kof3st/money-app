@@ -1,7 +1,6 @@
 package me.kofesst.android.moneyapp.view.history
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import com.google.android.material.tabs.TabLayout
 import com.robinhood.ticker.TickerUtils
 import kotlinx.coroutines.flow.StateFlow
 import me.kofesst.android.moneyapp.R
-import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentHistoryBinding
 import me.kofesst.android.moneyapp.databinding.HistoryItemBinding
 import me.kofesst.android.moneyapp.databinding.SourceViewBinding
@@ -59,9 +57,6 @@ class HistoryFragment :
 
     override val itemsComparator: (TransactionEntity, TransactionEntity) -> Boolean
         get() = { first, second -> first.transactionId == second.transactionId }
-
-    override val emptySourceView: EmptySourceViewBinding
-        get() = binding.emptySourceView
 
     override val sourceView: SourceViewBinding
         get() = binding.sourceView
@@ -124,9 +119,6 @@ class HistoryFragment :
         }
 
         observe(viewModel.filteredHistory) { list ->
-            Log.d("AAA", list.size.toString())
-            Log.d("AAA", viewModel.items.value.size.toString())
-
             val history = list.filter { it.targetId == null }
             val credits = history.filter { it.amount > 0.0 }.sumOf { it.amount }
             val debits = history.filter { it.amount < 0.0 }.sumOf { it.amount }

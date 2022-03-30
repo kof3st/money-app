@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.CategoryItemBinding
-import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentCategoriesBinding
 import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.model.CategoryEntity
@@ -37,9 +36,6 @@ class CategoriesFragment :
 
     override val itemsComparator: (CategoryEntity, CategoryEntity) -> Boolean
         get() = { first, second -> first.categoryId == second.categoryId }
-
-    override val emptySourceView: EmptySourceViewBinding
-        get() = binding.emptySourceView
 
     override val sourceView: SourceViewBinding
         get() = binding.sourceView

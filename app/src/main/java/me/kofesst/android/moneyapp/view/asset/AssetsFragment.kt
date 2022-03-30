@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.AssetItemBinding
-import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentAssetsBinding
 import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.model.AssetWithSubscriptions
@@ -39,9 +38,6 @@ class AssetsFragment :
 
     override val itemsComparator: (AssetWithSubscriptions, AssetWithSubscriptions) -> Boolean
         get() = { first, second -> first.asset.assetId == second.asset.assetId }
-
-    override val emptySourceView: EmptySourceViewBinding
-        get() = binding.emptySourceView
 
     override val sourceView: SourceViewBinding
         get() = binding.sourceView

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.kofesst.android.moneyapp.R
-import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.FragmentSubscriptionsBinding
 import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.databinding.SubscriptionItemBinding
@@ -43,9 +42,6 @@ class SubscriptionsFragment :
                     first.type == second.type &&
                     first.day == second.day
         }
-
-    override val emptySourceView: EmptySourceViewBinding
-        get() = binding.emptySourceView
 
     override val sourceView: SourceViewBinding
         get() = binding.sourceView

@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
-import me.kofesst.android.moneyapp.databinding.EmptySourceViewBinding
 import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.util.SharedElement
 import me.kofesst.android.moneyapp.view.recyclerview.InlineAdapter
@@ -31,7 +30,6 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
     protected abstract val viewHolderBindingProducer: (View) -> ItemBinding
     protected abstract val onViewHolderBindCallback: (ItemBinding, Model) -> Unit
     protected abstract val itemsComparator: (Model, Model) -> Boolean
-    protected abstract val emptySourceView: EmptySourceViewBinding
     protected abstract val sourceView: SourceViewBinding
 
     protected open val divider: RecyclerView.ItemDecoration?
@@ -128,11 +126,11 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
                 onListObserved(models)
 
                 if (models.isEmpty()) {
-                    emptySourceView.root.visibility = View.VISIBLE
-                    emptySourceView.image.playAnimation()
+                    sourceView.emptySourceView.visibility = View.VISIBLE
+                    sourceView.emptySourceView.playAnimation()
                 } else {
-                    emptySourceView.root.visibility = View.GONE
-                    emptySourceView.image.cancelAnimation()
+                    sourceView.emptySourceView.visibility = View.GONE
+                    sourceView.emptySourceView.cancelAnimation()
                 }
             }.collect()
         }

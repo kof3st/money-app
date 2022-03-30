@@ -58,11 +58,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/empty_source_view"
-        layout="@layout/empty_source_view"
-        android:visibility="gone" />
-
-    <include
         android:id="@+id/source_view"
         layout="@layout/source_view" />
 
