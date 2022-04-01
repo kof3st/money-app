@@ -8,6 +8,9 @@ import me.kofesst.android.moneyapp.util.formatWithCurrency
 import java.io.Serializable
 import kotlin.math.abs
 
+/**
+ * Модель счёта пользователя.
+ */
 @Entity(tableName = "assets")
 data class AssetEntity(
     @PrimaryKey(autoGenerate = true) val assetId: Long = 0,
@@ -21,18 +24,31 @@ data class AssetEntity(
         const val POSITIVE_BALANCE_COLOR_RES = R.color.positive
     }
 
+    /**
+     * Прибавляет к балансу [amount] руб.
+     */
     fun add(amount: Double) {
         balance += amount
     }
 
+    /**
+     * Списывает с баланса [amount] руб.
+     */
     fun withdraw(amount: Double) {
         balance -= abs(amount)
     }
 
+    /**
+     * Добавляет к балансу [amount] руб.
+     */
     fun deposit(amount: Double) {
         balance += abs(amount)
     }
 
+    /**
+     * Переводит [amount] руб. между текущим
+     * счётом и [other].
+     */
     fun transfer(other: AssetEntity, amount: Double) {
         withdraw(amount)
         other.deposit(amount)

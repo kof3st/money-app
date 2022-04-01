@@ -7,6 +7,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import me.kofesst.android.moneyapp.R
 
+/**
+ * Показывает диалоговое окно,
+ * которое создаётся при помощи [MaterialAlertDialogBuilder].
+ */
 fun Fragment.showDeleteDialogWithSnackbar(
     fragmentView: View,
     @StringRes dialogTitleRes: Int,

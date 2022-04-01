@@ -5,6 +5,11 @@ import androidx.core.content.ContextCompat
 import me.kofesst.android.moneyapp.model.AssetEntity
 import java.text.DecimalFormat
 
+/**
+ * Возвращает форматированное число.
+ * Если [sign] = true, то добавляет в
+ * начале знак числа.
+ */
 fun Double.format(sign: Boolean = false): String {
     val formatter = DecimalFormat().apply {
         groupingSize = 3
@@ -20,8 +25,17 @@ fun Double.format(sign: Boolean = false): String {
     return format
 }
 
+/**
+ * Возвращает форматированное число
+ * с валютой. Если [sign] = true, то
+ * добавляет в начале знак числа.
+ */
 fun Double.formatWithCurrency(sign: Boolean = false): String = "%s руб.".format(this.format(sign))
 
+/**
+ * Возвращает цвет в зависимости от
+ * числа.
+ */
 fun Double.balanceColor(context: Context): Int {
     return when {
         this > .0 -> ContextCompat.getColor(

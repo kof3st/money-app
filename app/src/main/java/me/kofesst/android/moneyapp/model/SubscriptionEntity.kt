@@ -1,10 +1,13 @@
 package me.kofesst.android.moneyapp.model
 
 import androidx.room.*
-import androidx.room.ForeignKey.Companion.CASCADE
+import androidx.room.ForeignKey.CASCADE
 import me.kofesst.android.moneyapp.model.default.SubscriptionTypes
 import java.io.Serializable
 
+/**
+ * Модель автоплатежа
+ */
 @Entity(
     tableName = "subscriptions",
     foreignKeys = [ForeignKey(
