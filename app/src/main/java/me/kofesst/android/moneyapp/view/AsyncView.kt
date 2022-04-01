@@ -9,6 +9,10 @@ import androidx.annotation.LayoutRes
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import androidx.viewbinding.ViewBinding
 
+/**
+ * Класс, представляющий [View], который
+ * создаётся асинхронно.
+ */
 class AsyncView<Binding : ViewBinding>(
     context: Context,
     @LayoutRes val layoutIdRes: Int,

@@ -25,6 +25,9 @@ class MainActivity : AppCompatActivity() {
         setupSubscriptionWorker()
     }
 
+    /**
+     * Инициализация навигации приложения.
+     */
     private fun setupNavigation() {
         val navHostFragment = supportFragmentManager.findFragmentById(
             binding.fragmentContainer.id
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Инициализация [SubscriptionsWorker].
+     */
     private fun setupSubscriptionWorker() {
         val workRequest = PeriodicWorkRequest.Builder(
             SubscriptionsWorker::class.java,

@@ -13,7 +13,7 @@ class CategoriesViewModel(
     override suspend fun getItems(): List<CategoryEntity> = categoriesDao.getCategories()
 
     /**
-     * Добавляет новый счёт [category] в базу данных
+     * Добавляет новую категорию [category] в базу.
      */
     fun addCategory(category: CategoryEntity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -23,7 +23,7 @@ class CategoriesViewModel(
     }
 
     /**
-     * Удаляет счёт [category] из базы данных
+     * Удаляет категорию [category] из базы.
      */
     fun deleteCategory(category: CategoryEntity) {
         viewModelScope.launch(Dispatchers.IO) {

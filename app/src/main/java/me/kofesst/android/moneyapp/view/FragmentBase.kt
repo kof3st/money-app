@@ -1,6 +1,5 @@
 package me.kofesst.android.moneyapp.view
 
-import android.content.res.Resources.getSystem
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +24,9 @@ import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
 import me.kofesst.android.moneyapp.viewmodel.ViewModelFactory
 import kotlin.reflect.KClass
 
+/**
+ * Базовый класс всех фрагментов приложения.
+ */
 abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : ViewModelBase>(
     viewModelClass: KClass<FragmentViewModel>
 ) : Fragment() {
@@ -40,11 +42,17 @@ abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : V
     protected open val topBar: MaterialToolbar? get() = null
     protected open val topBarConfig: FragmentTopBarConfig? get() = null
 
+    /**
+     * Возвращает [ViewBinding] фрагмента.
+     */
     protected abstract fun getViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentBinding
 
+    /**
+     * Создаёт [ViewModelBase] фрагмента.
+     */
     protected abstract fun createViewModel(): FragmentViewModel
 
     override fun onCreateView(
@@ -71,6 +79,9 @@ abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : V
         setupTopBar()
     }
 
+    /**
+     * Инициализирует [MaterialToolbar] фрагмента.
+     */
     private fun setupTopBar() {
         topBar?.also { bar ->
             topBarConfig?.also { config ->
@@ -83,6 +94,9 @@ abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : V
         }
     }
 
+    /**
+     * Lazy-функция, создающая [FragmentViewModel] фрагмента.
+     */
     private fun Fragment.viewModel(
         clazz: KClass<FragmentViewModel>,
         ownerProducer: () -> ViewModelStoreOwner = { this },
@@ -90,18 +104,32 @@ abstract class FragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : V
     ) = createViewModelLazy(clazz, { ownerProducer().viewModelStore }, factoryProducer)
 }
 
+/**
+ * Класс, представляющий настройки [MaterialToolbar]
+ * фрагмента.
+ */
 data class FragmentTopBarConfig(
     val titleSetter: ((MaterialToolbar) -> Unit)? = null,
     val subtitleSetter: ((MaterialToolbar) -> Unit)? = null,
     val hasBackButton: Boolean = false
 )
 
+/**
+ * Начинает отслеживать [stateFlow] в [lifecycleScope].
+ */
 fun <T> Fragment.observe(stateFlow: StateFlow<T>, block: (T) -> Unit) =
     lifecycleScope.launchWhenStarted { stateFlow collectWith block }
 
+/**
+ * Упрощение отслеживания [StateFlow].
+ */
 suspend infix fun <T> StateFlow<T>.collectWith(block: (T) -> Unit) =
     this.onEach { block(it) }.collect()
 
+/**
+ * Переход на фрагмент [direction],
+ * используя sharedElementTransition.
+ */
 fun Fragment.navigateToShared(
     sharedElements: List<SharedElement>,
     direction: NavDirections
@@ -110,9 +138,16 @@ fun Fragment.navigateToShared(
     findNavController().navigate(direction, extras)
 }
 
+/**
+ * Переходит на фрагмент, который находится выше
+ * в иерархии навигации приложения.
+ */
 fun Fragment.navigateUp() =
     findNavController().navigateUp()
 
+/**
+ * Создаёт диалоговое окно с двумя кнопками.
+ */
 fun Fragment.showConfirmDialog(
     @StringRes titleResId: Int,
     @StringRes messageResId: Int,
@@ -128,5 +163,3 @@ fun Fragment.showConfirmDialog(
         }
         .show()
 }
-
-val Int.dp get() = (this / getSystem().displayMetrics.density).toInt()

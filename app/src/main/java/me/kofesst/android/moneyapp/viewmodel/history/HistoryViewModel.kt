@@ -20,8 +20,14 @@ class HistoryViewModel(
     private val _filteredHistory = MutableStateFlow(listOf<TransactionEntity>())
     val filteredHistory get() = _filteredHistory.asStateFlow()
 
+    /**
+     * Возвращает список транзакций.
+     */
     override suspend fun getItems(): List<TransactionEntity> = transactionsDao.getTransactions()
 
+    /**
+     * Фильтрует список транзакций по фильтру [filter].
+     */
     fun filterHistory(filter: HistoryFilter) {
         viewModelScope.launch(Dispatchers.IO) {
             _currentFilter.value = filter
@@ -29,6 +35,9 @@ class HistoryViewModel(
         }
     }
 
+    /**
+     * Обновляет список транзакций.
+     */
     override fun updateItems(callback: () -> Unit) {
         super.updateItems {
             callback()

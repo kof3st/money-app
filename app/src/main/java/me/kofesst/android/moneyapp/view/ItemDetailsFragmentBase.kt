@@ -8,6 +8,11 @@ import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.viewmodel.ViewModelBase
 import kotlin.reflect.KClass
 
+/**
+ * Базовый класс, представляющий фрагмент,
+ * появляющийся при нажатии на элемент списка
+ * [ListFragmentBase].
+ */
 abstract class ItemDetailsFragmentBase<FragmentBinding : ViewBinding, FragmentViewModel : ViewModelBase>(
     viewModelClass: KClass<FragmentViewModel>
 ) : FragmentBase<FragmentBinding, FragmentViewModel>(viewModelClass) {

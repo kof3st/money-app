@@ -3,15 +3,12 @@ package me.kofesst.android.moneyapp.view
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.ViewCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import me.kofesst.android.moneyapp.R
 import me.kofesst.android.moneyapp.databinding.SourceViewBinding
 import me.kofesst.android.moneyapp.util.SharedElement
@@ -20,6 +17,11 @@ import me.kofesst.android.moneyapp.view.recyclerview.ItemClickListener
 import me.kofesst.android.moneyapp.viewmodel.ListViewModelBase
 import kotlin.reflect.KClass
 
+/**
+ * Базовый класс всех фрагментов,
+ * хранящих список [Model], используя
+ * [RecyclerView].
+ */
 abstract class ListFragmentBase<FragmentBinding : ViewBinding,
         FragmentViewModel : ListViewModelBase<Model>,
         Model,
@@ -48,6 +50,9 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
 
     private lateinit var fragmentAdapter: InlineAdapter<ItemBinding, Model>
 
+    /**
+     * Вызывается после обновления [sourceStateFlow].
+     */
     protected open fun onListObserved(list: List<Model>) {}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,6 +63,9 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
         setupObserves()
     }
 
+    /**
+     * Инициализирует свайп-контейнер.
+     */
     private fun setupRefreshLayout() {
         sourceView.refreshLayout.apply {
             setOnRefreshListener {
@@ -68,6 +76,9 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
         }
     }
 
+    /**
+     * Инициализирует [RecyclerView]
+     */
     private fun setupRecyclerView() {
         fragmentAdapter = createAdapter()
 
@@ -81,6 +92,9 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
         }
     }
 
+    /**
+     * Создаёт [InlineAdapter] для [RecyclerView].
+     */
     private fun createAdapter(): InlineAdapter<ItemBinding, Model> =
         InlineAdapter(
             context = requireContext(),
@@ -119,24 +133,29 @@ abstract class ListFragmentBase<FragmentBinding : ViewBinding,
             }
         )
 
+    /**
+     * Начинает отслеживание [sourceStateFlow].
+     */
     private fun setupObserves() {
-        lifecycleScope.launchWhenStarted {
-            sourceStateFlow.onEach { models ->
-                fragmentAdapter.submitList(models)
-                onListObserved(models)
+        observe(sourceStateFlow) { models ->
+            fragmentAdapter.submitList(models)
+            onListObserved(models)
 
-                if (models.isEmpty()) {
-                    sourceView.emptySourceView.visibility = View.VISIBLE
-                    sourceView.emptySourceView.playAnimation()
-                } else {
-                    sourceView.emptySourceView.visibility = View.GONE
-                    sourceView.emptySourceView.cancelAnimation()
-                }
-            }.collect()
+            if (models.isEmpty()) {
+                sourceView.emptySourceView.visibility = View.VISIBLE
+                sourceView.emptySourceView.playAnimation()
+            } else {
+                sourceView.emptySourceView.visibility = View.GONE
+                sourceView.emptySourceView.cancelAnimation()
+            }
         }
     }
 }
 
+/**
+ * Класс, представляющий настройки
+ * анимаций при нажатии на элемент списка.
+ */
 data class ItemTransitionConfig<Binding : ViewBinding, Item>(
     val directionProducer: (Item) -> NavDirections,
     val sharedElementsProducer: (Binding) -> List<SharedElement> = { listOf() },

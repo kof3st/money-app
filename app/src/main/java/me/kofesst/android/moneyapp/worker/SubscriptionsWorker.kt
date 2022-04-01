@@ -19,6 +19,10 @@ import me.kofesst.android.moneyapp.util.formatWithCurrency
 import me.kofesst.android.moneyapp.util.monthDay
 import java.util.*
 
+/**
+ * [CoroutineWorker], обновляющий
+ * автоплатежи пользователя.
+ */
 class SubscriptionsWorker(
     private val context: Context,
     workerParams: WorkerParameters

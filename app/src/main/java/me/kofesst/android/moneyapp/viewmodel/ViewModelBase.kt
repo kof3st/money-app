@@ -4,6 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import me.kofesst.android.moneyapp.database.MainDatabase
 
+/**
+ * Базовый класс, представляющий все
+ * [AndroidViewModel] приложения.
+ */
 abstract class ViewModelBase(
     application: Application
 ) : AndroidViewModel(application) {

@@ -12,11 +12,17 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.google.android.material.transition.platform.MaterialElevationScale
 import me.kofesst.android.moneyapp.R
 
+/**
+ * Откладывает анимацию создания [view].
+ */
 fun Fragment.setPostpone(view: View) {
     postponeEnterTransition()
     view.doOnPreDraw { startPostponedEnterTransition() }
 }
 
+/**
+ * Определяет анимацию создания фрагмента.
+ */
 fun Fragment.setEnterSharedTransition(@IntegerRes durationRes: Int) {
     sharedElementEnterTransition = MaterialContainerTransform().apply {
         drawingViewId = R.id.fragment_container
@@ -25,6 +31,9 @@ fun Fragment.setEnterSharedTransition(@IntegerRes durationRes: Int) {
     }
 }
 
+/**
+ * Определяет анимацию уничтожения фрагмента.
+ */
 fun Fragment.setExitSharedTransition(@IntegerRes durationRes: Int) {
     exitTransition = MaterialElevationScale(false).apply {
         duration = resources.getInteger(durationRes).toLong()
@@ -37,14 +46,25 @@ fun Fragment.setExitSharedTransition(@IntegerRes durationRes: Int) {
 
 typealias SharedElement = Pair<View, String>
 
+/**
+ * Конвертирует список [SharedElement] в [FragmentNavigatorExtras].
+ */
 fun List<SharedElement>.extras(): FragmentNavigator.Extras {
     return FragmentNavigatorExtras(*this.toTypedArray())
 }
 
+/**
+ * Создаёт [SharedElement] из [View] и ресурса
+ * названия анимации [transitionNameRes].
+ */
 infix fun View.shared(@StringRes transitionNameRes: Int): SharedElement {
     return this to this.resources.getString(transitionNameRes)
 }
 
+/**
+ * Создаёт [SharedElement] из [View] и
+ * названия анимации [transitionName]
+ */
 infix fun View.shared(transitionName: String): SharedElement {
     return this to transitionName
 }
