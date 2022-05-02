@@ -14,7 +14,7 @@ sealed class HistoryFilter(
     @StringRes val titleResId: Int
 ) {
     companion object {
-        val FILTERS = listOf(
+        val FILTERS get() = listOf(
             DayHistoryFilter,
             WeekHistoryFilter,
             MonthHistoryFilter,
